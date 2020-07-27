@@ -1,0 +1,26 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- Custom CSS-->
+    <link rel="stylesheet" href="/css/styles.css">
+    <!-- Custom JS-->
+    <!-- Client Connection Details-->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/lights.js"></script>
+</head>
+
+<body>
+    <nav style="background-color: eb6123;">
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo"
+                style="font-family: Helvetica, Arial, sans-serif;">witchonstephendrive.com</a>
+        </div>
+    </nav><br />
+    <a class="waves-effect waves-light btn purple" onclick="setLight('48017')">Purple</a><br /><br />
+    <a class="waves-effect waves-light btn orange" onclick="setLight('2521')">Orange</a><br /><br />
+    <a class="waves-effect waves-light btn red" onclick="lightDance(['48017', '2521'])">Halloween</a><br />
+</body>
+</html>
