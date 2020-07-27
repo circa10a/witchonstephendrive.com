@@ -1,11 +1,11 @@
 const setLight = async (color) => {
-    const rawResponse = await fetch(`http://${endpoint}/api/${user}/lights/${light}/state`, {
-        method: 'PUT',
+    const rawResponse = await fetch(`https://maker.ifttt.com/trigger/hue-hook/with/key/lMsWNtWo61JsG5pXq2FCrmlgdX1o_9eRDukbNFgQLQk`, {
+        method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ 'on': true, 'bri': 200, "hue": parseInt(color) }),
+        body: JSON.stringify({ 'value1': color }),
     });
     const content = await rawResponse.json();
 
@@ -18,7 +18,7 @@ const lightDance = async (colors) => {
     while (count < threshold) {
         for (color of colors) {
             await setLight(color);
-            await sleep(3000);
+            await sleep(6000);
             count++;
         };
         console.log(count)
