@@ -1,0 +1,30 @@
+nav {
+  background-color: #eb6123;
+}
+
+body {
+  background: #222;
+  background: linear-gradient(to bottom, #111 , #222);
+}
+
+.container {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+}
+
+.button-row {
+  display: flex;
+  justify-content: center;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
