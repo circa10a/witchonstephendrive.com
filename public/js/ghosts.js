@@ -178,9 +178,13 @@ var StageManager = function () {
     };
     return StageManager;
 }();
+
 var stageManager = new StageManager(Snap('svg'));
+
 stageManager.init();
+
 makeGhost();
+
 function makeGhost() {
     stageManager.addGhost();
     setTimeout(makeGhost, Math.random() * 500);
