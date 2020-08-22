@@ -1,10 +1,14 @@
 <html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="css/catamaran.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
     <!-- Custom CSS-->
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <!-- Custom JS-->
     <!-- Client Connection Details-->
     <script src="js/config.js"></script>
@@ -12,15 +16,28 @@
     <script src="js/lights.js"></script>
 </head>
 
-<body>
-    <nav style="background-color: eb6123;">
+<body class="dark">
+    <nav>
         <div class="nav-wrapper">
             <a href="#" class="brand-logo"
                 style="font-family: Helvetica, Arial, sans-serif;">witchonstephendrive.com</a>
         </div>
     </nav><br />
-    <a class="waves-effect waves-light btn purple" onclick="setLight('purple')">Purple</a><br /><br />
-    <a class="waves-effect waves-light btn orange" onclick="setLight('orange')">Orange</a><br /><br />
-    <a class="waves-effect waves-light btn red" onclick="lightDance(['purple', 'orange'])">Halloween</a><br />
+
+    <a class="waves-effect waves-light btn purple" onclick="setLight('purple')">Purple</a>
+    <a class="waves-effect waves-light btn" style="background-color: #eb6123;" onclick="setLight('orange')">Orange</a>
+    <a class="waves-effect waves-light btn green" onclick="setLight('green')">Green</a>
+    <a class="waves-effect waves-light btn blue" onclick="setLight('blue')">Blue</a>
+    <br /><br />
+
+    <a class="waves-effect waves-light btn red" onclick="setLight('orange')">Red</a>
+    <a class="waves-effect waves-light btn yellow""onclick=" setLight('orange')">Yellow</a>
+    <a class="waves-effect waves-light btn pink" onclick="setLight('orange')">Pink</a>
+    <a class="waves-effect waves-light btn" style="background-color: black"
+        onclick="lightDance(['purple', 'orange'])">Halloween</a>
+    <div class="container">
+        <svg id="svg"></svg>
+    </div>
 </body>
+<script src="js/ghosts.js"></script>
 </html>
