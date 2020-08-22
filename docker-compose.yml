@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  witch:
+    container_name: witch
+    build: .
+    environment:
+      HUE_USER: YOUR_TOKEN
+      HUE_LIGHTS: 1 2 3
+    ports:
+     - 8080:8080
+    volumes:
+      - ./public:/public
