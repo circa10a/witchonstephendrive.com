@@ -41,7 +41,7 @@ func flags() {
 	port = flag.Int("port", 8080, "Listening port")
 	metrics = flag.Bool("metrics", true, "Enable prometheus metrics")
 	hueUser = flag.String("hue-user", os.Getenv("HUE_USER"), "ID to connect to hue bridge")
-	lightsStr := flag.String("lights", os.Getenv("HUE_LIGHTS"), "Light ID's to change")
+	lightsStr := flag.String("hue-lights", os.Getenv("HUE_LIGHTS"), "Light ID's to change")
 	flag.Parse()
 
 	// Parse string input to slice of ints
