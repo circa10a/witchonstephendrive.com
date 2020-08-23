@@ -28,3 +28,7 @@ svg {
   padding-top: 1em;
   padding-bottom: 1em;
 }
+
+.btn {
+  width: 30%;
+}
