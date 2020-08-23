@@ -7,9 +7,9 @@ import (
 )
 
 func colorHandler(c *fiber.Ctx) {
+	colorParam := c.Params("color")
 	for _, light := range hueLights {
-		colorParam := c.Params("color")
-		// Only change color if in the map
+		// Only change color if in the mgpriap
 		if _, ok := colorMap[colorParam]; ok {
 			bridge.SetLightState(light, getColorState(colorParam))
 			c.JSON(fiber.Map{
