@@ -1,6 +1,10 @@
 package main
 
-import "github.com/gofiber/fiber"
+import (
+	"fmt"
+
+	"github.com/gofiber/fiber"
+)
 
 func colorHandler(c *fiber.Ctx) {
 	for _, light := range hueLights {
@@ -8,6 +12,13 @@ func colorHandler(c *fiber.Ctx) {
 		// Only change color if in the map
 		if _, ok := colorMap[colorParam]; ok {
 			bridge.SetLightState(light, getColorState(colorParam))
+			c.JSON(fiber.Map{
+				"status": fmt.Sprintf("set to %s", colorParam),
+			})
+		} else {
+			c.JSON(fiber.Map{
+				"status": fmt.Sprintf("%s not found", colorParam),
+			})
 		}
 	}
 }
