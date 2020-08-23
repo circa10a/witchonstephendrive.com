@@ -1,6 +1,17 @@
 # witchonstephendrive.com 🧹
 
-A home automation project to control hue lights for Halloween <img src="https://raw.githubusercontent.com/egonelbre/gophers/10cc13c5e29555ec23f689dc985c157a8d4692ab/vector/fairy-tale/witch-too-much-candy.svg" align="right"/>
+A home automation project to control hue lights for Halloween <img src="https://raw.githubusercontent.com/egonelbre/gophers/10cc13c5e29555ec23f689dc985c157a8d4692ab/vector/fairy-tale/witch-too-much-candy.svg" align="right" width="20%" height="20%"/>
+
+- [witchonstephendrive.com 🧹](#witchonstephendrivecom---)
+  * [Why](#why)
+  * [What's it do?](#what-s-it-do-)
+  * [How's it does it work?](#how-s-it-does-it-work-)
+  * [Usage](#usage)
+    + [Configuration](#configuration)
+    + [Go](#go)
+    + [Docker](#docker)
+    + [Endpoints](#endpoints)
+  * [Example color change request](#example-color-change-request)
 
 ## Why
 
@@ -14,8 +25,58 @@ It allows anyone to change the color of the lighting behind the witch silhouette
 
 Here's what the front of my house looks like:
 
-![alt text](https://i.imgur.com/hQE6u6h.jpg)
+<img src="https://i.imgur.com/hQE6u6h.jpg" width="50%" height="50%"/>
 
-Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks like:
+Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks like(with some sweet ghost animations):
 
-![alt text](https://i.imgur.com/DR3xuHO.png)
+<img src="https://i.imgur.com/DR3xuHO.png" width="35%" height="35%"/>
+
+## How's it does it work?
+
+1. [Caddy](https://github.com/caddyserver/caddy) server as a reverse proxy to the `witch` app for TLS termination([let's encrypt](https://letsencrypt.org/)).
+2. The `witch` app is a Go backend powered by [gofiber](https://github.com/gofiber/fiber) that serves a vanilla html/css/js front end and has a `/:color` route.
+3. Once a `/:color` route is hit via a `POST` request, the `witch` app uses the [huego](https://github.com/amimof/huego) library for manipulating the state of the philips hue multicolor bulbs. The hue bridge endpoint on your network is automatically discovered.
+
+## Usage
+
+### Configuration
+
+|             |                                                                       |                      |                        |           |               |
+|-------------|-----------------------------------------------------------------------|----------------------|------------------------|-----------|---------------|
+| Name        | Description                                                           | Environment Variable | Command Line Argument  | Required  | Default       |
+| PORT        | Port for web server to listen on                                      | `PORT`               | NONE                   | `false`   | `8080`        |
+| HUE_USER    | Philips Hue API User/Token                                            | `HUE_USER`           | `--hue-user`           | `true`    | None          |
+| HUE_LIGHTs  | Light ID's to change color of                                         | `HUE_LIGHTS`         | `--hue-lights`         | `true`    | None          |
+| METRICS     | Enables prometheus metrics on `/metrics`(unset for false)             | `METRICS`            | `--metrics`            | `false`   | `true`        |
+
+
+### Go
+
+```bash
+go build -o witch .
+./witch --hue-user <YOUR_TOKEN> --lights "1 2 3"
+```
+
+### Docker
+
+> Be sure to update `HUE_USER` and `HUE_LIGHTS` in compose file
+
+```bash
+docker-compose up -d
+```
+
+### Endpoints
+
+|             |                                                                                                   |        |
+|-------------|---------------------------------------------------------------------------------------------------|--------|
+| Route       | Description                                                                                       | Method |
+| `/`         | Serves static content in `./public`                                                               | `GET`  |
+| `/:color`   | Changes color of hue lights                                                                       | `POST` |
+| `/health`   | Reports a JSON status that application is up                                                      | `GET`  |
+| `/metrics`  | Serves prometheus metrics using [gofiber middleware](https://github.com/ansrivas/fiberprometheus) | `GET`  |
+
+## Example color change request
+
+```bash
+curl -X POST http://localhost:8080/red
+```
