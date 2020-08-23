@@ -2,7 +2,10 @@ package main
 
 import "github.com/amimof/huego"
 
-var colorMap = map[string]huego.State{
+// ColorMap holds all the possible colors supported by the api
+type ColorMap map[string]huego.State
+
+var colors = ColorMap{
 	"red": {
 		On:  true,
 		Bri: 254,
@@ -69,6 +72,6 @@ var colorMap = map[string]huego.State{
 	},
 }
 
-func getColorState(c string) huego.State {
-	return colorMap[c]
+func (m ColorMap) getColorState(c string) huego.State {
+	return m[c]
 }
