@@ -59,7 +59,7 @@ go build -o witch .
 
 ### Docker
 
-> Be sure to update `HUE_USER` and `HUE_LIGHTS` in compose file
+> Be sure to update `HUE_USER` and `HUE_LIGHTS` in `docker-compose.yml`
 
 ```bash
 docker-compose up -d
