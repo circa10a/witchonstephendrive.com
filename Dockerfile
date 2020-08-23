@@ -4,8 +4,6 @@ COPY . .
 ENV USER=go \
     UID=1000 \
     GID=1000 \
-    GOOS=linux \
-    GOARCH=amd64 \
     CGO_ENABLED=0
 
 RUN go build -ldflags="-s -w" \

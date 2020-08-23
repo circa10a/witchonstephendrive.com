@@ -3,15 +3,18 @@ version: '3'
 services:
   witch:
     container_name: witch
+    restart: always
     build: .
     environment:
       HUE_USER: YOUR_TOKEN
       HUE_LIGHTS: 1 2 3
+      GOMAXPROCS: 1
     volumes:
       - ./public:/public
 
   caddy:
     container_name: caddy
+    restart: always
     image: caddy
     ports:
       - 80:80
