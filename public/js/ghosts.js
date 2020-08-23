@@ -187,5 +187,5 @@ makeGhost();
 
 function makeGhost() {
     stageManager.addGhost();
-    setTimeout(makeGhost, Math.random() * 500);
+    setTimeout(makeGhost, Math.random() * 800);
 }
