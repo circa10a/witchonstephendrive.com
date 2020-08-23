@@ -4,8 +4,8 @@ A home automation project to control hue lights for Halloween <img src="https://
 
 - [witchonstephendrive.com 🧹](#witchonstephendrivecom---)
   * [Why](#why)
-  * [What's it do?](#what-s-it-do-)
-  * [How's it does it work?](#how-s-it-does-it-work-)
+  * [What does it do](#what-does-it-do)
+  * [How does it work](#how-does-it-work)
   * [Usage](#usage)
     + [Configuration](#configuration)
     + [Go](#go)
@@ -19,7 +19,7 @@ A home automation project to control hue lights for Halloween <img src="https://
 - Side projects are the best
 - Given how hectic 2020 is, I believe kids won't have a normal Halloween. I want try to produce more smiles from the kids in my neighborhood.
 
-## What's it do?
+## What does it do
 
 It allows anyone to change the color of the lighting behind the witch silhouette curtain
 
@@ -31,9 +31,9 @@ Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks lik
 
 <img src="https://i.imgur.com/DR3xuHO.png" width="35%" height="35%"/>
 
-## How's it does it work?
+## How does it work
 
-1. [Caddy](https://github.com/caddyserver/caddy) server as a reverse proxy to the `witch` app for TLS termination([let's encrypt](https://letsencrypt.org/)).
+1. Uses [Caddy](https://github.com/caddyserver/caddy) as a reverse proxy to the `witch` app for TLS termination([let's encrypt](https://letsencrypt.org/)).
 2. The `witch` app is a Go backend powered by [gofiber](https://github.com/gofiber/fiber) that serves a vanilla html/css/js front end and has a `/:color` route.
 3. Once a `/:color` route is hit via a `POST` request, the `witch` app uses the [huego](https://github.com/amimof/huego) library for manipulating the state of the philips hue multicolor bulbs. The hue bridge endpoint on your network is automatically discovered.
 
@@ -46,7 +46,7 @@ Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks lik
 | Name        | Description                                                           | Environment Variable | Command Line Argument  | Required  | Default       |
 | PORT        | Port for web server to listen on                                      | `PORT`               | NONE                   | `false`   | `8080`        |
 | HUE_USER    | Philips Hue API User/Token                                            | `HUE_USER`           | `--hue-user`           | `true`    | None          |
-| HUE_LIGHTs  | Light ID's to change color of                                         | `HUE_LIGHTS`         | `--hue-lights`         | `true`    | None          |
+| HUE_LIGHTS  | Light ID's to change color of                                         | `HUE_LIGHTS`         | `--hue-lights`         | `true`    | None          |
 | METRICS     | Enables prometheus metrics on `/metrics`(unset for false)             | `METRICS`            | `--metrics`            | `false`   | `true`        |
 
 
