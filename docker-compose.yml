@@ -19,5 +19,3 @@ services:
     command: ["caddy", "reverse-proxy", "--from", "witchonstephendrive.com", "--to", "witch:8080"]
     depends_on:
         - witch
-    logging:
-      driver: none
