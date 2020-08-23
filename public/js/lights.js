@@ -10,8 +10,7 @@ const setLight = async (color) => {
 
 const lightDance = async (colors) => {
     count = 0;
-    threshold = 10;
-    while (count < threshold) {
+    while (count < colors.length) {
         for (color of colors) {
             await setLight(color);
             await sleep(1000);

@@ -7,17 +7,17 @@ import (
 )
 
 func colorHandler(c *fiber.Ctx) {
-	colorParam := c.Params("color")
+	color := c.Params("color")
 	for _, light := range hueLights {
 		// Only change color if in the mgpriap
-		if _, ok := colorMap[colorParam]; ok {
-			bridge.SetLightState(light, getColorState(colorParam))
+		if _, ok := colors[color]; ok {
+			bridge.SetLightState(light, colors.getColorState(color))
 			c.JSON(fiber.Map{
-				"status": fmt.Sprintf("set to %s", colorParam),
+				"status": fmt.Sprintf("set to %s", color),
 			})
 		} else {
 			c.JSON(fiber.Map{
-				"status": fmt.Sprintf("%s not found", colorParam),
+				"status": fmt.Sprintf("%s not found", color),
 			})
 		}
 	}
