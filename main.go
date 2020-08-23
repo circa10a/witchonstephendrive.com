@@ -8,12 +8,14 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/amimof/huego"
+	"github.com/ansrivas/fiberprometheus"
 	"github.com/gofiber/fiber"
 	"github.com/gofiber/fiber/middleware"
 )
 
 var (
 	port      *int
+	metrics   *bool
 	hueUser   *string
 	bridge    *huego.Bridge
 	hueLights []int
@@ -37,11 +39,12 @@ func init() {
 func flags() {
 	// Args
 	port = flag.Int("port", 8080, "Listening port")
+	metrics = flag.Bool("metrics", true, "Enable prometheus metrics")
 	hueUser = flag.String("hue-user", os.Getenv("HUE_USER"), "ID to connect to hue bridge")
 	lightsStr := flag.String("lights", os.Getenv("HUE_LIGHTS"), "Light ID's to change")
 	flag.Parse()
 
-	// Ensure converstion
+	// Parse string input to slice of ints
 	hueLights = strToIntSlice(strings.Fields(*lightsStr))
 
 	// Validation
@@ -56,6 +59,12 @@ func flags() {
 func main() {
 	// New instance of fiber
 	app := fiber.New()
+	// Prometheus metrics
+	if *metrics {
+		prometheus := fiberprometheus.New("witch-metrics")
+		prometheus.RegisterAt(app, "/metrics")
+		app.Use(prometheus.Middleware)
+	}
 	// Use logging middleware
 	app.Use(middleware.Logger())
 	// Declare routes
