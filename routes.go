@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber"
+	log "github.com/sirupsen/logrus"
 )
 
 func colorHandler(c *fiber.Ctx) {
@@ -11,7 +12,10 @@ func colorHandler(c *fiber.Ctx) {
 	for _, light := range hueLights {
 		// Only change color if in the mgpriap
 		if _, ok := colors[color]; ok {
-			bridge.SetLightState(light, colors.getColorState(color))
+			_, err := bridge.SetLightState(light, colors.getColorState(color))
+			if err != nil {
+				log.Error(err)
+			}
 			c.JSON(fiber.Map{
 				"status": fmt.Sprintf("set to %s", color),
 			})
