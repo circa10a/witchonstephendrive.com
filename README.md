@@ -32,7 +32,7 @@ Here's what the front of my house looks like:
 
 Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks like(with some sweet ghost animations):
 
-<img src="https://i.imgur.com/DR3xuHO.png" width="35%" height="35%"/>
+<img src="https://i.imgur.com/BSg32cA.png" width="35%" height="35%"/>
 
 ## How does it work
 
@@ -75,7 +75,6 @@ docker-compose up -d
 | Route       | Description                                                                                       | Method |
 | `/`         | Serves static content in `./public`                                                               | `GET`  |
 | `/:color`   | Changes color of hue lights                                                                       | `POST` |
-| `/health`   | Reports a JSON status that application is up                                                      | `GET`  |
 | `/metrics`  | Serves prometheus metrics using [gofiber middleware](https://github.com/ansrivas/fiberprometheus) | `GET`  |
 
 ## Example color change request
