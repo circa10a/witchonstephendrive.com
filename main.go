@@ -2,15 +2,17 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
-
 	"github.com/amimof/huego"
 	"github.com/ansrivas/fiberprometheus"
+	"github.com/circa10a/witchonstephendrive.com/internal/colors"
+	"github.com/circa10a/witchonstephendrive.com/pkg/utils"
 	"github.com/gofiber/fiber"
 	"github.com/gofiber/fiber/middleware"
+	log "github.com/sirupsen/logrus"
 )
 
 var (
@@ -45,7 +47,7 @@ func flags() {
 	flag.Parse()
 
 	// Parse string input to slice of ints
-	hueLights = strToIntSlice(strings.Fields(*lightsStr))
+	hueLights = utils.StrToIntSlice(strings.Fields(*lightsStr))
 
 	// Validation
 	if *hueUser == "" {
@@ -54,6 +56,35 @@ func flags() {
 	if len(hueLights) == 0 {
 		log.Fatal("HUE_LIGHTS not set")
 	}
+}
+
+func colorHandler(c *fiber.Ctx) {
+	colors := colors.Colors
+	color := c.Params("color")
+	for _, light := range hueLights {
+		// Only change color if in the map
+		if _, ok := colors[color]; ok {
+			_, err := bridge.SetLightState(light, colors[color])
+			if err != nil {
+				log.Error(err)
+			}
+			c.JSON(fiber.Map{
+				"status": fmt.Sprintf("set to %s", color),
+			})
+		} else {
+			c.JSON(fiber.Map{
+				"status": fmt.Sprintf("%s not found", color),
+			})
+		}
+	}
+}
+
+func routes(app *fiber.App) {
+	root := app.Group("/")
+	// // Route to change lights
+	root.Post("/:color", colorHandler)
+	// Serve frontend static assets
+	root.Static("/", "./web")
 }
 
 func main() {
