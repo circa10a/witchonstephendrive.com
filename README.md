@@ -73,7 +73,7 @@ docker-compose up -d
 |             |                                                                                                   |        |
 |-------------|---------------------------------------------------------------------------------------------------|--------|
 | Route       | Description                                                                                       | Method |
-| `/`         | Serves static content in `./public`                                                               | `GET`  |
+| `/`         | Serves static content in `./web`                                                               | `GET`  |
 | `/:color`   | Changes color of hue lights                                                                       | `POST` |
 | `/metrics`  | Serves prometheus metrics using [gofiber middleware](https://github.com/ansrivas/fiberprometheus) | `GET`  |
 
