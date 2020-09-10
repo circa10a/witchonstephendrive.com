@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"strconv"
@@ -6,7 +6,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func strToIntSlice(s []string) []int {
+func StrToIntSlice(s []string) []int {
 	intSlice := []int{}
 	for _, s := range s {
 		intValue, err := strconv.Atoi(s)
