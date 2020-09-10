@@ -1,6 +1,6 @@
 # witchonstephendrive.com 🧹
 
-[![Go Doc](https://godoc.org/github.com/circa10a/witchonstephendrive.com?status.svg)](http://godoc.org/github.com/circa10a/witchonstephendrive.com)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/circa10a/witchonstephendrive.com)](https://pkg.go.dev/github.com/circa10a/witchonstephendrive.com?tab=overview)
 [![Go Report Card](https://goreportcard.com/badge/github.com/circa10a/witchonstephendrive.com)](https://goreportcard.com/report/github.com/circa10a/witchonstephendrive.com)
 
 A home automation project to control hue lights for Halloween <img src="https://raw.githubusercontent.com/egonelbre/gophers/10cc13c5e29555ec23f689dc985c157a8d4692ab/vector/fairy-tale/witch-too-much-candy.svg" align="right" width="20%" height="20%"/>
