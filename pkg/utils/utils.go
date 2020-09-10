@@ -6,6 +6,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// StrToIntSlice converts a slice of strings to ints
 func StrToIntSlice(s []string) []int {
 	intSlice := []int{}
 	for _, s := range s {
