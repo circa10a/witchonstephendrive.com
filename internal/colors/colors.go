@@ -5,6 +5,7 @@ import "github.com/amimof/huego"
 // ColorMap holds all the possible colors supported by the api
 type ColorMap map[string]huego.State
 
+// Colors hold all the supported colors' states
 var Colors = ColorMap{
 	"red": {
 		On:     true,
