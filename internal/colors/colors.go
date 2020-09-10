@@ -1,11 +1,11 @@
-package main
+package colors
 
 import "github.com/amimof/huego"
 
 // ColorMap holds all the possible colors supported by the api
 type ColorMap map[string]huego.State
 
-var colors = ColorMap{
+var Colors = ColorMap{
 	"red": {
 		On:     true,
 		Bri:    254,
@@ -83,8 +83,4 @@ var colors = ColorMap{
 		Bri:    254,
 		Effect: "colorloop",
 	},
-}
-
-func (m ColorMap) getColorState(c string) huego.State {
-	return m[c]
 }
