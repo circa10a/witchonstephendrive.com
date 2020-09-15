@@ -1,0 +1,43 @@
+basePath: /
+definitions:
+  routes.ColorResponse:
+    properties:
+      status:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: caleblemoine@gmail.com
+    name: Caleb Lemoine
+  description: Control my lights for halloween
+  license:
+    name: MIT
+    url: https://raw.githubusercontent.com/circa10a/witchonstephendrive.com/master/LICENSE
+  title: witchonstephendrive.com
+  version: 0.1.0
+paths:
+  /{color}:
+    post:
+      description: Change hue lights to supported color defined in color map
+      parameters:
+      - description: Color to change lights to
+        in: path
+        name: color
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/routes.ColorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/routes.ColorResponse'
+      summary: Change hue lights color
+schemes:
+- http
+swagger: "2.0"

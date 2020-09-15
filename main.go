@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"strings"
 
@@ -57,6 +58,16 @@ func flags() {
 	}
 }
 
+// @title witchonstephendrive.com
+// @version 0.1.0
+// @description Control my lights for Halloween
+// @contact.name Caleb Lemoine
+// @contact.email caleblemoine@gmail.com
+// @license.name MIT
+// @license.url https://raw.githubusercontent.com/circa10a/witchonstephendrive.com/master/LICENSE
+// @host witchonstephendrive.com
+// @BasePath /
+// @Schemes https
 func main() {
 	// New instance of fiber
 	app := fiber.New()
@@ -71,5 +82,5 @@ func main() {
 	// Declare routes
 	routes.Routes(app, hueLights, bridge)
 	// Start App
-	app.Listen(*port)
+	app.Listen(fmt.Sprintf(":%d", *port))
 }

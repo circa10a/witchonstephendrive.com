@@ -1,0 +1,65 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Control my lights for halloween",
+        "title": "witchonstephendrive.com",
+        "contact": {
+            "name": "Caleb Lemoine",
+            "email": "caleblemoine@gmail.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://raw.githubusercontent.com/circa10a/witchonstephendrive.com/master/LICENSE"
+        },
+        "version": "0.1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/{color}": {
+            "post": {
+                "description": "Change hue lights to supported color defined in color map",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Change hue lights color",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Color to change lights to",
+                        "name": "color",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/routes.ColorResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/routes.ColorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "routes.ColorResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

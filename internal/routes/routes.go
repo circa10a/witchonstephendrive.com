@@ -1,14 +1,27 @@
 package routes
 
 import (
-	"fmt"
-
 	"github.com/amimof/huego"
+	swagger "github.com/arsmn/fiber-swagger"
+	_ "github.com/circa10a/witchonstephendrive.com/api" // import generated docs.go
 	"github.com/circa10a/witchonstephendrive.com/internal/colors"
 	"github.com/gofiber/fiber"
 	log "github.com/sirupsen/logrus"
 )
 
+// ColorResponse responds with success or failed status string
+type ColorResponse struct {
+	Status string
+}
+
+// :color godoc
+// @Summary Change hue lights color
+// @Description Change hue lights to supported color defined in color map
+// @Produce json
+// @Success 200 {object} ColorResponse
+// @Failure 400 {object} ColorResponse
+// @Router /{color} [post]
+// @Param color path string true "Color to change lights to"
 func colorHandler(c *fiber.Ctx) {
 	colors := colors.Colors
 	color := c.Params("color")
@@ -21,12 +34,12 @@ func colorHandler(c *fiber.Ctx) {
 			if err != nil {
 				log.Error(err)
 			}
-			c.JSON(fiber.Map{
-				"status": fmt.Sprintf("set to %s", color),
+			c.JSON(ColorResponse{
+				Status: "success",
 			})
 		} else {
-			c.JSON(fiber.Map{
-				"status": fmt.Sprintf("%s not found", color),
+			c.Status(400).JSON(ColorResponse{
+				Status: "failed",
 			})
 		}
 	}
@@ -40,8 +53,13 @@ func Routes(app *fiber.App, hueLights []int, bridge *huego.Bridge) {
 		c.Locals("bridge", bridge)
 		c.Next()
 	})
-	// // Route to change lights
+	// Route to change lights
 	root.Post("/:color", colorHandler)
 	// Serve frontend static assets
 	root.Static("/", "./web")
+	// Swagger docs
+	root.Static("/api", "./api")
+	app.Use("/swagger", swagger.New(swagger.Config{
+		URL: "/api/swagger.json",
+	}))
 }
