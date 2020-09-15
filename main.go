@@ -7,11 +7,11 @@ import (
 	"strings"
 
 	"github.com/amimof/huego"
-	"github.com/ansrivas/fiberprometheus"
+	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/circa10a/witchonstephendrive.com/internal/routes"
 	"github.com/circa10a/witchonstephendrive.com/pkg/utils"
-	"github.com/gofiber/fiber"
-	"github.com/gofiber/fiber/middleware"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -78,9 +78,9 @@ func main() {
 		app.Use(prometheus.Middleware)
 	}
 	// Use logging middleware
-	app.Use(middleware.Logger())
+	app.Use(logger.New())
 	// Declare routes
 	routes.Routes(app, hueLights, bridge)
 	// Start App
-	app.Listen(fmt.Sprintf(":%d", *port))
+	app.Listen(fmt.Sprintf(":%v", *port))
 }

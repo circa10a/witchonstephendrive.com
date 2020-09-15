@@ -1,10 +1,10 @@
 {
     "schemes": [
-        "http"
+        "https"
     ],
     "swagger": "2.0",
     "info": {
-        "description": "Control my lights for halloween",
+        "description": "Control my lights for Halloween",
         "title": "witchonstephendrive.com",
         "contact": {
             "name": "Caleb Lemoine",
@@ -16,7 +16,7 @@
         },
         "version": "0.1.0"
     },
-    "host": "localhost:8080",
+    "host": "witchonstephendrive.com",
     "basePath": "/",
     "paths": {
         "/{color}": {

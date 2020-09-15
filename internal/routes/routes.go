@@ -2,10 +2,10 @@ package routes
 
 import (
 	"github.com/amimof/huego"
-	swagger "github.com/arsmn/fiber-swagger"
+	swagger "github.com/arsmn/fiber-swagger/v2"
 	_ "github.com/circa10a/witchonstephendrive.com/api" // import generated docs.go
 	"github.com/circa10a/witchonstephendrive.com/internal/colors"
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -22,7 +22,7 @@ type ColorResponse struct {
 // @Failure 400 {object} ColorResponse
 // @Router /{color} [post]
 // @Param color path string true "Color to change lights to"
-func colorHandler(c *fiber.Ctx) {
+func colorHandler(c *fiber.Ctx) error {
 	colors := colors.Colors
 	color := c.Params("color")
 	hueLights := c.Locals("hueLights").([]int)
@@ -34,24 +34,24 @@ func colorHandler(c *fiber.Ctx) {
 			if err != nil {
 				log.Error(err)
 			}
-			c.JSON(ColorResponse{
-				Status: "success",
-			})
 		} else {
-			c.Status(400).JSON(ColorResponse{
+			return c.Status(400).JSON(ColorResponse{
 				Status: "failed",
 			})
 		}
 	}
+	return c.JSON(ColorResponse{
+		Status: "success",
+	})
 }
 
 // Routes instantiates all of the listening context paths
 func Routes(app *fiber.App, hueLights []int, bridge *huego.Bridge) {
 	// Share huelight id's and bridge connection with route group
-	root := app.Group("/", func(c *fiber.Ctx) {
+	root := app.Group("/", func(c *fiber.Ctx) error {
 		c.Locals("hueLights", hueLights)
 		c.Locals("bridge", bridge)
-		c.Next()
+		return c.Next()
 	})
 	// Route to change lights
 	root.Post("/:color", colorHandler)
