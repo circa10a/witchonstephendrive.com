@@ -88,11 +88,11 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "0.1.0",
-	Host:        "localhost:8080",
+	Host:        "witchonstephendrive.com",
 	BasePath:    "/",
-	Schemes:     []string{"http"},
+	Schemes:     []string{"https"},
 	Title:       "witchonstephendrive.com",
-	Description: "Control my lights for halloween",
+	Description: "Control my lights for Halloween",
 }
 
 type s struct{}
