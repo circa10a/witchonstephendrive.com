@@ -52,7 +52,6 @@ Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks lik
 | HUE_LIGHTS  | Light ID's to change color of                                         | `HUE_LIGHTS`         | `--hue-lights`         | `true`    | None          |
 | METRICS     | Enables prometheus metrics on `/metrics`(unset for false)             | `METRICS`            | `--metrics`            | `false`   | `true`        |
 
-
 ### Go
 
 ```bash
@@ -73,9 +72,10 @@ docker-compose up -d
 |             |                                                                                                   |        |
 |-------------|---------------------------------------------------------------------------------------------------|--------|
 | Route       | Description                                                                                       | Method |
-| `/`         | Serves static content in `./web`                                                               | `GET`  |
+| `/`         | Serves static content in `./web`                                                                  | `GET`  |
 | `/:color`   | Changes color of hue lights                                                                       | `POST` |
 | `/metrics`  | Serves prometheus metrics using [gofiber middleware](https://github.com/ansrivas/fiberprometheus) | `GET`  |
+| `/swagger`  | Swagger API documentation                                                                         | `GET`  |
 
 ## Example color change request
 
