@@ -30,6 +30,8 @@ Here's what the front of my house looks like:
 
 <img src="https://i.imgur.com/hQE6u6h.jpg" width="50%" height="50%"/>
 
+<img src="https://i.imgur.com/Qj296rO.jpg" width="50%" height="50%"/>
+
 Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks like(with some sweet ghost animations):
 
 <img src="https://i.imgur.com/BSg32cA.png" width="35%" height="35%"/>
