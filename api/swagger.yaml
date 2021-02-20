@@ -17,7 +17,7 @@ info:
   title: witchonstephendrive.com
   version: 0.1.0
 paths:
-  /{color}:
+  /color/{color}:
     post:
       description: Change hue lights to supported color defined in color map
       parameters:
