@@ -31,7 +31,7 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/{color}": {
+        "/color/{color}": {
             "post": {
                 "description": "Change hue lights to supported color defined in color map",
                 "produces": [
