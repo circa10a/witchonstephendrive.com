@@ -9,9 +9,6 @@ services:
       HUE_USER: YOUR_TOKEN
       HUE_LIGHTS: 1 2 3
       GOMAXPROCS: 1
-    volumes:
-      - ./api:/api
-      - ./web:/web
 
   caddy:
     container_name: caddy

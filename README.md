@@ -39,8 +39,8 @@ Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks lik
 ## How does it work
 
 1. Uses [Caddy](https://github.com/caddyserver/caddy) as a reverse proxy to the `witch` app for TLS termination([let's encrypt](https://letsencrypt.org/)).
-2. The `witch` app is a Go backend powered by [gofiber](https://github.com/gofiber/fiber) that serves a vanilla html/css/js front end and has a `/:color` route.
-3. Once a `/:color` route is hit via a `POST` request, the `witch` app uses the [huego](https://github.com/amimof/huego) library for manipulating the state of the philips hue multicolor bulbs. The hue bridge endpoint on your network is automatically discovered.
+2. The `witch` app is a Go backend powered by [echo](https://echo.labstack.com/) that serves a vanilla html/css/js front end and has a `/color/:color` route.
+3. Once a `/color/:color` route is hit via a `POST` request, the `witch` app uses the [huego](https://github.com/amimof/huego) library for manipulating the state of the philips hue multicolor bulbs. The hue bridge endpoint on your network is automatically discovered.
 
 ## Usage
 
@@ -71,16 +71,16 @@ docker-compose up -d
 
 ### Endpoints
 
-|             |                                                                                                   |        |
-|-------------|---------------------------------------------------------------------------------------------------|--------|
-| Route       | Description                                                                                       | Method |
-| `/`         | Serves static content in `./web`                                                                  | `GET`  |
-| `/:color`   | Changes color of hue lights                                                                       | `POST` |
-| `/metrics`  | Serves prometheus metrics using [gofiber middleware](https://github.com/ansrivas/fiberprometheus) | `GET`  |
-| `/swagger`  | Swagger API documentation                                                                         | `GET`  |
+|             |                                                                                                    |        |
+|-------------|----------------------------------------------------------------------------------------------------|--------|
+| Route       | Description                                                                                        | Method |
+| `/`         | Serves static content in `./web`                                                                   | `GET`  |
+| `/:color`   | Changes color of hue lights                                                                        | `POST` |
+| `/metrics`  | Serves prometheus metrics using [echo middleware](https://echo.labstack.com/middleware/prometheus) | `GET`  |
+| `/swagger`  | Swagger API documentation                                                                          | `GET`  |
 
 ## Example color change request
 
 ```bash
-curl -X POST http://localhost:8080/red
+curl -X POST http://localhost:8080/color/red
 ```

@@ -21,5 +21,8 @@ compile:
 
 docs:
 	# Swagger
-	# https://github.com/arsmn/fiber-swagger
+	# https://github.com/swaggo/echo-swagger
 	swag init -o ./api
+
+lint:
+	golangci-lint run -v
