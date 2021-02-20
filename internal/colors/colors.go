@@ -5,11 +5,13 @@ import "github.com/amimof/huego"
 // ColorMap holds all the possible colors supported by the api
 type ColorMap map[string]huego.State
 
+var maxBrightness uint8 = 254
+
 // Colors hold all the supported colors' states
 var Colors = ColorMap{
 	"red": {
 		On:     true,
-		Bri:    254,
+		Bri:    maxBrightness,
 		Effect: "none",
 		Xy: []float32{
 			0.6786,
@@ -18,7 +20,7 @@ var Colors = ColorMap{
 	},
 	"orange": {
 		On:     true,
-		Bri:    254,
+		Bri:    maxBrightness,
 		Effect: "none",
 		Xy: []float32{
 			0.6424,
@@ -27,7 +29,7 @@ var Colors = ColorMap{
 	},
 	"yellow": {
 		On:     true,
-		Bri:    254,
+		Bri:    maxBrightness,
 		Effect: "none",
 		Xy: []float32{
 			0.5145,
@@ -36,7 +38,7 @@ var Colors = ColorMap{
 	},
 	"green": {
 		On:     true,
-		Bri:    254,
+		Bri:    maxBrightness,
 		Effect: "none",
 		Xy: []float32{
 			0.1723,
@@ -45,7 +47,7 @@ var Colors = ColorMap{
 	},
 	"blue": {
 		On:     true,
-		Bri:    254,
+		Bri:    maxBrightness,
 		Effect: "none",
 		Xy: []float32{
 			0.1396,
@@ -54,7 +56,7 @@ var Colors = ColorMap{
 	},
 	"purple": {
 		On:     true,
-		Bri:    254,
+		Bri:    maxBrightness,
 		Effect: "none",
 		Xy: []float32{
 			0.2027,
@@ -63,7 +65,7 @@ var Colors = ColorMap{
 	},
 	"pink": {
 		On:     true,
-		Bri:    254,
+		Bri:    maxBrightness,
 		Effect: "none",
 		Xy: []float32{
 			0.3924,
@@ -72,7 +74,7 @@ var Colors = ColorMap{
 	},
 	"teal": {
 		On:     true,
-		Bri:    254,
+		Bri:    maxBrightness,
 		Effect: "none",
 		Xy: []float32{
 			0.1527,
@@ -81,7 +83,7 @@ var Colors = ColorMap{
 	},
 	"rainbow": {
 		On:     true,
-		Bri:    254,
+		Bri:    maxBrightness,
 		Effect: "colorloop",
 	},
 }

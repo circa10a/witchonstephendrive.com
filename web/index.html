@@ -18,9 +18,8 @@
 
 <body class="dark">
     <nav>
-        <div class="nav-wrapper">
-            <a href="#" class="brand-logo"
-                style="font-family: Helvetica, Arial, sans-serif;">witchonstephendrive.com</a>
+        <div class="nav-wrapper green ">
+            <a href="#" class="brand-logo horror" style="font-size: 1.5em;">witchonstephendrive.com</a>
         </div>
     </nav><br />
 
@@ -52,13 +51,35 @@
         <a class="waves-effect waves-light btn teal" onclick="setLight('teal')">Teal</a>
     </div>
     <div class="button-row">
-        <a class="waves-effect waves-light btn" style="background-image: url('https://i.imgur.com/PLEe8r3.jpg'); background-size: 100% 100%;" onclick="setLight('rainbow')">Rainbow</a>
+        <a class="waves-effect waves-light btn"
+            style="background-image: url('https://i.imgur.com/PLEe8r3.jpg'); background-size: 100% 100%;"
+            onclick="setLight('rainbow')">Rainbow</a>
     </div>
 
     <div class="container">
         <svg id="svg"></svg>
     </div>
 </body>
-<script src="js/ghosts.js"></script>
+<div class="gooeys center">
+    <canvas style="position:relative;" id="canvas" </canvas>
+</div>
+
+<div class="glow center"></div>
+<div class="shadow center"></div>
+<div class="pot-top center"></div>
+<div class="pot center"></div>
+
+<svg>
+    <defs>
+        <filter id="filter">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 17 -10"
+                result="filter" />
+            <feBlend />
+        </filter>
+    </defs>
+</svg>
+
+<script src="js/cauldron.js"></script>
 
 </html>
