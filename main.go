@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"flag"
 	"fmt"
 	"os"
@@ -14,6 +15,12 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	log "github.com/sirupsen/logrus"
 )
+
+//go:embed web
+var frontendAssets embed.FS
+
+//go:embed api
+var apiDocAssets embed.FS
 
 var (
 	port      *int
@@ -81,7 +88,7 @@ func main() {
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
 	}))
 	// Declare routes
-	routes.Routes(e, hueLights, bridge)
+	routes.Routes(e, hueLights, bridge, frontendAssets, apiDocAssets)
 	// Start App
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%v", *port)))
 }

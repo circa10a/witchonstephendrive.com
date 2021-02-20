@@ -1,11 +1,13 @@
 package routes
 
 import (
+	"embed"
 	"net/http"
 
 	"github.com/amimof/huego"
 	_ "github.com/circa10a/witchonstephendrive.com/api" // import generated docs.go
 	"github.com/circa10a/witchonstephendrive.com/internal/colors"
+	"github.com/circa10a/witchonstephendrive.com/pkg/utils"
 	swagger "github.com/swaggo/echo-swagger"
 
 	"github.com/labstack/echo/v4"
@@ -23,7 +25,7 @@ type ColorResponse struct {
 // @Produce json
 // @Success 200 {object} ColorResponse
 // @Failure 400 {object} ColorResponse
-// @Router /{color} [post]
+// @Router /color/{color} [post]
 // @Param color path string true "Color to change lights to"
 func colorHandler(c echo.Context) error {
 	colors := colors.Colors
@@ -49,19 +51,31 @@ func colorHandler(c echo.Context) error {
 }
 
 // Routes instantiates all of the listening context paths
-func Routes(e *echo.Echo, hueLights []int, bridge *huego.Bridge) {
+func Routes(e *echo.Echo, hueLights []int, bridge *huego.Bridge, frontendAssets embed.FS, apiDocAssets embed.FS) {
+	frontendHttpFs, err := utils.ConvertEmbedFsDirToHttpFs(frontendAssets, "web")
+	if err != nil {
+		log.Error(err)
+	}
+
+	frontendFileServer := http.FileServer(frontendHttpFs)
 	// Serve frontend static assets
-	e.Static("/", "web")
-	// Swagger docs
-	e.Static("/api", "./api")
+	e.GET("/*", echo.WrapHandler(frontendFileServer))
+
+	apiDocsFileServer := http.FileServer(http.FS(apiDocAssets))
+	// API docs/Swagger JSON
+	e.GET("/api/*", echo.WrapHandler(apiDocsFileServer))
+
 	// Share huelight id's and bridge connection with route group
 	// Route to change lights
-	e.POST("/api/:color", colorHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
+	e.POST("/color/:color", colorHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			c.Set("hueLights", hueLights)
 			c.Set("bridge", bridge)
 			return next(c)
 		}
 	})
-	e.GET("/swagger/*", swagger.WrapHandler)
+
+	// Swagger docs
+	url := swagger.URL("http://localhost:8080/api/swagger.json")
+	e.GET("/swagger/*", swagger.EchoWrapHandler(url))
 }

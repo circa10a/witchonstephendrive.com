@@ -1,12 +1,12 @@
 module github.com/circa10a/witchonstephendrive.com
 
-go 1.15
+go 1.16
 
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/amimof/huego v1.1.0
 	github.com/go-openapi/spec v0.20.3 // indirect
-	github.com/labstack/echo-contrib v0.9.0 // indirect
+	github.com/labstack/echo-contrib v0.9.0
 	github.com/labstack/echo/v4 v4.2.0
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.8 // indirect
