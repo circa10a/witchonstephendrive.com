@@ -1,11 +1,14 @@
 package routes
 
 import (
+	"net/http"
+
 	"github.com/amimof/huego"
-	swagger "github.com/arsmn/fiber-swagger/v2"
 	_ "github.com/circa10a/witchonstephendrive.com/api" // import generated docs.go
 	"github.com/circa10a/witchonstephendrive.com/internal/colors"
-	"github.com/gofiber/fiber/v2"
+	swagger "github.com/swaggo/echo-swagger"
+
+	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -22,11 +25,11 @@ type ColorResponse struct {
 // @Failure 400 {object} ColorResponse
 // @Router /{color} [post]
 // @Param color path string true "Color to change lights to"
-func colorHandler(c *fiber.Ctx) error {
+func colorHandler(c echo.Context) error {
 	colors := colors.Colors
-	color := c.Params("color")
-	hueLights := c.Locals("hueLights").([]int)
-	bridge := c.Locals("bridge").(*huego.Bridge)
+	color := c.Param("color")
+	hueLights := c.Get("hueLights").([]int)
+	bridge := c.Get("bridge").(*huego.Bridge)
 	for _, light := range hueLights {
 		// Only change color if in the map
 		if _, ok := colors[color]; ok {
@@ -35,31 +38,30 @@ func colorHandler(c *fiber.Ctx) error {
 				log.Error(err)
 			}
 		} else {
-			return c.Status(400).JSON(ColorResponse{
+			return c.JSON(http.StatusBadRequest, ColorResponse{
 				Status: "failed",
 			})
 		}
 	}
-	return c.JSON(ColorResponse{
+	return c.JSON(http.StatusOK, ColorResponse{
 		Status: "success",
 	})
 }
 
 // Routes instantiates all of the listening context paths
-func Routes(app *fiber.App, hueLights []int, bridge *huego.Bridge) {
-	// Share huelight id's and bridge connection with route group
-	root := app.Group("/", func(c *fiber.Ctx) error {
-		c.Locals("hueLights", hueLights)
-		c.Locals("bridge", bridge)
-		return c.Next()
-	})
-	// Route to change lights
-	root.Post("/:color", colorHandler)
+func Routes(e *echo.Echo, hueLights []int, bridge *huego.Bridge) {
 	// Serve frontend static assets
-	root.Static("/", "./web")
+	e.Static("/", "web")
 	// Swagger docs
-	root.Static("/api", "./api")
-	app.Use("/swagger", swagger.New(swagger.Config{
-		URL: "/api/swagger.json",
-	}))
+	e.Static("/api", "./api")
+	// Share huelight id's and bridge connection with route group
+	// Route to change lights
+	e.POST("/api/:color", colorHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			c.Set("hueLights", hueLights)
+			c.Set("bridge", bridge)
+			return next(c)
+		}
+	})
+	e.GET("/swagger/*", swagger.WrapHandler)
 }

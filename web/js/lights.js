@@ -1,6 +1,6 @@
 const setLight = async (color) => {
     try {
-        await fetch(`/${color}`, {
+        await fetch(`/api/${color}`, {
             method: 'POST',
         });
     } catch(e) {
