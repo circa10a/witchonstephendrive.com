@@ -17,43 +17,43 @@
 </head>
 
 <body class="dark">
-    <nav>
-        <div class="nav-wrapper green ">
+    <nav >
+        <div class="nav-wrapper green" id="navbar">
             <a href="#" class="brand-logo horror" style="font-size: 1.5em;">witchonstephendrive.com</a>
         </div>
     </nav><br />
 
     <div class="button-row">
-        <a class="waves-effect waves-light btn red" onclick="setLight('red')">Red</a>
+        <a class="waves-effect waves-light btn red" onclick="setColors({lightsColor: 'red', themeColor: 'red'})">Red</a>
     </div>
     <div class="button-row">
         <a class="waves-effect waves-light btn" style="background-color: #eb6123;"
-            onclick="setLight('orange')">Orange</a>
+            onclick="setColors({lightsColor: 'orange', themeColor: 'orange'})">Orange</a>
     </div>
     <div class="button-row">
-        <a class="waves-effect waves-light btn yellow" onclick="setLight('yellow')">Yellow</a>
-    </div>
-
-    <div class="button-row">
-        <a class="waves-effect waves-light btn green" onclick="setLight('green')">Green</a>
-    </div>
-    <div class="button-row">
-        <a class="waves-effect waves-light btn blue" onclick="setLight('blue')">Blue</a>
-    </div>
-    <div class="button-row">
-        <a class="waves-effect waves-light btn purple" onclick="setLight('purple')">Purple</a>
+        <a class="waves-effect waves-light btn yellow" onclick="setColors({lightsColor: 'yellow', themeColor: 'yellow'})">Yellow</a>
     </div>
 
     <div class="button-row">
-        <a class="waves-effect waves-light btn pink" onclick="setLight('pink')">Pink</a>
+        <a class="waves-effect waves-light btn green" onclick="setColors({lightsColor: 'green', themeColor: 'green'})">Green</a>
     </div>
     <div class="button-row">
-        <a class="waves-effect waves-light btn teal" onclick="setLight('teal')">Teal</a>
+        <a class="waves-effect waves-light btn blue" onclick="setColors({lightsColor: 'blue', themeColor: 'blue'})">Blue</a>
+    </div>
+    <div class="button-row">
+        <a class="waves-effect waves-light btn purple" onclick="setColors({lightsColor: 'purple', themeColor: 'purple'})">Purple</a>
+    </div>
+
+    <div class="button-row">
+        <a class="waves-effect waves-light btn pink" onclick="setColors({lightsColor: 'pink', themeColor: 'pink'})">Pink</a>
+    </div>
+    <div class="button-row">
+        <a class="waves-effect waves-light btn teal" onclick="setColors({lightsColor: 'teal', themeColor: 'teal'})">Teal</a>
     </div>
     <div class="button-row">
         <a class="waves-effect waves-light btn"
             style="background-image: url('https://i.imgur.com/PLEe8r3.jpg'); background-size: 100% 100%;"
-            onclick="setLight('rainbow')">Rainbow</a>
+            onclick="setColors({lightsColor: 'rainbow', themeColor: 'rainbow'})">Rainbow</a>
     </div>
 
     <div class="container">
@@ -73,7 +73,7 @@
     <defs>
         <filter id="filter">
             <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 17 -10"
+            <feColorMatrix id ="colormatrix" in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 17 -10"
                 result="filter" />
             <feBlend />
         </filter>
