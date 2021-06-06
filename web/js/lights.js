@@ -1,6 +1,12 @@
-const setLight = async (color) => {
+const setColors = async (opts = {}) => {
+    // Change navbar
+    let navBar =  document.getElementById("navbar");
+    navBar.classList.remove(...navBar.classList);
+    navBar.classList.add('nav-wrapper');
+    navBar.classList.add(opts.themeColor === 'rainbow' ? 'black' : opts.themeColor);
+    // Set light colors via hue
     try {
-        await fetch(`/color/${color}`, {
+        await fetch(`/color/${opts.lightsColor}`, {
             method: 'POST',
         });
     } catch(e) {
