@@ -1,0 +1,12 @@
+FROM node:lts-alpine3.12
+ARG ASSISTANT_RELAY_VERSION=3.3.2b
+ENV NODE_ENV=production
+EXPOSE 3000
+ADD https://github.com/greghesp/assistant-relay/releases/download/v$ASSISTANT_RELAY_VERSION/release.zip .
+RUN  apk update && \
+     apk upgrade && \
+     apk add --no-cache python3 py3-pip make g++ && \
+     unzip -q release.zip && \
+     rm release.zip
+RUN npm run setup
+CMD ["npm", "start"]

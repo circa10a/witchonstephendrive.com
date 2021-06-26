@@ -71,7 +71,7 @@ func flags() {
 // @contact.name Caleb Lemoine
 // @contact.email caleblemoine@gmail.com
 // @license.name MIT
-// @license.url https://raw.githubusercontent.com/circa10a/witchonstephendrive.com/master/LICENSE
+// @license.url https://raw.githubusercontent.com/circa10a/witchonstephendrive.com/main/LICENSE
 // @host witchonstephendrive.com
 // @BasePath /
 // @Schemes https

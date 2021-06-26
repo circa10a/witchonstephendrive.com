@@ -20,3 +20,15 @@ services:
     command: ["caddy", "reverse-proxy", "--from", "witchonstephendrive.com", "--to", "witch:8080"]
     depends_on:
         - witch
+
+  assistant-relay:
+    container_name: assistant-relay
+    network_mode: host
+    build:
+      context: .
+      dockerfile: ./Dockerfile.assistant-relay
+    volumes:
+      - assistant-relay-secrets:/bin
+      - ./sounds:/bin/media
+volumes:
+  assistant-relay-secrets:
