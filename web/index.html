@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <!-- Custom JS-->
     <script src="js/utils.js"></script>
+    <script src="js/sounds.js"></script>
     <script src="js/lights.js"></script>
 </head>
 
@@ -24,36 +25,36 @@
     </nav><br />
 
     <div class="button-row">
-        <a class="waves-effect waves-light btn red" onclick="setColors({lightsColor: 'red', themeColor: 'red'})">Red</a>
+        <a class="waves-effect waves-light btn red" onclick="setState({color: 'red'})">Red</a>
     </div>
     <div class="button-row">
         <a class="waves-effect waves-light btn" style="background-color: #eb6123;"
-            onclick="setColors({lightsColor: 'orange', themeColor: 'orange'})">Orange</a>
+            onclick="setState({color: 'orange'})">Orange</a>
     </div>
     <div class="button-row">
-        <a class="waves-effect waves-light btn yellow" onclick="setColors({lightsColor: 'yellow', themeColor: 'yellow'})">Yellow</a>
-    </div>
-
-    <div class="button-row">
-        <a class="waves-effect waves-light btn green" onclick="setColors({lightsColor: 'green', themeColor: 'green'})">Green</a>
-    </div>
-    <div class="button-row">
-        <a class="waves-effect waves-light btn blue" onclick="setColors({lightsColor: 'blue', themeColor: 'blue'})">Blue</a>
-    </div>
-    <div class="button-row">
-        <a class="waves-effect waves-light btn purple" onclick="setColors({lightsColor: 'purple', themeColor: 'purple'})">Purple</a>
+        <a class="waves-effect waves-light btn yellow" onclick="setState({color: 'yellow'})">Yellow</a>
     </div>
 
     <div class="button-row">
-        <a class="waves-effect waves-light btn pink" onclick="setColors({lightsColor: 'pink', themeColor: 'pink'})">Pink</a>
+        <a class="waves-effect waves-light btn green" onclick="setState({color: 'green'})">Green</a>
     </div>
     <div class="button-row">
-        <a class="waves-effect waves-light btn teal" onclick="setColors({lightsColor: 'teal', themeColor: 'teal'})">Teal</a>
+        <a class="waves-effect waves-light btn blue" onclick="setState({color: 'blue'})">Blue</a>
+    </div>
+    <div class="button-row">
+        <a class="waves-effect waves-light btn purple" onclick="setState({color: 'purple'})">Purple</a>
+    </div>
+
+    <div class="button-row">
+        <a class="waves-effect waves-light btn pink" onclick="setState({color: 'pink'})">Pink</a>
+    </div>
+    <div class="button-row">
+        <a class="waves-effect waves-light btn teal" onclick="setState({color: 'teal'})">Teal</a>
     </div>
     <div class="button-row">
         <a class="waves-effect waves-light btn"
             style="background-image: url('https://i.imgur.com/PLEe8r3.jpg'); background-size: 100% 100%;"
-            onclick="setColors({lightsColor: 'rainbow', themeColor: 'rainbow'})">Rainbow</a>
+            onclick="setState({color: 'rainbow'})">Rainbow</a>
     </div>
 
     <div class="container">
