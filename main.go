@@ -2,14 +2,11 @@ package main
 
 import (
 	"embed"
-	"flag"
 	"fmt"
-	"os"
-	"strings"
 
 	"github.com/amimof/huego"
 	"github.com/circa10a/witchonstephendrive.com/internal/routes"
-	"github.com/circa10a/witchonstephendrive.com/pkg/utils"
+	"github.com/kelseyhightower/envconfig"
 	"github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -22,47 +19,12 @@ var frontendAssets embed.FS
 //go:embed api
 var apiDocAssets embed.FS
 
-var (
-	port      *int
-	metrics   *bool
-	hueUser   *string
-	bridge    *huego.Bridge
-	hueLights []int
-)
-
-func init() {
-	// Parse flags
-	flags()
-	// Find hue bridge ip
-	hueBridge, err := huego.Discover()
-	if err != nil {
-		log.Fatal(err)
-	}
-	// Assign bridge location to global var
-	bridge = hueBridge
-	// Authenticate against bridge api
-	bridge.Login(*hueUser)
-}
-
-// Read flags from command line args and set defaults
-func flags() {
-	// Args
-	port = flag.Int("port", 8080, "Listening port")
-	metrics = flag.Bool("metrics", true, "Enable prometheus metrics")
-	hueUser = flag.String("hue-user", os.Getenv("HUE_USER"), "ID to connect to hue bridge")
-	lightsStr := flag.String("hue-lights", os.Getenv("HUE_LIGHTS"), "Light ID's to change")
-	flag.Parse()
-
-	// Parse string input to slice of ints
-	hueLights = utils.StrToIntSlice(strings.Fields(*lightsStr))
-
-	// Validation
-	if *hueUser == "" {
-		log.Fatal("HUE_USER not set")
-	}
-	if len(hueLights) == 0 {
-		log.Fatal("HUE_LIGHTS not set")
-	}
+type witchConfig struct {
+	Port      int           `envconfig:"PORT" default:"8080"`
+	Metrics   bool          `envconfig:"METRICS" default:"true"`
+	HueUser   string        `envconfig:"HUE_USER" required:"true"`
+	HueLights []int         `envconfig:"HUE_LIGHTS" required:"true" split_words:"true"`
+	Bridge    *huego.Bridge `ignored:"true"`
 }
 
 // @title witchonstephendrive.com
@@ -76,10 +38,26 @@ func flags() {
 // @BasePath /
 // @Schemes https
 func main() {
+	// setup config
+	var witchConfig witchConfig
+	err := envconfig.Process("witch", &witchConfig)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	// Find hue bridge ip
+	hueBridge, err := huego.Discover()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// Assign bridge location to global var
+	witchConfig.Bridge = hueBridge
+	// Authenticate against bridge api
+	witchConfig.Bridge.Login(witchConfig.HueUser)
+
 	// New instance of echo
 	e := echo.New()
 	// Prometheus metrics
-	if *metrics {
+	if witchConfig.Metrics {
 		p := prometheus.NewPrometheus("echo", nil)
 		p.Use(e)
 	}
@@ -89,7 +67,7 @@ func main() {
 		Output: e.Logger.Output(),
 	}))
 	// Declare routes
-	routes.Routes(e, hueLights, bridge, frontendAssets, apiDocAssets)
+	routes.Routes(e, witchConfig.HueLights, witchConfig.Bridge, frontendAssets, apiDocAssets)
 	// Start App
-	e.Logger.Fatal(e.Start(fmt.Sprintf(":%v", *port)))
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%v", witchConfig.Port)))
 }
