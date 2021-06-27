@@ -46,19 +46,20 @@ Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks lik
 
 ### Configuration
 
-|             |                                                                       |                      |                        |           |               |
-|-------------|-----------------------------------------------------------------------|----------------------|------------------------|-----------|---------------|
-| Name        | Description                                                           | Environment Variable | Command Line Argument  | Required  | Default       |
-| PORT        | Port for web server to listen on                                      | `PORT`               | NONE                   | `false`   | `8080`        |
-| HUE_USER    | Philips Hue API User/Token                                            | `HUE_USER`           | `--hue-user`           | `true`    | None          |
-| HUE_LIGHTS  | Light ID's to change color of                                         | `HUE_LIGHTS`         | `--hue-lights`         | `true`    | None          |
-| METRICS     | Enables prometheus metrics on `/metrics`(unset for false)             | `METRICS`            | `--metrics`            | `false`   | `true`        |
+|             |                                                                       |                      |           |               |
+|-------------|-----------------------------------------------------------------------|----------------------|-----------|---------------|
+| Name        | Description                                                           | Environment Variable | Required  | Default       |
+| PORT        | Port for web server to listen on                                      | `PORT`               | `false`   | `8080`        |
+| HUE_USER    | Philips Hue API User/Token                                            | `HUE_USER`           | `true`    | None          |
+| HUE_LIGHTS  | Light ID's to change color of                                         | `HUE_LIGHTS`         | `true`    | None          |
+| METRICS     | Enables prometheus metrics on `/metrics`(unset for false)             | `METRICS`            | `false`   | `true`        |
 
 ### Go
 
 ```bash
 go build -o witch .
-./witch --hue-user <YOUR_TOKEN> --lights "1 2 3"
+export HUE_USER=<YOUR_TOKEN>; export HUE_LIGHTS="1 2 3"
+./witch
 ```
 
 ### Docker
