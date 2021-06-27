@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/amimof/huego"
+	"github.com/circa10a/witchonstephendrive.com/internal/config"
 	"github.com/circa10a/witchonstephendrive.com/internal/routes"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/labstack/echo-contrib/prometheus"
@@ -19,17 +20,9 @@ var frontendAssets embed.FS
 //go:embed api
 var apiDocAssets embed.FS
 
-type witchConfig struct {
-	Port      int           `envconfig:"PORT" default:"8080"`
-	Metrics   bool          `envconfig:"METRICS" default:"true"`
-	HueUser   string        `envconfig:"HUE_USER" required:"true"`
-	HueLights []int         `envconfig:"HUE_LIGHTS" required:"true" split_words:"true"`
-	Bridge    *huego.Bridge `ignored:"true"`
-}
-
 // @title witchonstephendrive.com
 // @version 0.1.0
-// @description Control my lights for Halloween
+// @description Control my halloween decorations
 // @contact.name Caleb Lemoine
 // @contact.email caleblemoine@gmail.com
 // @license.name MIT
@@ -39,7 +32,7 @@ type witchConfig struct {
 // @Schemes https
 func main() {
 	// setup config
-	var witchConfig witchConfig
+	var witchConfig config.WitchConfig
 	err := envconfig.Process("witch", &witchConfig)
 	if err != nil {
 		log.Fatal(err.Error())
@@ -67,7 +60,7 @@ func main() {
 		Output: e.Logger.Output(),
 	}))
 	// Declare routes
-	routes.Routes(e, witchConfig.HueLights, witchConfig.Bridge, frontendAssets, apiDocAssets)
+	routes.Routes(e, witchConfig, frontendAssets, apiDocAssets)
 	// Start App
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%v", witchConfig.Port)))
 }

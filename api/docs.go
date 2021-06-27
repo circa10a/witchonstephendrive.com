@@ -24,7 +24,7 @@ var doc = `{
         },
         "license": {
             "name": "MIT",
-            "url": "https://raw.githubusercontent.com/circa10a/witchonstephendrive.com/master/LICENSE"
+            "url": "https://raw.githubusercontent.com/circa10a/witchonstephendrive.com/main/LICENSE"
         },
         "version": "{{.Version}}"
     },
@@ -62,10 +62,50 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/sound/{sound}": {
+            "post": {
+                "description": "Play halloween sound supported sound defined in sound map",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Play sound via assistant relay",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Sound to play",
+                        "name": "sound",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/routes.SoundResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/routes.SoundResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
         "routes.ColorResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "routes.SoundResponse": {
             "type": "object",
             "properties": {
                 "status": {
