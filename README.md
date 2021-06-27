@@ -6,21 +6,25 @@
 A home automation project to control hue lights for Halloween <img src="https://raw.githubusercontent.com/egonelbre/gophers/10cc13c5e29555ec23f689dc985c157a8d4692ab/vector/fairy-tale/witch-too-much-candy.svg" align="right" width="20%" height="20%"/>
 
 - [witchonstephendrive.com](#witchonstephendrivecom---)
-  * [Why](#why)
-  * [What does it do](#what-does-it-do)
-  * [How does it work](#how-does-it-work)
-  * [Usage](#usage)
-    + [Configuration](#configuration)
-    + [Go](#go)
-    + [Docker](#docker)
-    + [Endpoints](#endpoints)
-  * [Example color change request](#example-color-change-request)
+  - [Why](#why)
+  - [What does it do](#what-does-it-do)
+  - [How does it work](#how-does-it-work)
+  - [Usage](#usage)
+    - [Configuration](#configuration)
+    - [Go](#go)
+    - [Docker](#docker)
+    - [Endpoints](#endpoints)
+  - [Get colors](#get-colors)
+  - [Example color change request](#example-color-change-request)
+  - [Get sounds](#get-sounds)
+  - [Example sound play request](#example-sound-play-request)
 
 ## Why
 
 - I love Halloween 🎃
 - Side projects are the best
-- Given how hectic 2020 is, I believe kids won't have a normal Halloween. I want try to produce more smiles from the kids in my neighborhood.
+- ~~Given how hectic 2020 is, I believe kids won't have a normal Halloween. I want try to produce more smiles from the kids in my neighborhood.~~
+- Let's give people a reason to smile every year.
 
 ## What does it do
 
@@ -54,7 +58,7 @@ Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks lik
 | HUE_USER               | Philips Hue API User/Token                                            | `HUE_USER`               | `true`    | None          |
 | HUE_LIGHTS             | Light ID's to change color of. Example(export HUE_LIGHTS="1,2,3")     | `HUE_LIGHTS`             | `true`    | None          |
 | METRICS                | Enables prometheus metrics on `/metrics`(unset for false)             | `METRICS`                | `false`   | `true`        |
-| ASSISTANT_DEVICE       | Name of google assistant speaker to play sounds on                    | `ASSISTANT_RELAY_DEVICE` | `true`    | None          |
+| ASSISTANT_DEVICE       | Name of google assistant speaker to play sounds on                    | `ASSISTANT_DEVICE`       | `true`    | None          |
 | ASSISTANT_RELAY_HOST   | Address of the google assistant relay                                 | `ASSISTANT_RELAY_HOST`   | `false`   | `127.0.0.1`   |
 | ASSISTANT_RELAY_PORT   | Listening port of the google assistant relay                          | `ASSISTANT_RELAY_PORT`   | `false`   | `3000`        |
 
@@ -62,13 +66,13 @@ Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks lik
 
 ```bash
 go build -o witch .
-export HUE_USER=<YOUR_TOKEN>; export HUE_LIGHTS="1,2,3"
+export HUE_USER=<YOUR_TOKEN>; export HUE_LIGHTS="1,2,3"; export ASSISTANT_DEVICE="My speaker"
 ./witch
 ```
 
 ### Docker
 
-> Be sure to update `HUE_USER` and `HUE_LIGHTS` in `docker-compose.yml`
+> Be sure to update `HUE_USER`, `HUE_LIGHTS`, and `ASSISTANT_DEVICE` in `docker-compose.yml`
 
 ```bash
 docker-compose up -d

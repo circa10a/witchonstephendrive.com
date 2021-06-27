@@ -51,13 +51,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/routes.ColorResponse"
+                            "$ref": "#/definitions/routes.ColorSuccessfulChangeResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/routes.ColorResponse"
+                            "$ref": "#/definitions/routes.ColorFailedChangeResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/routes.ColorFailedChangeResponse"
                         }
                     }
                 }
@@ -74,13 +80,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/routes.ColorResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/routes.ColorResponse"
+                            "$ref": "#/definitions/routes.ColorsListResponse"
                         }
                     }
                 }
@@ -106,13 +106,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/routes.SoundResponse"
+                            "$ref": "#/definitions/routes.SoundSuccessfulPlayResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/routes.SoundResponse"
+                            "$ref": "#/definitions/routes.SoundFailedPlayResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/routes.SoundFailedPlayResponse"
                         }
                     }
                 }
@@ -129,13 +135,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/routes.SoundResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/routes.SoundResponse"
+                            "$ref": "#/definitions/routes.SoundsListResponse"
                         }
                     }
                 }
@@ -143,7 +143,7 @@ var doc = `{
         }
     },
     "definitions": {
-        "routes.ColorResponse": {
+        "routes.ColorFailedChangeResponse": {
             "type": "object",
             "properties": {
                 "message": {
@@ -160,7 +160,26 @@ var doc = `{
                 }
             }
         },
-        "routes.SoundResponse": {
+        "routes.ColorSuccessfulChangeResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "routes.ColorsListResponse": {
+            "type": "object",
+            "properties": {
+                "supportedColors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "routes.SoundFailedPlayResponse": {
             "type": "object",
             "properties": {
                 "message": {
@@ -169,6 +188,25 @@ var doc = `{
                 "status": {
                     "type": "string"
                 },
+                "supportedSounds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "routes.SoundSuccessfulPlayResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "routes.SoundsListResponse": {
+            "type": "object",
+            "properties": {
                 "supportedSounds": {
                     "type": "array",
                     "items": {

@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  routes.ColorResponse:
+  routes.ColorFailedChangeResponse:
     properties:
       message:
         type: string
@@ -11,12 +11,36 @@ definitions:
           type: string
         type: array
     type: object
-  routes.SoundResponse:
+  routes.ColorSuccessfulChangeResponse:
+    properties:
+      status:
+        type: string
+    type: object
+  routes.ColorsListResponse:
+    properties:
+      supportedColors:
+        items:
+          type: string
+        type: array
+    type: object
+  routes.SoundFailedPlayResponse:
     properties:
       message:
         type: string
       status:
         type: string
+      supportedSounds:
+        items:
+          type: string
+        type: array
+    type: object
+  routes.SoundSuccessfulPlayResponse:
+    properties:
+      status:
+        type: string
+    type: object
+  routes.SoundsListResponse:
+    properties:
       supportedSounds:
         items:
           type: string
@@ -49,11 +73,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/routes.ColorResponse'
+            $ref: '#/definitions/routes.ColorSuccessfulChangeResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/routes.ColorResponse'
+            $ref: '#/definitions/routes.ColorFailedChangeResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/routes.ColorFailedChangeResponse'
       summary: Change hue lights color
   /colors:
     get:
@@ -64,11 +92,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/routes.ColorResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/routes.ColorResponse'
+            $ref: '#/definitions/routes.ColorsListResponse'
       summary: Get available colors to change to
   /sound/{sound}:
     post:
@@ -85,11 +109,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/routes.SoundResponse'
+            $ref: '#/definitions/routes.SoundSuccessfulPlayResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/routes.SoundResponse'
+            $ref: '#/definitions/routes.SoundFailedPlayResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/routes.SoundFailedPlayResponse'
       summary: Play sound via assistant relay
   /sounds:
     get:
@@ -100,11 +128,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/routes.SoundResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/routes.SoundResponse'
+            $ref: '#/definitions/routes.SoundsListResponse'
       summary: Get available sounds to play
 schemes:
 - https

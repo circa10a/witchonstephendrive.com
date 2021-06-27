@@ -11,10 +11,20 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// SoundResponse responds with success or failed status string
-type SoundResponse struct {
+// SoundsListResponse responds supported sounds to play
+type SoundsListResponse struct {
+	SupportedSounds []string `json:"supportedSounds"`
+}
+
+// SoundSuccesfulPlayResponse responds with a success status string when operation has completed successfully
+type SoundSuccessfulPlayResponse struct {
+	Status string `json:"status"`
+}
+
+// SoundFailedPlayResponse responds with status string, reason for failure in message, and list of supported sounds
+type SoundFailedPlayResponse struct {
 	Status          string   `json:"status"`
-	Message         string   `json:"message,omitempty"`
+	Message         string   `json:"message"`
 	SupportedSounds []string `json:"supportedSounds"`
 }
 
@@ -22,12 +32,10 @@ type SoundResponse struct {
 // @Summary Get available sounds to play
 // @Description Get list of supported sounds
 // @Produce json
-// @Success 200 {object} SoundResponse
-// @Failure 400 {object} SoundResponse
+// @Success 200 {object} SoundsListResponse
 // @Router /sounds [get]
 func soundsReadHandler(c echo.Context) error {
-	return c.JSON(http.StatusOK, SoundResponse{
-		Status:          successString,
+	return c.JSON(http.StatusOK, SoundsListResponse{
 		SupportedSounds: sounds.SupportedSounds,
 	})
 }
@@ -36,19 +44,15 @@ func soundsReadHandler(c echo.Context) error {
 // @Summary Play sound via assistant relay
 // @Description Play halloween sound supported in sound list
 // @Produce json
-// @Success 200 {object} SoundResponse
-// @Failure 400 {object} SoundResponse
+// @Success 200 {object} SoundSuccessfulPlayResponse
+// @Failure 400 {object} SoundFailedPlayResponse
+// @Failure 500 {object} SoundFailedPlayResponse
 // @Router /sound/{sound} [post]
 // @Param sound path string true "Sound to play"
 func soundPlayHandler(c echo.Context) error {
 	sound := c.Param("sound")
 	client := c.Get("client").(*resty.Client)
 	assistantDevice := c.Get("assistantDevice")
-	responseCode := http.StatusOK
-	response := &SoundResponse{
-		Status:          successString,
-		SupportedSounds: sounds.SupportedSounds,
-	}
 	if utils.StrInSlice(sound, sounds.SupportedSounds) {
 		// Call assistant-relay if sound is supported
 		resp, err := client.R().SetBody(&sounds.PlaySoundPayload{
@@ -57,17 +61,31 @@ func soundPlayHandler(c echo.Context) error {
 			Type:   "custom",
 		}).Post("/cast")
 		// Handle unknown error
-		if err != nil || resp.StatusCode() != http.StatusOK {
+		if err != nil {
 			log.Error(err)
-			responseCode = http.StatusBadRequest
-			response.Status = failedString
-			response.Message = err.Error()
+			return c.JSON(http.StatusInternalServerError, SoundFailedPlayResponse{
+				Status:          failedString,
+				Message:         err.Error(),
+				SupportedSounds: sounds.SupportedSounds,
+			})
 		}
+		// If there was an issue with assistant relay
+		if resp.StatusCode() != http.StatusOK {
+			return c.JSON(http.StatusInternalServerError, SoundFailedPlayResponse{
+				Status:          failedString,
+				Message:         resp.String(),
+				SupportedSounds: sounds.SupportedSounds,
+			})
+		}
+		// If sound not found in support sounds
 	} else {
-		// If sound is not supported
-		responseCode = http.StatusBadRequest
-		response.Status = failedString
-		response.Message = fmt.Sprintf("sound: %v not supported", sound)
+		return c.JSON(http.StatusBadRequest, SoundFailedPlayResponse{
+			Status:          failedString,
+			Message:         fmt.Sprintf("sound: %v not supported", sound),
+			SupportedSounds: sounds.SupportedSounds,
+		})
 	}
-	return c.JSON(responseCode, response)
+	return c.JSON(http.StatusOK, &SoundSuccessfulPlayResponse{
+		Status: successString,
+	})
 }

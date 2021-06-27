@@ -6,7 +6,9 @@ ADD https://github.com/greghesp/assistant-relay/releases/download/v$ASSISTANT_RE
 RUN  apk update && \
      apk upgrade && \
      apk add --no-cache python3 py3-pip make g++ && \
+     pip3 install catt && \
      unzip -q release.zip && \
-     rm release.zip
-RUN npm run setup
+     rm release.zip && \
+     npm run setup && \
+     rm -rf /node_modules/grpc/Release/*
 CMD ["npm", "start"]
