@@ -31,6 +31,7 @@ func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, 
 	e.GET("/*", echo.WrapHandler(frontendFileServer))
 	// Swagger.{json,yaml}
 	apiDocsFileServer := http.FileServer(http.FS(apiDocAssets))
+
 	// API docs/Swagger JSON
 	e.GET("/api/*", echo.WrapHandler(apiDocsFileServer))
 

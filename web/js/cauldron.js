@@ -1,3 +1,4 @@
+// Cauldron
 canvas = document.getElementById("canvas");
 var context = canvas.getContext('2d');
 W = canvas.width = window.innerWidth;

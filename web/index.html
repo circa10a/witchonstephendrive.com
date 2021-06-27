@@ -4,23 +4,23 @@
     <title>The Witch on Stephen Drive</title>
     <link rel="icon" href="/favicon.ico" type="image/gif" sizes="16x16">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#1a1a1a"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <link rel="stylesheet" href="css/catamaran.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
+    <!-- Parse prometheus metrics library -->
+    <script src="https://cdn.jsdelivr.net/npm/parse-prometheus-text-format@1.1.1/dist/parse-prometheus-text-format.umd.js"></script>
     <!-- Custom CSS-->
     <link rel="stylesheet" href="css/styles.css">
     <!-- Custom JS-->
-    <script src="js/utils.js"></script>
-    <script src="js/sounds.js"></script>
-    <script src="js/lights.js"></script>
+    <script src="js/index.js"></script>
 </head>
 
 <body class="dark">
-    <nav >
+    <nav>
         <div class="nav-wrapper green" id="navbar">
-            <a href="#" class="brand-logo horror" style="font-size: 1.5em;">witchonstephendrive.com</a>
+            <a href="#" id="title" class="brand-logo horror" style="font-size: 1.5em;">witchonstephendrive.com</a>
         </div>
     </nav><br />
 
@@ -56,6 +56,8 @@
             style="background-image: url('https://i.imgur.com/PLEe8r3.jpg'); background-size: 100% 100%;"
             onclick="setState({color: 'rainbow'})">Rainbow</a>
     </div>
+    <footer class="page-footer" id="footer">
+    </footer>
 
     <div class="container">
         <svg id="svg"></svg>
@@ -74,13 +76,14 @@
     <defs>
         <filter id="filter">
             <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-            <feColorMatrix id ="colormatrix" in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 17 -10"
-                result="filter" />
+            <feColorMatrix id="colormatrix" in="blur" mode="matrix"
+                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 17 -10" result="filter" />
             <feBlend />
         </filter>
     </defs>
 </svg>
 
-<script src="js/cauldron.js"></script>
+<!-- <script src="js/cauldron.js"></script> -->
+
 
 </html>
