@@ -11,6 +11,7 @@ var SupportedSounds = []string{
 	"this-is-halloween",
 	"werewolf",
 	"witch-laugh",
+	"police-siren", // Cause Traci
 }
 
 // PlaySoundPayload is the type supported by assistant-relay to cast custom media
