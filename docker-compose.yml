@@ -3,27 +3,31 @@ version: '3'
 services:
   witch:
     container_name: witch
+    network_mode: host
     restart: always
     build: .
     environment:
+      ASSISTANT_DEVICE: YOUR_DEVICE_NAME_OR_IP
       HUE_USER: YOUR_TOKEN
-      HUE_LIGHTS: 1 2 3
+      HUE_LIGHTS: 1,2,3
       GOMAXPROCS: 1
 
   caddy:
     container_name: caddy
+    network_mode: host
     restart: always
     image: caddy
     ports:
       - 80:80
       - 443:443
-    command: ["caddy", "reverse-proxy", "--from", "witchonstephendrive.com", "--to", "witch:8080"]
+    command: ["caddy", "reverse-proxy", "--from", "witchonstephendrive.com", "--to", "127.0.0.1:8080"]
     depends_on:
         - witch
 
   assistant-relay:
     container_name: assistant-relay
     network_mode: host
+    restart: always
     build:
       context: .
       dockerfile: ./Dockerfile.assistant-relay

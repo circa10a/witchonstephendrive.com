@@ -63,9 +63,32 @@ var doc = `{
                 }
             }
         },
+        "/colors": {
+            "get": {
+                "description": "Get list of supported colors",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get available colors to change to",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/routes.ColorResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/routes.ColorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/sound/{sound}": {
             "post": {
-                "description": "Play halloween sound supported sound defined in sound map",
+                "description": "Play halloween sound supported in sound list",
                 "produces": [
                     "application/json"
                 ],
@@ -94,22 +117,63 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/sounds": {
+            "get": {
+                "description": "Get list of supported sounds",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get available sounds to play",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/routes.SoundResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/routes.SoundResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
         "routes.ColorResponse": {
             "type": "object",
             "properties": {
+                "message": {
+                    "type": "string"
+                },
                 "status": {
                     "type": "string"
+                },
+                "supportedColors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
         "routes.SoundResponse": {
             "type": "object",
             "properties": {
+                "message": {
+                    "type": "string"
+                },
                 "status": {
                     "type": "string"
+                },
+                "supportedSounds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         }
@@ -132,7 +196,7 @@ var SwaggerInfo = swaggerInfo{
 	BasePath:    "/",
 	Schemes:     []string{"https"},
 	Title:       "witchonstephendrive.com",
-	Description: "Control my lights for Halloween",
+	Description: "Control my halloween decorations",
 }
 
 type s struct{}
