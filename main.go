@@ -38,9 +38,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	for _, light := range witchConfig.HueLights {
-		log.Warn(light)
-	}
+
 	// Find hue bridge ip
 	hueBridge, err := huego.Discover()
 	if err != nil {
