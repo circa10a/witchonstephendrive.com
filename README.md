@@ -40,26 +40,29 @@ Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks lik
 
 1. Uses [Caddy](https://github.com/caddyserver/caddy) as a reverse proxy to the `witch` app for TLS termination([let's encrypt](https://letsencrypt.org/)).
 2. The `witch` app is a Go backend powered by [echo](https://echo.labstack.com/) that serves a vanilla html/css/js front end and has a `/color/:color` route.
-3. Once a `/color/:color` route is hit via a `POST` request, the `witch` app uses the [huego](https://github.com/amimof/huego) library for manipulating the state of the phillips hue multicolor bulbs. The hue bridge endpoint on your network is automatically discovered.
+3. Once a `/color/:color` route is hit via a `POST` request, the `witch` app uses the [huego](https://github.com/amimof/huego) library for manipulating the state of the philips hue multicolor bulbs. The hue bridge endpoint on your network is automatically discovered.
 4. When a `/sound/:sound` route is hit via a `POST` request, the `witch` app talks to the local [assistant-relay](https://assistantrelay.com) to play pre-configured halloween sounds through connected nest speakers.
 
 ## Usage
 
 ### Configuration
 
-|             |                                                                       |                      |           |               |
-|-------------|-----------------------------------------------------------------------|----------------------|-----------|---------------|
-| Name        | Description                                                           | Environment Variable | Required  | Default       |
-| PORT        | Port for web server to listen on                                      | `PORT`               | `false`   | `8080`        |
-| HUE_USER    | Philips Hue API User/Token                                            | `HUE_USER`           | `true`    | None          |
-| HUE_LIGHTS  | Light ID's to change color of                                         | `HUE_LIGHTS`         | `true`    | None          |
-| METRICS     | Enables prometheus metrics on `/metrics`(unset for false)             | `METRICS`            | `false`   | `true`        |
+|                        |                                                                       |                          |           |               |
+|------------------------|-----------------------------------------------------------------------|--------------------------|-----------|---------------|
+| Name                   | Description                                                           | Environment Variable     | Required  | Default       |
+| PORT                   | Port for web server to listen on                                      | `PORT`                   | `false`   | `8080`        |
+| HUE_USER               | Philips Hue API User/Token                                            | `HUE_USER`               | `true`    | None          |
+| HUE_LIGHTS             | Light ID's to change color of. Example(export HUE_LIGHTS="1,2,3")     | `HUE_LIGHTS`             | `true`    | None          |
+| METRICS                | Enables prometheus metrics on `/metrics`(unset for false)             | `METRICS`                | `false`   | `true`        |
+| ASSISTANT_DEVICE       | Name of google assistant speaker to play sounds on                    | `ASSISTANT_RELAY_DEVICE` | `true`    | None          |
+| ASSISTANT_RELAY_HOST   | Address of the google assistant relay                                 | `ASSISTANT_RELAY_HOST`   | `false`   | `127.0.0.1`   |
+| ASSISTANT_RELAY_PORT   | Listening port of the google assistant relay                          | `ASSISTANT_RELAY_PORT`   | `false`   | `3000`        |
 
 ### Go
 
 ```bash
 go build -o witch .
-export HUE_USER=<YOUR_TOKEN>; export HUE_LIGHTS="1 2 3"
+export HUE_USER=<YOUR_TOKEN>; export HUE_LIGHTS="1,2,3"
 ./witch
 ```
 
@@ -76,16 +79,30 @@ docker-compose up -d
 |                       |                                                                                                    |        |
 |-----------------------|----------------------------------------------------------------------------------------------------|--------|
 | Route                 | Description                                                                                        | Method |
-| `/`                   | Serves static content in `./web`                                                                   | `GET`  |
+| `/`                   | Serves static content in embedded from `./web`                                                     | `GET`  |
+| `/colors`             | Get supported colors to change to                                                                  | `GET`  |
 | `/color/:color`       | Changes color of hue lights                                                                        | `POST` |
+| `/sounds`             | Get support sounds to play                                                                         | `GET`  |
 | `/sound/:sound`       | Changes color of hue lights                                                                        | `POST` |
 | `/metrics`            | Serves prometheus metrics using [echo middleware](https://echo.labstack.com/middleware/prometheus) | `GET`  |
 | `/swagger/index.html` | Swagger API documentation                                                                          | `GET`  |
+
+## Get colors
+
+```bash
+curl -X POST http://localhost:8080/colors
+```
 
 ## Example color change request
 
 ```bash
 curl -X POST http://localhost:8080/color/red
+```
+
+## Get sounds
+
+```bash
+curl -X POST http://localhost:8080/sounds
 ```
 
 ## Example sound play request

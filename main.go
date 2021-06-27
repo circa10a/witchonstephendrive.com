@@ -7,6 +7,7 @@ import (
 	"github.com/amimof/huego"
 	"github.com/circa10a/witchonstephendrive.com/internal/config"
 	"github.com/circa10a/witchonstephendrive.com/internal/routes"
+	"github.com/go-resty/resty/v2"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
@@ -37,15 +38,21 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	for _, light := range witchConfig.HueLights {
+		log.Warn(light)
+	}
 	// Find hue bridge ip
 	hueBridge, err := huego.Discover()
 	if err != nil {
 		log.Fatal(err)
 	}
-	// Assign bridge location to global var
 	witchConfig.Bridge = hueBridge
 	// Authenticate against bridge api
 	witchConfig.Bridge.Login(witchConfig.HueUser)
+
+	// Create client to be used with assistant relay
+	assitantRelatEndpoint := fmt.Sprintf("%v:%v", witchConfig.AssistantRelayHost, witchConfig.AssistantRelayPort)
+	witchConfig.Client = resty.New().SetHostURL(assitantRelatEndpoint).SetHeader("Content-Type", "application/json")
 
 	// New instance of echo
 	e := echo.New()
