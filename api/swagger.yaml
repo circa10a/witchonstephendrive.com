@@ -5,6 +5,11 @@ definitions:
       status:
         type: string
     type: object
+  routes.SoundResponse:
+    properties:
+      status:
+        type: string
+    type: object
 host: witchonstephendrive.com
 info:
   contact:
@@ -13,7 +18,7 @@ info:
   description: Control my lights for Halloween
   license:
     name: MIT
-    url: https://raw.githubusercontent.com/circa10a/witchonstephendrive.com/master/LICENSE
+    url: https://raw.githubusercontent.com/circa10a/witchonstephendrive.com/main/LICENSE
   title: witchonstephendrive.com
   version: 0.1.0
 paths:
@@ -38,6 +43,27 @@ paths:
           schema:
             $ref: '#/definitions/routes.ColorResponse'
       summary: Change hue lights color
+  /sound/{sound}:
+    post:
+      description: Play halloween sound supported sound defined in sound map
+      parameters:
+      - description: Sound to play
+        in: path
+        name: sound
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/routes.SoundResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/routes.SoundResponse'
+      summary: Play sound via assistant relay
 schemes:
 - https
 swagger: "2.0"
