@@ -86,6 +86,44 @@ var doc = `{
                 }
             }
         },
+        "/lights/{state}": {
+            "post": {
+                "description": "Only supports states of on/off",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Change state of configured lights",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "State to set lights to (on/off)",
+                        "name": "state",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/routes.LightStateSuccessfulChangeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/routes.LightStateFailedChangeResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/routes.LightStateFailedChangeResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/sound/{sound}": {
             "post": {
                 "description": "Play halloween sound supported in sound list",
@@ -176,6 +214,25 @@ var doc = `{
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "routes.LightStateFailedChangeResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "routes.LightStateSuccessfulChangeResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
                 }
             }
         },

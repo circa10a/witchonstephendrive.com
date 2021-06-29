@@ -32,13 +32,14 @@ var apiDocAssets embed.FS
 // @BasePath /
 // @Schemes https
 func main() {
-	// setup config
+	// Setup config
 	var witchConfig config.WitchConfig
 	err := envconfig.Process("witch", &witchConfig)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
+	// Hue config
 	// Find hue bridge ip
 	hueBridge, err := huego.Discover()
 	if err != nil {
@@ -47,6 +48,14 @@ func main() {
 	witchConfig.Bridge = hueBridge
 	// Authenticate against bridge api
 	witchConfig.Bridge.Login(witchConfig.HueUser)
+	// Store all light data to be used later
+	for _, lightID := range witchConfig.HueLights {
+		light, err := witchConfig.Bridge.GetLight(lightID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		witchConfig.HueLightsStructs = append(witchConfig.HueLightsStructs, *light)
+	}
 
 	// Create client to be used with assistant relay
 	assitantRelatEndpoint := fmt.Sprintf("%v:%v", witchConfig.AssistantRelayHost, witchConfig.AssistantRelayPort)
