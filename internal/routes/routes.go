@@ -42,13 +42,21 @@ func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, 
 			return next(c)
 		}
 	})
-	// Route to change lights
+	// Route to change color of lights
 	e.POST("/color/:color", colorChangeHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 		// In the event user passes unsupported color, give them a list
 		return func(c echo.Context) error {
 			c.Set("hueLights", witchConfig.HueLights)
 			c.Set("bridge", witchConfig.Bridge)
 			c.Set("supportedColors", colors.SupportedColors)
+			return next(c)
+		}
+	})
+
+	// Route to change lights state(on/off)
+	e.POST("/lights/:state", lightsStateHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			c.Set("hueLights", witchConfig.HueLightsStructs)
 			return next(c)
 		}
 	})

@@ -18,6 +18,7 @@ A home automation project to control hue lights for Halloween <img src="https://
   - [Example color change request](#example-color-change-request)
   - [Get sounds](#get-sounds)
   - [Example sound play request](#example-sound-play-request)
+  - [Turn lights on/off](#turn-lights-on/off)
 
 ## Why
 
@@ -88,6 +89,7 @@ docker-compose up -d
 | `/color/:color`       | Changes color of hue lights                                                                        | `POST` |
 | `/sounds`             | Get support sounds to play                                                                         | `GET`  |
 | `/sound/:sound`       | Changes color of hue lights                                                                        | `POST` |
+| `/lights/:state`      | Changes state of configured lights(on/off)                                                         | `POST` |
 | `/metrics`            | Serves prometheus metrics using [echo middleware](https://echo.labstack.com/middleware/prometheus) | `GET`  |
 | `/swagger/index.html` | Swagger API documentation                                                                          | `GET`  |
 
@@ -113,4 +115,13 @@ curl -X POST http://localhost:8080/sounds
 
 ```bash
 curl -X POST http://localhost:8080/sound/werewolf
+```
+
+## Turn lights on/off
+
+```bash
+# on
+curl -X POST http://localhost:8080/lights/on
+# off
+curl -X POST http://localhost:8080/lights/off
 ```

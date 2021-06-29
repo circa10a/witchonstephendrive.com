@@ -14,5 +14,6 @@ type WitchConfig struct {
 	AssistantRelayPort int           `envconfig:"ASSISTANT_RELAY_PORT" default:"3000"`
 	AssistantDevice    string        `envconfig:"ASSISTANT_DEVICE" required:"true"`
 	Bridge             *huego.Bridge `ignored:"true"`
+	HueLightsStructs   []huego.Light `ignored:"true"`
 	Client             *resty.Client `ignored:"true"`
 }
