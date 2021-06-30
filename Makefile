@@ -26,3 +26,6 @@ docs:
 
 lint:
 	golangci-lint run -v
+
+js-lint:
+	eslint web/js/*.js
