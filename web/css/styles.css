@@ -8,6 +8,17 @@ body {
 	background-color: #1a1a1a;
 }
 
+@keyframes blinker {
+	50% {
+	  opacity: 0;
+	}
+}
+
+.blink {
+	animation: blinker 3.5s linear infinite;
+	color: white;
+}
+
 .container {
   margin: 0;
   padding: 0;
