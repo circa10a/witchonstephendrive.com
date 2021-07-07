@@ -2,11 +2,12 @@ FROM node:lts-alpine3.12
 ARG ASSISTANT_RELAY_VERSION=3.3.2b
 ENV NODE_ENV=production
 EXPOSE 3000
+COPY ./sounds /bin/media
 ADD https://github.com/greghesp/assistant-relay/releases/download/v$ASSISTANT_RELAY_VERSION/release.zip .
 RUN  apk update && \
      apk upgrade && \
      apk add --no-cache python3 py3-pip make g++ && \
-     pip3 install catt && \
+     pip3 install zeroconf==0.28.8 catt && \
      unzip -q release.zip && \
      rm release.zip && \
      npm run setup && \
