@@ -5,12 +5,11 @@ services:
     container_name: witch
     network_mode: host
     restart: always
-    build: .
+    image: circa10a/witchonstephendrive.com:witch
     environment:
-      ASSISTANT_DEVICE: YOUR_DEVICE_NAME_OR_IP
-      HUE_USER: YOUR_TOKEN
-      HUE_LIGHTS: 1,2,3
-      GOMAXPROCS: 1
+      ASSISTANT_DEVICE: YOUR_DEVICE_NAME_OR_IP  # To be configured
+      HUE_USER: YOUR_TOKEN  # To be configured
+      HUE_LIGHTS: 1,2,3  # To be configured
 
   caddy:
     container_name: caddy
@@ -28,11 +27,17 @@ services:
     container_name: assistant-relay
     network_mode: host
     restart: always
-    build:
-      context: .
-      dockerfile: ./Dockerfile.assistant-relay
+    image: circa10a/witchonstephendrive.com:assistant-relay
     volumes:
-      - assistant-relay-secrets:/bin
-      - ./sounds:/bin/media
-volumes:
-  assistant-relay-secrets:
+      - ~/config.json:/bin/config.json
+
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      WATCHTOWER_CLEANUP: "true"
+      WATCHTOWER_POLL_INTERVAL: 3600
