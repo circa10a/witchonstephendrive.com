@@ -10,6 +10,8 @@ services:
       ASSISTANT_DEVICE: YOUR_DEVICE_NAME_OR_IP  # To be configured
       HUE_USER: YOUR_TOKEN  # To be configured
       HUE_LIGHTS: 1,2,3  # To be configured
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
 
   caddy:
     container_name: caddy
@@ -19,7 +21,9 @@ services:
     ports:
       - 80:80
       - 443:443
-    command: ["caddy", "reverse-proxy", "--from", "witchonstephendrive.com", "--to", "127.0.0.1:8080"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - /etc/localtime:/etc/localtime:ro
     depends_on:
         - witch
 
@@ -29,7 +33,8 @@ services:
     restart: always
     image: circa10a/witchonstephendrive.com:assistant-relay
     volumes:
-      - ~/config.json:/bin/config.json
+      - ~/config.json:/bin/config.json # To be configured
+      - /etc/localtime:/etc/localtime:ro
 
   watchtower:
     container_name: watchtower
