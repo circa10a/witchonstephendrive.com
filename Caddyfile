@@ -1,0 +1,24 @@
+witchonstephendrive.com
+@cachedFiles {
+        path *.jpg *.jpeg *.png *.gif *.ico *.css *.js
+}
+header @cachedFiles {
+        Cache-Control "max-age=86400"
+}
+encode @cachedFiles {
+        gzip
+}
+header {
+        # enable HSTS
+        Strict-Transport-Security max-age=31536000;
+
+        # disable clients from sniffing the media type
+        X-Content-Type-Options nosniff
+
+        # clickjacking protection
+        X-Frame-Options DENY
+
+        # keep referrer data off of HTTP connections
+        Referrer-Policy no-referrer-when-downgrade
+}
+reverse_proxy 127.0.0.1:8080
