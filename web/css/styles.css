@@ -8,6 +8,14 @@ body {
 	background-color: #1a1a1a;
 }
 
+#toast-container {
+	bottom: auto !important;
+	left: auto !important;
+	top: 10%;
+	right:3%;
+	min-width: 10%;
+}
+
 @keyframes blinker {
 	50% {
 	  opacity: 0;

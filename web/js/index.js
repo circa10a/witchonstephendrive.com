@@ -1,7 +1,13 @@
 // Utils
-function sleep(ms) {
+const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms));
-}
+};
+
+const checkLimit = (opts = {}) => {
+  if (opts.statusCode === 429) {
+    M.toast({html: 'Slow down!', displayLength: 2000, classes: 'green darken-1 rounded'});
+  };
+};
 
 // Sounds
 const colorToSoundMap = {
@@ -34,7 +40,6 @@ const getCountOfColorChanges = async () => {
   metricsResp = await fetch('/metrics', {
     method: 'GET',
   });
-
   const metricsText = await metricsResp.text();
   const parsed = parsePrometheusTextFormat(metricsText);
   const requestMetrics = parsed.filter(metric =>  metric.name ===  'echo_requests_total')[0];
@@ -79,9 +84,11 @@ const setState = async (opts = {}) => {
 
   // Set light colors via hue
   try {
-    await fetch(`/color/${opts.color}`, {
+    colorResponse = await fetch(`/color/${opts.color}`, {
       method: 'POST',
     });
+    // Check that rate limit isn't hit, alert user
+    checkLimit({statusCode: colorResponse.status});
   } catch(e) {
     console.error(e);
   }

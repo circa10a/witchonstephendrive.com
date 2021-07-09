@@ -17,12 +17,11 @@ services:
     container_name: caddy
     network_mode: host
     restart: always
-    image: caddy
+    image: circa10a/witchonstephendrive.com:caddy
     ports:
       - 80:80
       - 443:443
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
       - /etc/localtime:/etc/localtime:ro
     depends_on:
         - witch
