@@ -31,6 +31,14 @@ jobs:
           platforms: ${{ env.PLATFORMS }}
           push: true
           tags: ${{ github.repository }}:witch
+      - name: Build and push caddy
+        uses: docker/build-push-action@v2
+        with:
+          file: Dockerfile.caddy
+          context: .
+          platforms: ${{ env.PLATFORMS }}
+          push: true
+          tags: ${{ github.repository }}:caddy
       - name: Build and push assistant-relay
         uses: docker/build-push-action@v2
         with:
