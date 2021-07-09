@@ -82,17 +82,19 @@ docker-compose up -d
 
 ### Endpoints
 
-|                       |                                                                                                    |        |
-|-----------------------|----------------------------------------------------------------------------------------------------|--------|
-| Route                 | Description                                                                                        | Method |
-| `/`                   | Serves static content in embedded from `./web`                                                     | `GET`  |
-| `/colors`             | Get supported colors to change to                                                                  | `GET`  |
-| `/color/:color`       | Changes color of hue lights                                                                        | `POST` |
-| `/sounds`             | Get support sounds to play                                                                         | `GET`  |
-| `/sound/:sound`       | Changes color of hue lights                                                                        | `POST` |
-| `/lights/:state`      | Changes state of configured lights(on/off)                                                         | `POST` |
-| `/metrics`            | Serves prometheus metrics using [echo middleware](https://echo.labstack.com/middleware/prometheus) | `GET`  |
-| `/swagger/index.html` | Swagger API documentation                                                                          | `GET`  |
+> Rate limiting performed by [this caddy plugin](https://github.com/mholt/caddy-ratelimit)
+
+|                       |                                                  |        |              |                |
+|-----------------------|--------------------------------------------------|--------|--------------|----------------|
+| Route                 | Description                                      | Method | Rate Limited | Limit          |
+| `/`                   | Serves static content in embedded from `./web`   | `GET`  | No           | N/A            |
+| `/colors`             | Get supported colors to change to                | `GET`  | No           | N/A            |
+| `/color/:color`       | Changes color of hue lights                      | `POST` | Yes          | 5 req. per 10s |
+| `/sounds`             | Get support sounds to play                       | `GET`  | No           | N/A            |
+| `/sound/:sound`       | Changes color of hue lights                      | `POST` | Yes          | 5 req. per 10s |
+| `/lights/:state`      | Changes state of configured lights(on/off)       | `POST` | Yes          | 5 req. per 10s |
+| `/metrics`            | Serves prometheus metrics using echo middleware] | `GET`  | No           | N/A            |
+| `/swagger/index.html` | Swagger API documentation                        | `GET`  | No           | N/A            |
 
 ## Get colors
 
