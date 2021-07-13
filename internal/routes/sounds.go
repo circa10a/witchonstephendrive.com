@@ -16,14 +16,15 @@ type SoundsListResponse struct {
 	SupportedSounds []string `json:"supportedSounds"`
 }
 
-// SoundSuccesfulPlayResponse responds with a success status string when operation has completed successfully
+// SoundSuccesfulPlayResponse responds with a boolean to indicate successful or not
 type SoundSuccessfulPlayResponse struct {
-	Status string `json:"status"`
+	Success bool `json:"success"`
 }
 
-// SoundFailedPlayResponse responds with status string, reason for failure in message, and list of supported sounds
+// SoundFailedPlayResponse responds with a boolean to indicate successful or not,
+// reason for failure, and list of supported sounds
 type SoundFailedPlayResponse struct {
-	Status          string   `json:"status"`
+	Success         bool     `json:"success"`
 	Message         string   `json:"message"`
 	SupportedSounds []string `json:"supportedSounds"`
 }
@@ -64,7 +65,7 @@ func soundPlayHandler(c echo.Context) error {
 		if err != nil {
 			log.Error(err)
 			return c.JSON(http.StatusInternalServerError, SoundFailedPlayResponse{
-				Status:          failedString,
+				Success:         false,
 				Message:         err.Error(),
 				SupportedSounds: sounds.SupportedSounds,
 			})
@@ -72,7 +73,7 @@ func soundPlayHandler(c echo.Context) error {
 		// If there was an issue with assistant relay
 		if resp.StatusCode() != http.StatusOK {
 			return c.JSON(http.StatusInternalServerError, SoundFailedPlayResponse{
-				Status:          failedString,
+				Success:         false,
 				Message:         resp.String(),
 				SupportedSounds: sounds.SupportedSounds,
 			})
@@ -80,12 +81,12 @@ func soundPlayHandler(c echo.Context) error {
 		// If sound not found in support sounds
 	} else {
 		return c.JSON(http.StatusBadRequest, SoundFailedPlayResponse{
-			Status:          failedString,
+			Success:         false,
 			Message:         fmt.Sprintf("sound: %v not supported", sound),
 			SupportedSounds: sounds.SupportedSounds,
 		})
 	}
 	return c.JSON(http.StatusOK, &SoundSuccessfulPlayResponse{
-		Status: successString,
+		Success: true,
 	})
 }

@@ -16,26 +16,26 @@ type ColorsListResponse struct {
 	SupportedColors []string `json:"supportedColors"`
 }
 
-// ColorSuccessfulChangeResponse responds with a success status string when operation has completed successfully
+// ColorSuccessfulChangeResponse responds with a boolean to indicate successful or not
 type ColorSuccessfulChangeResponse struct {
-	Status string `json:"status"`
+	Success bool `json:"success"`
 }
 
-// ColorFailedChangeResponse responds with status string, reason for failure in message, and list of supported colors
+// ColorFailedChangeResponse responds with status string, reason for failure, and list of supported colors
 type ColorFailedChangeResponse struct {
-	Status          string   `json:"status"`
+	Success         bool     `json:"success"`
 	Message         string   `json:"message"`
 	SupportedColors []string `json:"supportedColors"`
 }
 
-// LightStateSuccessfulChangeResponse responds with status string
+// LightStateSuccessfulChangeResponse responds with a boolean to indicate successful or not
 type LightStateSuccessfulChangeResponse struct {
-	Status string `json:"status"`
+	Success bool `json:"success"`
 }
 
-// LightStateFailedChangeResponse responds with status string, reason for failure in message
+// LightStateFailedChangeResponse responds with a boolean to indicate successful or not and reason for failure
 type LightStateFailedChangeResponse struct {
-	Status  string `json:"status"`
+	Success bool   `json:"success"`
 	Message string `json:"message"`
 }
 
@@ -72,7 +72,7 @@ func colorChangeHandler(c echo.Context) error {
 			if err != nil {
 				log.Error(err)
 				return c.JSON(http.StatusInternalServerError, &ColorFailedChangeResponse{
-					Status:          failedString,
+					Success:         false,
 					Message:         err.Error(),
 					SupportedColors: colors.SupportedColors,
 				})
@@ -80,14 +80,14 @@ func colorChangeHandler(c echo.Context) error {
 			// Fail if color not supported
 		} else {
 			return c.JSON(http.StatusBadRequest, &ColorFailedChangeResponse{
-				Status:          failedString,
+				Success:         false,
 				Message:         fmt.Sprintf("color: %v not supported", color),
 				SupportedColors: colors.SupportedColors,
 			})
 		}
 	}
 	return c.JSON(http.StatusOK, &ColorSuccessfulChangeResponse{
-		Status: successString,
+		Success: true,
 	})
 }
 
@@ -107,7 +107,7 @@ func lightsStateHandler(c echo.Context) error {
 	// Check for on/off states
 	if state != "on" && state != "off" {
 		return c.JSON(http.StatusBadRequest, LightStateFailedChangeResponse{
-			Status:  failedString,
+			Success: false,
 			Message: fmt.Sprintf("received state: %v. on/off are the only valid values", state),
 		})
 	}
@@ -117,7 +117,7 @@ func lightsStateHandler(c echo.Context) error {
 			err := light.On()
 			if err != nil {
 				return c.JSON(http.StatusInternalServerError, LightStateFailedChangeResponse{
-					Status:  failedString,
+					Success: false,
 					Message: err.Error(),
 				})
 			}
@@ -126,13 +126,13 @@ func lightsStateHandler(c echo.Context) error {
 			err := light.Off()
 			if err != nil {
 				return c.JSON(http.StatusInternalServerError, LightStateFailedChangeResponse{
-					Status:  failedString,
+					Success: false,
 					Message: err.Error(),
 				})
 			}
 		}
 	}
 	return c.JSON(http.StatusOK, LightStateSuccessfulChangeResponse{
-		Status: successString,
+		Success: true,
 	})
 }

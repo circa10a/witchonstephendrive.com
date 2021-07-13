@@ -65,8 +65,7 @@ func main() {
 	e := echo.New()
 	// Prometheus metrics
 	if witchConfig.Metrics {
-		p := prometheus.NewPrometheus("echo", nil)
-		p.Use(e)
+		prometheus.NewPrometheus("echo", nil).Use(e)
 	}
 	// Use logging middleware
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
