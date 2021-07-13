@@ -96,7 +96,7 @@ const setState = async (opts = {}) => {
 };
 
 // Flicker (turn lights off/on)
-const flicker = async (opts = {count: 2, sleepTime: 1000, color: 'black'}) => {
+const flicker = async (opts = {count: 3, sleepTime: 1000, color: 'black'}) => {
   setTheme({color: opts.color});
   // Play sound, don't wait since it takes a few seconds to kick off
   playSoundForColor(opts);
