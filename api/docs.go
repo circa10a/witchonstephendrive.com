@@ -187,8 +187,8 @@ var doc = `{
                 "message": {
                     "type": "string"
                 },
-                "status": {
-                    "type": "string"
+                "success": {
+                    "type": "boolean"
                 },
                 "supportedColors": {
                     "type": "array",
@@ -201,8 +201,8 @@ var doc = `{
         "routes.ColorSuccessfulChangeResponse": {
             "type": "object",
             "properties": {
-                "status": {
-                    "type": "string"
+                "success": {
+                    "type": "boolean"
                 }
             }
         },
@@ -223,16 +223,16 @@ var doc = `{
                 "message": {
                     "type": "string"
                 },
-                "status": {
-                    "type": "string"
+                "success": {
+                    "type": "boolean"
                 }
             }
         },
         "routes.LightStateSuccessfulChangeResponse": {
             "type": "object",
             "properties": {
-                "status": {
-                    "type": "string"
+                "success": {
+                    "type": "boolean"
                 }
             }
         },
@@ -242,8 +242,8 @@ var doc = `{
                 "message": {
                     "type": "string"
                 },
-                "status": {
-                    "type": "string"
+                "success": {
+                    "type": "boolean"
                 },
                 "supportedSounds": {
                     "type": "array",
@@ -256,8 +256,8 @@ var doc = `{
         "routes.SoundSuccessfulPlayResponse": {
             "type": "object",
             "properties": {
-                "status": {
-                    "type": "string"
+                "success": {
+                    "type": "boolean"
                 }
             }
         },

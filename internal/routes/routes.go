@@ -13,11 +13,6 @@ import (
 	swagger "github.com/swaggo/echo-swagger"
 )
 
-const (
-	successString = "success"
-	failedString  = "failed"
-)
-
 // Routes instantiates all of the listening context paths
 func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, apiDocAssets fs.FS) {
 	// Static assets
