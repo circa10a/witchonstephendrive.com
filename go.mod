@@ -15,6 +15,7 @@ require (
 	github.com/labstack/echo/v4 v4.4.0
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-isatty v0.0.13 // indirect
+	github.com/oleiade/lane v1.0.1
 	github.com/prometheus/common v0.30.0 // indirect
 	github.com/prometheus/procfs v0.7.1 // indirect
 	github.com/sirupsen/logrus v1.8.1

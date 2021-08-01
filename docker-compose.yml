@@ -1,38 +1,14 @@
 version: '3'
 
 services:
-  redis:
-    container_name: redis
-    network_mode: host
-    restart: always
-    image: redis
-    ports:
-      - 6379:6379
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-
-  witch-server:
-    container_name: witch-server
+  witch:
+    container_name: witch
     network_mode: host
     restart: always
     image: circa10a/witchonstephendrive.com:witch
-    command: server
     env_file: .env
     volumes:
       - /etc/localtime:/etc/localtime:ro
-    depends_on:
-      - redis
-
-  witch-client:
-    container_name: witch-client
-    network_mode: host
-    restart: always
-    image: circa10a/witchonstephendrive.com:witch
-    command: client
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-    depends_on:
-      - redis
 
   caddy:
     container_name: caddy
@@ -45,7 +21,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
     depends_on:
-        - witch-server
+        - witch
 
   assistant-relay:
     container_name: assistant-relay

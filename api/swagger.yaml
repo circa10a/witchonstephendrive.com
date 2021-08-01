@@ -151,10 +151,6 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/routes.SoundFailedPlayResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/routes.SoundFailedPlayResponse'
       summary: Play sound via assistant relay
   /sounds:
     get:
