@@ -7,6 +7,7 @@ import (
 	"github.com/amimof/huego"
 	"github.com/circa10a/witchonstephendrive.com/internal/config"
 	"github.com/circa10a/witchonstephendrive.com/internal/routes"
+	"github.com/circa10a/witchonstephendrive.com/internal/sounds"
 	"github.com/go-resty/resty/v2"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/labstack/echo-contrib/prometheus"
@@ -60,6 +61,12 @@ func main() {
 	// Create client to be used with assistant relay
 	assitantRelatEndpoint := fmt.Sprintf("%v:%v", witchConfig.AssistantRelayHost, witchConfig.AssistantRelayPort)
 	witchConfig.Client = resty.New().SetHostURL(assitantRelatEndpoint).SetHeader("Content-Type", "application/json")
+
+	// Sound processing
+	// To process "sound" jobs one at a time
+	witchConfig.SoundChannel = make(chan string)
+	// Start the worker
+	go sounds.Worker(witchConfig)
 
 	// New instance of echo
 	e := echo.New()

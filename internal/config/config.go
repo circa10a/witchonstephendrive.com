@@ -16,4 +16,5 @@ type WitchConfig struct {
 	Bridge             *huego.Bridge `ignored:"true"`
 	HueLightsStructs   []huego.Light `ignored:"true"`
 	Client             *resty.Client `ignored:"true"`
+	SoundChannel       chan string   `ignored:"true"`
 }

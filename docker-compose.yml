@@ -6,10 +6,7 @@ services:
     network_mode: host
     restart: always
     image: circa10a/witchonstephendrive.com:witch
-    environment:
-      ASSISTANT_DEVICE: YOUR_DEVICE_NAME_OR_IP  # To be configured
-      HUE_USER: YOUR_TOKEN  # To be configured
-      HUE_LIGHTS: 1,2,3  # To be configured
+    env_file: .env
     volumes:
       - /etc/localtime:/etc/localtime:ro
 
@@ -42,6 +39,4 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/localtime:/etc/localtime:ro
-    environment:
-      WATCHTOWER_CLEANUP: "true"
-      WATCHTOWER_POLL_INTERVAL: 3600
+    env_file: .env

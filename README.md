@@ -74,7 +74,7 @@ export HUE_USER=<YOUR_TOKEN>; export HUE_LIGHTS="1,2,3"; export ASSISTANT_DEVICE
 
 ### Docker
 
-> Be sure to update `HUE_USER`, `HUE_LIGHTS`, and `ASSISTANT_DEVICE` in `docker-compose.yml`
+> Be sure to update values in `.env` to be consumed by `docker-compose.yml`
 
 ```bash
 docker-compose up -d

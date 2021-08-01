@@ -66,8 +66,7 @@ func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, 
 	// Route to play sounds
 	e.POST("/sound/:sound", soundPlayHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			c.Set("client", witchConfig.Client)
-			c.Set("assistantDevice", witchConfig.AssistantDevice)
+			c.Set("soundChannel", witchConfig.SoundChannel)
 			return next(c)
 		}
 	})

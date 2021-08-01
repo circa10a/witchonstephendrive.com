@@ -6,9 +6,7 @@ import (
 
 	"github.com/circa10a/witchonstephendrive.com/internal/sounds"
 	"github.com/circa10a/witchonstephendrive.com/pkg/utils"
-	"github.com/go-resty/resty/v2"
 	"github.com/labstack/echo/v4"
-	log "github.com/sirupsen/logrus"
 )
 
 // SoundsListResponse responds supported sounds to play
@@ -47,39 +45,15 @@ func soundsReadHandler(c echo.Context) error {
 // @Produce json
 // @Success 200 {object} SoundSuccessfulPlayResponse
 // @Failure 400 {object} SoundFailedPlayResponse
-// @Failure 500 {object} SoundFailedPlayResponse
 // @Router /sound/{sound} [post]
 // @Param sound path string true "Sound to play"
 func soundPlayHandler(c echo.Context) error {
 	sound := c.Param("sound")
-	client := c.Get("client").(*resty.Client)
-	assistantDevice := c.Get("assistantDevice")
+	channel := c.Get("soundChannel").(chan string)
 	if utils.StrInSlice(sound, sounds.SupportedSounds) {
-		// Call assistant-relay if sound is supported
-		resp, err := client.R().SetBody(&sounds.PlaySoundPayload{
-			Device: assistantDevice.(string),
-			Source: fmt.Sprintf("%v.mp3", sound),
-			Type:   "custom",
-		}).Post("/cast")
-		// Handle unknown error
-		if err != nil {
-			log.Error(err)
-			return c.JSON(http.StatusInternalServerError, SoundFailedPlayResponse{
-				Success:         false,
-				Message:         err.Error(),
-				SupportedSounds: sounds.SupportedSounds,
-			})
-		}
-		// If there was an issue with assistant relay
-		if resp.StatusCode() != http.StatusOK {
-			return c.JSON(http.StatusInternalServerError, SoundFailedPlayResponse{
-				Success:         false,
-				Message:         resp.String(),
-				SupportedSounds: sounds.SupportedSounds,
-			})
-		}
-		// If sound not found in support sounds
+		channel <- sound
 	} else {
+		// If sound not found in supported sounds
 		return c.JSON(http.StatusBadRequest, SoundFailedPlayResponse{
 			Success:         false,
 			Message:         fmt.Sprintf("sound: %v not supported", sound),
