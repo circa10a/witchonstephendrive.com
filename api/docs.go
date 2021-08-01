@@ -152,12 +152,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/routes.SoundFailedPlayResponse"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/routes.SoundFailedPlayResponse"
-                        }
                     }
                 }
             }

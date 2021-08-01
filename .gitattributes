@@ -1,3 +1,2 @@
 # Media
-*.mp3 filter=lfs diff=lfs merge=lfs -text
 sounds/*.mp3 filter=lfs diff=lfs merge=lfs -text
