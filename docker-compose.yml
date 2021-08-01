@@ -1,17 +1,36 @@
 version: '3'
 
 services:
-  witch:
-    container_name: witch
+  redis:
+    container_name: redis
+    network_mode: host
+    restart: always
+    image: redis:alpine
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+
+  witch-server:
+    container_name: witch-server
     network_mode: host
     restart: always
     image: circa10a/witchonstephendrive.com:witch
-    environment:
-      ASSISTANT_DEVICE: YOUR_DEVICE_NAME_OR_IP  # To be configured
-      HUE_USER: YOUR_TOKEN  # To be configured
-      HUE_LIGHTS: 1,2,3  # To be configured
+    command: server
+    env_file: .env
     volumes:
       - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - redis
+
+  witch-client:
+    container_name: witch-client
+    network_mode: host
+    restart: always
+    image: circa10a/witchonstephendrive.com:witch
+    command: client
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - redis
 
   caddy:
     container_name: caddy
@@ -24,7 +43,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
     depends_on:
-        - witch
+        - witch-server
 
   assistant-relay:
     container_name: assistant-relay
@@ -42,6 +61,4 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/localtime:/etc/localtime:ro
-    environment:
-      WATCHTOWER_CLEANUP: "true"
-      WATCHTOWER_POLL_INTERVAL: 3600
+    env_file: .env

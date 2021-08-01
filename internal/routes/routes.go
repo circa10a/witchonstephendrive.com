@@ -14,7 +14,7 @@ import (
 )
 
 // Routes instantiates all of the listening context paths
-func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, apiDocAssets fs.FS) {
+func Routes(e *echo.Echo, witchConfig config.WitchServerConfig, frontendAssets fs.FS, apiDocAssets fs.FS) {
 	// Static assets
 	frontendHTTPFS, err := utils.ConvertEmbedFsDirToHTTPFS(frontendAssets, "web")
 	if err != nil {
@@ -66,8 +66,9 @@ func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, 
 	// Route to play sounds
 	e.POST("/sound/:sound", soundPlayHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			c.Set("client", witchConfig.Client)
-			c.Set("assistantDevice", witchConfig.AssistantDevice)
+			c.Set("redisChannel", witchConfig.RedisChannel)
+			c.Set("redisClient", witchConfig.RedisClient)
+			c.Set("redisContext", witchConfig.RedisContext)
 			return next(c)
 		}
 	})
