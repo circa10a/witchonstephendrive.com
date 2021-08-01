@@ -47,7 +47,7 @@ Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks lik
 1. Uses [Caddy](https://github.com/caddyserver/caddy) as a reverse proxy to the `witch` app for TLS termination([let's encrypt](https://letsencrypt.org/)).
 2. The `witch` app is a Go backend powered by [echo](https://echo.labstack.com/) that serves a vanilla html/css/js front end and has a `/color/:color` route.
 3. Once a `/color/:color` route is hit via a `POST` request, the `witch` app uses the [huego](https://github.com/amimof/huego) library for manipulating the state of the philips hue multicolor bulbs. The hue bridge endpoint on your network is automatically discovered.
-4. When a `/sound/:sound` route is hit via a `POST` request, the `witch` app talks to the local [assistant-relay](https://assistantrelay.com) to play pre-configured halloween sounds through connected nest speakers.
+4. When a `/sound/:sound` route is hit via a `POST` request, the `witch` app writes to an in-memory queue which will then process sounds to play by calling the [assistant-relay](https://assistantrelay.com) to play pre-configured halloween sounds through connected nest speakers. The reason for the queue is to ensure all sounds are played and do not overlap.
 
 ## Usage
 

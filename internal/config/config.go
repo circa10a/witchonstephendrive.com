@@ -3,6 +3,7 @@ package config
 import (
 	"github.com/amimof/huego"
 	"github.com/go-resty/resty/v2"
+	"github.com/oleiade/lane"
 )
 
 type WitchConfig struct {
@@ -15,6 +16,6 @@ type WitchConfig struct {
 	AssistantDevice    string        `envconfig:"ASSISTANT_DEVICE" required:"true"`
 	Bridge             *huego.Bridge `ignored:"true"`
 	HueLightsStructs   []huego.Light `ignored:"true"`
-	Client             *resty.Client `ignored:"true"`
-	SoundChannel       chan string   `ignored:"true"`
+	RESTClient         *resty.Client `ignored:"true"`
+	SoundQueue         *lane.Queue   `ignored:"true"`
 }

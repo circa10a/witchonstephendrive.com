@@ -7,6 +7,7 @@ import (
 	"github.com/circa10a/witchonstephendrive.com/internal/sounds"
 	"github.com/circa10a/witchonstephendrive.com/pkg/utils"
 	"github.com/labstack/echo/v4"
+	"github.com/oleiade/lane"
 )
 
 // SoundsListResponse responds supported sounds to play
@@ -49,9 +50,9 @@ func soundsReadHandler(c echo.Context) error {
 // @Param sound path string true "Sound to play"
 func soundPlayHandler(c echo.Context) error {
 	sound := c.Param("sound")
-	channel := c.Get("soundChannel").(chan string)
+	queue := c.Get("soundQueue").(*lane.Queue)
 	if utils.StrInSlice(sound, sounds.SupportedSounds) {
-		channel <- sound
+		queue.Enqueue(sound)
 	} else {
 		// If sound not found in supported sounds
 		return c.JSON(http.StatusBadRequest, SoundFailedPlayResponse{

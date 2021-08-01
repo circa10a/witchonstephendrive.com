@@ -13,6 +13,7 @@ import (
 	"github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/oleiade/lane"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -60,13 +61,13 @@ func main() {
 
 	// Create client to be used with assistant relay
 	assitantRelatEndpoint := fmt.Sprintf("%v:%v", witchConfig.AssistantRelayHost, witchConfig.AssistantRelayPort)
-	witchConfig.Client = resty.New().SetHostURL(assitantRelatEndpoint).SetHeader("Content-Type", "application/json")
+	witchConfig.RESTClient = resty.New().SetHostURL(assitantRelatEndpoint).SetHeader("Content-Type", "application/json")
 
 	// Sound processing
 	// To process "sound" jobs one at a time
-	witchConfig.SoundChannel = make(chan string)
+	witchConfig.SoundQueue = lane.NewQueue()
 	// Start the worker
-	go sounds.Worker(witchConfig)
+	go sounds.Daemon(witchConfig)
 
 	// New instance of echo
 	e := echo.New()
