@@ -1,6 +1,6 @@
 FROM golang:alpine
 WORKDIR /go/src/app
-COPY . .
+COPY ../ .
 ENV USER=go \
     UID=1000 \
     GID=1000 \

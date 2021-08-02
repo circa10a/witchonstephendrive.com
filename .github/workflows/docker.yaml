@@ -30,7 +30,7 @@ jobs:
       - name: Build and push witch
         uses: docker/build-push-action@v2
         with:
-          file: Dockerfile
+          file: ./deploy/Dockerfile
           context: .
           platforms: ${{ env.PLATFORMS }}
           push: true
@@ -38,7 +38,7 @@ jobs:
       - name: Build and push caddy
         uses: docker/build-push-action@v2
         with:
-          file: Dockerfile.caddy
+          file: ./deploy/Dockerfile.caddy
           context: .
           platforms: ${{ env.PLATFORMS }}
           push: true
@@ -46,8 +46,24 @@ jobs:
       - name: Build and push assistant-relay
         uses: docker/build-push-action@v2
         with:
-          file: Dockerfile.assistant-relay
+          file: ./deploy/Dockerfile.assistant-relay
           context: .
           platforms: ${{ env.PLATFORMS }}
           push: true
           tags: ${{ github.repository }}:assistant-relay
+      - name: Build and push prometheus
+        uses: docker/build-push-action@v2
+        with:
+          file: ./deploy/Dockerfile.prometheus
+          context: .
+          platforms: ${{ env.PLATFORMS }}
+          push: true
+          tags: ${{ github.repository }}:prometheus
+      - name: Build and push grafana
+        uses: docker/build-push-action@v2
+        with:
+          file: ./deploy/Dockerfile.grafana
+          context: .
+          platforms: ${{ env.PLATFORMS }}
+          push: true
+          tags: ${{ github.repository }}:grafana
