@@ -3,25 +3,16 @@
         admin off
 }
 
-(rate_limit_events) {
+witchonstephendrive.com {
         rate_limit {
                 zone register_limit {
                         key {http.request.remote.host}
-                        events {args.0}
-                        window {args.1}s
+                        match {
+                                method POST
+                        }
+                        events 10
+                        window 10s
                 }
-        }
-}
-
-witchonstephendrive.com {
-        route /color/* {
-                import rate_limit_events 5 10
-        }
-        route /sound/* {
-                import rate_limit_events 5 10
-        }
-        route /lights/* {
-                import rate_limit_events 5 10
         }
         @cachedFiles {
                 path *.jpg *.jpeg *.png *.gif *.ico *.css *.js
