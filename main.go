@@ -35,7 +35,7 @@ var apiDocAssets embed.FS
 // @Schemes https
 func main() {
 	// Setup global config store
-	var witchConfig config.WitchConfig
+	witchConfig := config.WitchConfig{}
 	err := envconfig.Process("", &witchConfig)
 	if err != nil {
 		log.Fatal(err.Error())
