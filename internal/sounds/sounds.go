@@ -53,7 +53,8 @@ func worker(witchConfig config.WitchConfig, sound string) {
 func Daemon(witchConfig config.WitchConfig) {
 	for {
 		time.Sleep(time.Second * time.Duration(witchConfig.SoundQueuePollInterval))
-		for witchConfig.SoundQueue.Head() != nil {
+		// If there is something at the front of the queue, remove it, and play it
+		if witchConfig.SoundQueue.Head() != nil {
 			sound := witchConfig.SoundQueue.Dequeue()
 			worker(witchConfig, sound.(string))
 		}

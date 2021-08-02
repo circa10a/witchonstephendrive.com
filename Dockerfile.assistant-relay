@@ -10,7 +10,6 @@ RUN  apk update && \
      pip3 install catt && \
      unzip -q release.zip && \
      rm release.zip && \
-     npm update && \
-     npm i -g pm2 && npm i --no-optional && \
+     npm run setup && \
      rm -rf /node_modules/grpc/build/Release/*.a /node_modules/grpc/build/Release/obj.target
 CMD ["npm", "start"]

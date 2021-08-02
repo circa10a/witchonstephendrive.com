@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	_ "github.com/circa10a/witchonstephendrive.com/api" // import generated docs.go
-	"github.com/circa10a/witchonstephendrive.com/internal/colors"
 	"github.com/circa10a/witchonstephendrive.com/internal/config"
 	"github.com/circa10a/witchonstephendrive.com/pkg/utils"
 	"github.com/labstack/echo/v4"
@@ -41,9 +40,7 @@ func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, 
 	e.POST("/color/:color", colorChangeHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 		// In the event user passes unsupported color, give them a list
 		return func(c echo.Context) error {
-			c.Set("hueLights", witchConfig.HueLights)
-			c.Set("bridge", witchConfig.Bridge)
-			c.Set("supportedColors", colors.SupportedColors)
+			c.Set("witchConfig", witchConfig)
 			return next(c)
 		}
 	})
