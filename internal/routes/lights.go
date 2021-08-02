@@ -1,14 +1,15 @@
 package routes
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/amimof/huego"
 	"github.com/circa10a/witchonstephendrive.com/internal/colors"
+	"github.com/circa10a/witchonstephendrive.com/internal/config"
 	"github.com/labstack/echo/v4"
-	log "github.com/sirupsen/logrus"
 )
 
 // ColorsListResponse responds supported colors to set
@@ -61,27 +62,20 @@ func colorsReadHandler(c echo.Context) error {
 // @Router /color/{color} [post]
 // @Param color path string true "Color to change lights to"
 func colorChangeHandler(c echo.Context) error {
-	colorsMap := colors.Colors
 	color := c.Param("color")
-	hueLights := c.Get("hueLights").([]int)
-	bridge := c.Get("bridge").(*huego.Bridge)
-	for _, light := range hueLights {
-		// Only change color if in the map
-		if _, ok := colorsMap[color]; ok {
-			_, err := bridge.SetLightState(light, colorsMap[color])
-			if err != nil {
-				log.Error(err)
-				return c.JSON(http.StatusInternalServerError, &ColorFailedChangeResponse{
-					Success:         false,
-					Message:         err.Error(),
-					SupportedColors: colors.SupportedColors,
-				})
-			}
-			// Fail if color not supported
-		} else {
+	witchConfig := c.Get("witchConfig").(config.WitchConfig)
+	err := colors.SetLightsColor(witchConfig, color)
+	if err != nil {
+		if errors.Is(err, colors.ErrColorNotSupported) {
 			return c.JSON(http.StatusBadRequest, &ColorFailedChangeResponse{
 				Success:         false,
 				Message:         fmt.Sprintf("color: %v not supported", color),
+				SupportedColors: colors.SupportedColors,
+			})
+		} else {
+			return c.JSON(http.StatusInternalServerError, &ColorFailedChangeResponse{
+				Success:         false,
+				Message:         err.Error(),
 				SupportedColors: colors.SupportedColors,
 			})
 		}
@@ -111,25 +105,20 @@ func lightsStateHandler(c echo.Context) error {
 			Message: fmt.Sprintf("received state: %v. on/off are the only valid values", state),
 		})
 	}
+
 	// Loop through lights and change state accordingly
 	for _, light := range hueLights {
+		var err error
 		if state == "on" {
-			err := light.On()
-			if err != nil {
-				return c.JSON(http.StatusInternalServerError, LightStateFailedChangeResponse{
-					Success: false,
-					Message: err.Error(),
-				})
-			}
+			err = light.On()
+		} else if state == "off" {
+			err = light.Off()
 		}
-		if state == "off" {
-			err := light.Off()
-			if err != nil {
-				return c.JSON(http.StatusInternalServerError, LightStateFailedChangeResponse{
-					Success: false,
-					Message: err.Error(),
-				})
-			}
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, LightStateFailedChangeResponse{
+				Success: false,
+				Message: err.Error(),
+			})
 		}
 	}
 	return c.JSON(http.StatusOK, LightStateSuccessfulChangeResponse{
