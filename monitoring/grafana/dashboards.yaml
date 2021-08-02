@@ -1,0 +1,10 @@
+---
+apiVersion: 1
+
+providers:
+  - name: 'witchonstephendrive.com'
+    disableDeletion: true
+    updateIntervalSeconds: 60
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards

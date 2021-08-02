@@ -3,4 +3,4 @@ RUN xcaddy build --with github.com/mholt/caddy-ratelimit
 
 FROM caddy
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
-COPY ./Caddyfile /etc/caddy/
+COPY ../Caddyfile /etc/caddy/

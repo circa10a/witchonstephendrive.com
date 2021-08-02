@@ -2,7 +2,7 @@ FROM node:lts-alpine3.12
 ARG ASSISTANT_RELAY_VERSION=3.3.2b
 ENV NODE_ENV=production
 EXPOSE 3000
-COPY ./sounds /bin/media
+COPY ../sounds /bin/media
 ADD https://github.com/greghesp/assistant-relay/releases/download/v$ASSISTANT_RELAY_VERSION/release.zip .
 RUN  apk update && \
      apk upgrade && \
