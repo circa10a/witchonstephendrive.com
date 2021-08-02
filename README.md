@@ -53,16 +53,17 @@ Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks lik
 
 ### Configuration
 
-|                        |                                                                       |                          |           |               |
-|------------------------|-----------------------------------------------------------------------|--------------------------|-----------|---------------|
-| Name                   | Description                                                           | Environment Variable     | Required  | Default       |
-| PORT                   | Port for web server to listen on                                      | `PORT`                   | `false`   | `8080`        |
-| HUE_USER               | Philips Hue API User/Token                                            | `HUE_USER`               | `true`    | None          |
-| HUE_LIGHTS             | Light ID's to change color of. Example(export HUE_LIGHTS="1,2,3")     | `HUE_LIGHTS`             | `true`    | None          |
-| METRICS                | Enables prometheus metrics on `/metrics`(unset for false)             | `METRICS`                | `false`   | `true`        |
-| ASSISTANT_DEVICE       | Name of google assistant speaker to play sounds on                    | `ASSISTANT_DEVICE`       | `true`    | None          |
-| ASSISTANT_RELAY_HOST   | Address of the google assistant relay                                 | `ASSISTANT_RELAY_HOST`   | `false`   | `127.0.0.1`   |
-| ASSISTANT_RELAY_PORT   | Listening port of the google assistant relay                          | `ASSISTANT_RELAY_PORT`   | `false`   | `3000`        |
+|                           |                                                                          |                             |           |               |
+|---------------------------|--------------------------------------------------------------------------|-----------------------------|-----------|---------------|
+| Name                      | Description                                                              | Environment Variable        | Required  | Default       |
+| PORT                      | Port for web server to listen on                                         | `PORT`                      | `false`   | `8080`        |
+| HUE_USER                  | Philips Hue API User/Token                                               | `HUE_USER`                  | `true`    | None          |
+| HUE_LIGHTS                | Light ID's to change color of. Example(export HUE_LIGHTS="1,2,3")        | `HUE_LIGHTS`                | `true`    | None          |
+| METRICS                   | Enables prometheus metrics on `/metrics`(unset for false)                | `METRICS`                   | `false`   | `true`        |
+| ASSISTANT_DEVICE          | Name of google assistant speaker to play sounds on                       | `ASSISTANT_DEVICE`          | `true`    | None          |
+| ASSISTANT_RELAY_HOST      | Address of the google assistant relay                                    | `ASSISTANT_RELAY_HOST`      | `false`   | `127.0.0.1`   |
+| ASSISTANT_RELAY_PORT      | Listening port of the google assistant relay                             | `ASSISTANT_RELAY_PORT`      | `false`   | `3000`        |
+| SOUND_QUEUE_POLL_INTERVAL | How many seconds to wait between checking sound queue to play sound msgs | `SOUND_QUEUE_POLL_INTERVAL` | `false`   | `1`           |
 
 ### Go
 

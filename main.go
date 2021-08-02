@@ -34,7 +34,7 @@ var apiDocAssets embed.FS
 // @BasePath /
 // @Schemes https
 func main() {
-	// Setup config
+	// Setup global config store
 	var witchConfig config.WitchConfig
 	err := envconfig.Process("", &witchConfig)
 	if err != nil {
@@ -61,10 +61,10 @@ func main() {
 
 	// Create client to be used with assistant relay
 	assitantRelayEndpoint := fmt.Sprintf("%s:%d", witchConfig.AssistantRelayHost, witchConfig.AssistantRelayPort)
-	witchConfig.RESTClient = resty.New().SetHostURL(assitantRelayEndpoint).SetHeader("Content-Type", "application/json")
+	witchConfig.RelayClient = resty.New().SetHostURL(assitantRelayEndpoint).SetHeader("Content-Type", "application/json")
 
 	// Sound processing
-	// To process "sound" jobs one at a time
+	// Create new queue to process "sound" jobs one at a time
 	witchConfig.SoundQueue = lane.NewQueue()
 	// Start the worker
 	go sounds.Daemon(witchConfig)
@@ -87,5 +87,5 @@ func main() {
 	routes.Routes(e, witchConfig, frontendAssets, apiDocAssets)
 
 	// Start App
-	e.Logger.Fatal(e.Start(fmt.Sprintf(":%v", witchConfig.Port)))
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", witchConfig.Port)))
 }

@@ -10,24 +10,24 @@ const checkLimit = (opts = {}) => {
 };
 
 // Sounds
-const colorToSoundMap = {
-  red: 'dracula',
-  orange: 'pumpkin-king',
-  yellow: 'scream',
-  green: 'witch-laugh',
-  blue: 'ghost',
-  purple: 'halloween-organ',
-  pink: 'leave-now',
-  rainbow: 'this-is-halloween',
-  black: 'werewolf',
-  default: 'this-is-halloween'
-};
-
-// Sounds
-const playSoundForColor = async(opts) => {
-  sound = colorToSoundMap[opts.color] || colorToSoundMap['default'];
+const playRandomSound = async() => {
+  // Get Supported Sounds
+  // Have a default
+  supportedSounds = ['this-is-halloween'];
   try {
-    await fetch(`/sound/${sound}`, {
+    let resp = await fetch('/sounds', {});
+    let json = await resp.json();
+    supportedSounds = json.supportedSounds;
+  } catch(e) {
+    console.error(e);
+  }
+
+  // Let's not let users play this one
+  let allowedSounds = supportedSounds.filter(sound => sound !== 'police-siren');
+  const randomSound = () => allowedSounds[Math.floor(Math.random() * allowedSounds.length)];
+
+  try {
+    await fetch(`/sound/${randomSound()}`, {
       method: 'POST',
     });
   } catch(e) {
@@ -63,8 +63,6 @@ const setUsageFooter = async () => {
 
 // Theming UI colors
 const setTheme = (opts = {}) => {
-  sound = colorToSoundMap[opts.color] || colorToSoundMap['default'];
-
   // Change navbar color
   let navBar =  document.getElementById('navbar');
   navBar.classList.remove(...navBar.classList);
@@ -80,8 +78,7 @@ const setState = async (opts = {}) => {
   // Set UI colors
   setTheme(opts);
   // Play sound, don't wait since it takes a second to kick off
-  playSoundForColor(opts);
-
+  playRandomSound();
   // Set light colors via hue
   try {
     colorResponse = await fetch(`/color/${opts.color}`, {
@@ -99,7 +96,7 @@ const setState = async (opts = {}) => {
 const flicker = async (opts = {count: 3, sleepTime: 1000, color: 'black'}) => {
   setTheme({color: opts.color});
   // Play sound, don't wait since it takes a few seconds to kick off
-  playSoundForColor(opts);
+  playRandomSound();
   // Try to sync up sound and flash
   await sleep(5000);
   for (let i = 0; i < opts.count; i++) {
