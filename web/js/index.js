@@ -48,7 +48,10 @@ const getCountOfColorChanges = async () => {
   const parsed = parsePrometheusTextFormat(metricsText);
   const requestMetrics = parsed.filter(metric =>  metric.name ===  'echo_requests_total')[0];
   const requestCounter = requestMetrics.metrics.filter(counter => {
-    return counter.labels.code === '200' && counter.labels.url === '/color/:color' && counter.labels.host === 'witchonstephendrive.com';
+    return counter.labels.code === '200' &&
+           counter.labels.method === 'POST' &&
+           counter.labels.url.includes('/color/') &&
+           counter.labels.host === 'witchonstephendrive.com';
   })[0];
 
   return requestCounter.value;
