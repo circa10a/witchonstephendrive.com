@@ -65,6 +65,7 @@ Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks lik
 | ASSISTANT_RELAY_PORT      | Listening port of the google assistant relay                             | `ASSISTANT_RELAY_PORT`      | `false`   | `3000`        |
 | SOUND_QUIET_TIME_START    | Local time to ensure sounds are not played after this time               | `SOUND_QUIET_TIME_START`    | `false`   | `10:30PM`     |
 | SOUND_QUIET_TIME_END      | Local time to ensure sounds are not played before this time              | `SOUND_QUIET_TIME_END`      | `false`   | `7:00AM`      |
+| SOUND_QUEUE_CAPACITY      | Maxiumum depth of soung queue. This is to ensure no spam/long backlog    | `SOUND_QUEUE_CAPACITY`      | `false`   | `3`           |
 | SOUND_QUEUE_POLL_INTERVAL | How many seconds to wait between checking sound queue to play sound msgs | `SOUND_QUEUE_POLL_INTERVAL` | `false`   | `1`           |
 
 ### Go

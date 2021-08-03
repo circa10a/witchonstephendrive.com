@@ -151,6 +151,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/routes.SoundFailedPlayResponse'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/routes.SoundFailedPlayResponse'
       summary: Play sound via assistant relay
   /sounds:
     get:

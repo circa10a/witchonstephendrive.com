@@ -64,8 +64,8 @@ func main() {
 	witchConfig.RelayClient = resty.New().SetHostURL(assitantRelayEndpoint).SetHeader("Content-Type", "application/json")
 
 	// Sound processing
-	// Create new queue to process "sound" jobs one at a time
-	witchConfig.SoundQueue = lane.NewQueue()
+	// Create new queue to process "sound" jobs one at a time with a max limit to eliminate spam
+	witchConfig.SoundQueue = lane.NewCappedDeque(witchConfig.SoundQueueCapacity)
 	// Start the worker
 	go sounds.Daemon(witchConfig)
 

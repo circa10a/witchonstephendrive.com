@@ -152,6 +152,12 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/routes.SoundFailedPlayResponse"
                         }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/routes.SoundFailedPlayResponse"
+                        }
                     }
                 }
             }

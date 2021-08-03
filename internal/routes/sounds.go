@@ -46,11 +46,12 @@ func soundsReadHandler(c echo.Context) error {
 // @Produce json
 // @Success 202 {object} SoundSuccessfulPlayResponse
 // @Failure 400 {object} SoundFailedPlayResponse
+// @Failure 429 {object} SoundFailedPlayResponse
 // @Router /sound/{sound} [post]
 // @Param sound path string true "Sound to play"
 func soundPlayHandler(c echo.Context) error {
 	sound := c.Param("sound")
-	queue := c.Get("soundQueue").(*lane.Queue)
+	queue := c.Get("soundQueue").(*lane.Deque)
 	quietTimeStart := c.Get("quietTimeStart").(string)
 	quietTimeEnd := c.Get("quietTimeEnd").(string)
 	// Ensure sounds don't play during quiet time(late hours)
@@ -61,8 +62,16 @@ func soundPlayHandler(c echo.Context) error {
 			SupportedSounds: sounds.SupportedSounds,
 		})
 	}
+	// If sound is supported
 	if utils.StrInSlice(sound, sounds.SupportedSounds) {
-		queue.Enqueue(sound)
+		// Ensure we don't get a huge backlog of sound requests
+		if !queue.Append(sound) {
+			return c.JSON(http.StatusTooManyRequests, SoundFailedPlayResponse{
+				Success:         false,
+				Message:         fmt.Sprintf("will not play sound: %s. sound queue is at capacity", sound),
+				SupportedSounds: sounds.SupportedSounds,
+			})
+		}
 	} else {
 		// If sound not found in supported sounds
 		return c.JSON(http.StatusBadRequest, SoundFailedPlayResponse{
