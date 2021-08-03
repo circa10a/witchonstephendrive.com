@@ -44,7 +44,7 @@ func soundsReadHandler(c echo.Context) error {
 // @Summary Play sound via assistant relay
 // @Description Play halloween sound supported in sound list
 // @Produce json
-// @Success 200 {object} SoundSuccessfulPlayResponse
+// @Success 202 {object} SoundSuccessfulPlayResponse
 // @Failure 400 {object} SoundFailedPlayResponse
 // @Router /sound/{sound} [post]
 // @Param sound path string true "Sound to play"
@@ -71,7 +71,7 @@ func soundPlayHandler(c echo.Context) error {
 			SupportedSounds: sounds.SupportedSounds,
 		})
 	}
-	return c.JSON(http.StatusOK, &SoundSuccessfulPlayResponse{
+	return c.JSON(http.StatusAccepted, &SoundSuccessfulPlayResponse{
 		Success: true,
 	})
 }

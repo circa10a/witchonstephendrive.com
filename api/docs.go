@@ -141,8 +141,8 @@ var doc = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "202": {
+                        "description": "Accepted",
                         "schema": {
                             "$ref": "#/definitions/routes.SoundSuccessfulPlayResponse"
                         }
