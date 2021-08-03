@@ -6,7 +6,8 @@ ENV USER=go \
     GID=1000 \
     CGO_ENABLED=0
 
-RUN go build -ldflags="-s -w" \
+RUN go mod tidy && \
+    go build -ldflags="-s -w" \
     -o witch && \
     addgroup --gid "$GID" "$USER" && \
     adduser \

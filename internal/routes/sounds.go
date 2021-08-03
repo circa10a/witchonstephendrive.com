@@ -15,7 +15,7 @@ type SoundsListResponse struct {
 	SupportedSounds []string `json:"supportedSounds"`
 }
 
-// SoundSuccesfulPlayResponse responds with a boolean to indicate successful or not
+// SoundSuccessfulPlayResponse responds with a boolean to indicate successful or not
 type SoundSuccessfulPlayResponse struct {
 	Success bool `json:"success"`
 }
@@ -51,6 +51,16 @@ func soundsReadHandler(c echo.Context) error {
 func soundPlayHandler(c echo.Context) error {
 	sound := c.Param("sound")
 	queue := c.Get("soundQueue").(*lane.Queue)
+	quietTimeStart := c.Get("quietTimeStart").(string)
+	quietTimeEnd := c.Get("quietTimeEnd").(string)
+	// Ensure sounds don't play during quiet time(late hours)
+	if sounds.IsDuringQuietTime(quietTimeStart, quietTimeEnd) {
+		return c.JSON(http.StatusBadRequest, SoundFailedPlayResponse{
+			Success:         false,
+			Message:         fmt.Sprintf("quiet time enabled. quiet time is between %s and %s", quietTimeStart, quietTimeEnd),
+			SupportedSounds: sounds.SupportedSounds,
+		})
+	}
 	if utils.StrInSlice(sound, sounds.SupportedSounds) {
 		queue.Enqueue(sound)
 	} else {

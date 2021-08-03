@@ -27,9 +27,13 @@ const playRandomSound = async() => {
   const randomSound = () => allowedSounds[Math.floor(Math.random() * allowedSounds.length)];
 
   try {
-    await fetch(`/sound/${randomSound()}`, {
+    let resp = await fetch(`/sound/${randomSound()}`, {
       method: 'POST',
     });
+    let json = await resp.json();
+    if (json.message.includes('quiet')) {
+      M.toast({html: json.message, displayLength: 2000, classes: 'green darken-1 rounded'});
+    }
   } catch(e) {
     console.error(e);
   }
