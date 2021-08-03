@@ -9,6 +9,12 @@
     },
     {
       "type": "panel",
+      "id": "piechart",
+      "name": "Pie chart",
+      "version": ""
+    },
+    {
+      "type": "panel",
       "id": "stat",
       "name": "Stat",
       "version": ""
@@ -91,15 +97,121 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "echo_requests_total{host=\"witchonstephendrive.com\",method=\"POST\",url=\"/color/:color\"}",
+          "expr": "count(echo_requests_total{host=\"witchonstephendrive.com\",method=\"POST\",url=~\"/color/.*\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Color changes",
+      "title": "Total Color Changes",
       "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "/color/blue"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "/color/pink"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "rgba(255, 138, 235, 1)",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "/color/red"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "id": 9,
+      "options": {
+        "displayLabels": [
+          "percent"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.0.6",
+      "targets": [
+        {
+          "exemplar": false,
+          "expr": "echo_requests_total{host=\"witchonstephendrive.com\",method=\"POST\",url=~\"/color/\\\\w.*\"}",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{url}}",
+          "refId": "A"
+        }
+      ],
+      "title": "All Color Changes",
+      "type": "piechart"
     },
     {
       "datasource": null,
@@ -128,7 +240,7 @@
       "gridPos": {
         "h": 6,
         "w": 6,
-        "x": 6,
+        "x": 12,
         "y": 0
       },
       "id": 8,
@@ -153,14 +265,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "echo_requests_total{host=\"witchonstephendrive.com\",method=\"POST\",url=\"/sound/:sound\"}",
+          "expr": "count(echo_requests_total{host=\"witchonstephendrive.com\",method=\"POST\",url=~\"/sound/.*\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Sound Plays",
+      "title": "Total Sound Plays",
       "type": "stat"
     },
     {
@@ -171,78 +283,103 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
             }
           },
           "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "/sound/dracula"
+            },
+            "properties": [
               {
-                "color": "green",
-                "value": null
-              },
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "/sound/pumpkin-king"
+            },
+            "properties": [
               {
-                "color": "red",
-                "value": 80
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "/sound/werewolf"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-blue",
+                  "mode": "fixed"
+                }
               }
             ]
           }
-        },
-        "overrides": []
+        ]
       },
       "gridPos": {
         "h": 6,
-        "w": 12,
-        "x": 12,
+        "w": 6,
+        "x": 18,
         "y": 0
       },
-      "id": 2,
+      "id": 10,
       "options": {
+        "displayLabels": [
+          "percent"
+        ],
         "legend": {
-          "calcs": [],
           "displayMode": "list",
           "placement": "bottom"
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
         "tooltip": {
           "mode": "single"
         }
       },
+      "pluginVersion": "8.0.6",
       "targets": [
         {
-          "exemplar": true,
-          "expr": "sum by (url)(rate(echo_request_duration_seconds_sum[$__range])) / sum by (url)(rate(echo_request_duration_seconds_count[$__range]))",
+          "exemplar": false,
+          "expr": "echo_requests_total{host=\"witchonstephendrive.com\",method=\"POST\",url=~\"/sound/\\\\w.*\"}",
+          "instant": true,
           "interval": "",
           "legendFormat": "{{url}}",
           "refId": "A"
         }
       ],
-      "title": "Response times",
-      "type": "timeseries"
+      "title": "All Sound Changes",
+      "type": "piechart"
     },
     {
       "datasource": null,
@@ -316,9 +453,10 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "echo_requests_total{host=\"witchonstephendrive.com\",method=\"POST\",url=\"/color/:color\"}",
+          "expr": "count(echo_requests_total{host=\"witchonstephendrive.com\",method=\"POST\",url=~\"/color/.*\"})",
+          "instant": false,
           "interval": "",
-          "legendFormat": "{{code}}",
+          "legendFormat": " ",
           "refId": "A"
         }
       ],
@@ -397,13 +535,121 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "echo_requests_total{host=\"witchonstephendrive.com\",method=\"POST\",url=\"/sound/:sound\"}",
+          "expr": "count(echo_requests_total{host=\"witchonstephendrive.com\",method=\"POST\",url=~\"/sound/.*\"})",
+          "instant": false,
           "interval": "",
-          "legendFormat": "{{code}}",
+          "legendFormat": " ",
           "refId": "A"
         }
       ],
       "title": "Sound responses",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "/sounds"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum by (url)(rate(echo_request_duration_seconds_sum[$__range])) / sum by (url)(rate(echo_request_duration_seconds_count[$__range]))",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{url}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Response times",
       "type": "timeseries"
     }
   ],
@@ -414,12 +660,12 @@
     "list": []
   },
   "time": {
-    "from": "now-24h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "witchonstephendrive.com",
   "uid": "2IL1IIRRz",
-  "version": 2
+  "version": 9
 }
