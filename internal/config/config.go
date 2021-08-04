@@ -14,8 +14,8 @@ type WitchConfig struct {
 	AssistantRelayHost     string        `envconfig:"ASSISTANT_RELAY_HOST" default:"http://127.0.0.1"`
 	AssistantRelayPort     int           `envconfig:"ASSISTANT_RELAY_PORT" default:"3000"`
 	AssistantDevice        string        `envconfig:"ASSISTANT_DEVICE" required:"true"`
-	SoundQuietTimeStart    string        `envconfig:"SOUND_QUIET_TIME_START" default:"10:30PM"`
-	SoundQuietTimeEnd      string        `envconfig:"SOUND_QUIET_TIME_END" default:"7:00AM"`
+	SoundQuietTimeStart    int           `envconfig:"SOUND_QUIET_TIME_START" default:"22"`
+	SoundQuietTimeEnd      int           `envconfig:"SOUND_QUIET_TIME_END" default:"07"`
 	SoundQueueCapacity     int           `envconfig:"SOUND_QUEUE_CAPACITY" default:"3"`
 	SoundQueuePollInterval int           `envconfig:"SOUND_QUEUE_POLL_INTERVAL" default:"1"`
 	SoundQueue             *lane.Deque   `ignored:"true"`

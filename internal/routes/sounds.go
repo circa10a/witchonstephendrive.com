@@ -3,6 +3,7 @@ package routes
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/circa10a/witchonstephendrive.com/internal/sounds"
 	"github.com/circa10a/witchonstephendrive.com/pkg/utils"
@@ -52,13 +53,13 @@ func soundsReadHandler(c echo.Context) error {
 func soundPlayHandler(c echo.Context) error {
 	sound := c.Param("sound")
 	queue := c.Get("soundQueue").(*lane.Deque)
-	quietTimeStart := c.Get("quietTimeStart").(string)
-	quietTimeEnd := c.Get("quietTimeEnd").(string)
+	quietTimeStart := c.Get("quietTimeStart").(int)
+	quietTimeEnd := c.Get("quietTimeEnd").(int)
 	// Ensure sounds don't play during quiet time(late hours)
-	if sounds.IsDuringQuietTime(quietTimeStart, quietTimeEnd) {
+	if sounds.IsDuringQuietTime(time.Now().Hour(), quietTimeStart, quietTimeEnd) {
 		return c.JSON(http.StatusBadRequest, SoundFailedPlayResponse{
 			Success:         false,
-			Message:         fmt.Sprintf("quiet time enabled. quiet time is between %s and %s", quietTimeStart, quietTimeEnd),
+			Message:         fmt.Sprintf("sounds disabled. quiet time is between %d:00 and %d:00", quietTimeStart, quietTimeEnd),
 			SupportedSounds: sounds.SupportedSounds,
 		})
 	}

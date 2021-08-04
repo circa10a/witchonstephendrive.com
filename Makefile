@@ -29,3 +29,6 @@ lint:
 
 js-lint:
 	eslint web/js/*.js
+
+test:
+	go test -v ./...

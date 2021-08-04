@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/circa10a/witchonstephendrive.com/internal/config"
-	"github.com/nleeper/goment"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -61,19 +60,6 @@ func Daemon(witchConfig config.WitchConfig) {
 }
 
 // IsDuringQuietTime ensures no sounds are played during configured/late hours
-func IsDuringQuietTime(startTime, endTime string) bool {
-	token := "LT"
-	now, err := goment.New(time.Now())
-	if err != nil {
-		log.Error(err)
-	}
-	start, err := goment.New(startTime, token)
-	if err != nil {
-		log.Error(err)
-	}
-	end, err := goment.New(endTime, token)
-	if err != nil {
-		log.Error(err)
-	}
-	return now.IsBetween(start, end)
+func IsDuringQuietTime(currentHour, startHour, endHour int) bool {
+	return currentHour >= startHour || currentHour < endHour
 }

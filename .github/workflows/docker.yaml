@@ -1,9 +1,13 @@
 name: build-docker-images
 
 on:
-  push:
+  workflow_run:
+    workflows:
+      - Test
     branches:
       - main
+    types:
+       - completed
 
 env:
   PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7

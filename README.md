@@ -63,8 +63,8 @@ Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks lik
 | ASSISTANT_DEVICE          | Name of google assistant speaker to play sounds on                       | `ASSISTANT_DEVICE`          | `true`    | None          |
 | ASSISTANT_RELAY_HOST      | Address of the google assistant relay                                    | `ASSISTANT_RELAY_HOST`      | `false`   | `127.0.0.1`   |
 | ASSISTANT_RELAY_PORT      | Listening port of the google assistant relay                             | `ASSISTANT_RELAY_PORT`      | `false`   | `3000`        |
-| SOUND_QUIET_TIME_START    | Local time to ensure sounds are not played after this time               | `SOUND_QUIET_TIME_START`    | `false`   | `10:30PM`     |
-| SOUND_QUIET_TIME_END      | Local time to ensure sounds are not played before this time              | `SOUND_QUIET_TIME_END`      | `false`   | `7:00AM`      |
+| SOUND_QUIET_TIME_START    | Local time to ensure sounds are not played after this hour               | `SOUND_QUIET_TIME_START`    | `false`   | `22`          |
+| SOUND_QUIET_TIME_END      | Local time to ensure sounds are not played before this hour              | `SOUND_QUIET_TIME_END`      | `false`   | `07`          |
 | SOUND_QUEUE_CAPACITY      | Maxiumum depth of soung queue. This is to ensure no spam/long backlog    | `SOUND_QUEUE_CAPACITY`      | `false`   | `3`           |
 | SOUND_QUEUE_POLL_INTERVAL | How many seconds to wait between checking sound queue to play sound msgs | `SOUND_QUEUE_POLL_INTERVAL` | `false`   | `1`           |
 
@@ -88,17 +88,17 @@ docker-compose up -d
 
 > Rate limiting performed by [this caddy plugin](https://github.com/mholt/caddy-ratelimit)
 
-|                       |                                                  |        |              |                |
-|-----------------------|--------------------------------------------------|--------|--------------|----------------|
-| Route                 | Description                                      | Method | Rate Limited | Limit          |
-| `/`                   | Serves static content in embedded from `./web`   | `GET`  | No           | N/A            |
-| `/colors`             | Get supported colors to change to                | `GET`  | No           | N/A            |
-| `/color/:color`       | Changes color of hue lights                      | `POST` | Yes          | 5 req. per 10s |
-| `/sounds`             | Get support sounds to play                       | `GET`  | No           | N/A            |
-| `/sound/:sound`       | Changes color of hue lights                      | `POST` | Yes          | 5 req. per 10s |
-| `/lights/:state`      | Changes state of configured lights(on/off)       | `POST` | Yes          | 5 req. per 10s |
-| `/metrics`            | Serves prometheus metrics using echo middleware] | `GET`  | No           | N/A            |
-| `/swagger/index.html` | Swagger API documentation                        | `GET`  | No           | N/A            |
+|                       |                                                  |        |              |                 |
+|-----------------------|--------------------------------------------------|--------|--------------|-----------------|
+| Route                 | Description                                      | Method | Rate Limited | Limit           |
+| `/`                   | Serves static content in embedded from `./web`   | `GET`  | No           | N/A             |
+| `/colors`             | Get supported colors to change to                | `GET`  | No           | N/A             |
+| `/color/:color`       | Changes color of hue lights                      | `POST` | Yes          | 10 req. per 10s |
+| `/sounds`             | Get support sounds to play                       | `GET`  | No           | N/A             |
+| `/sound/:sound`       | Changes color of hue lights                      | `POST` | Yes          | 10 req. per 10s |
+| `/lights/:state`      | Changes state of configured lights(on/off)       | `POST` | Yes          | 10 req. per 10s |
+| `/metrics`            | Serves prometheus metrics using echo middleware] | `GET`  | No           | N/A             |
+| `/swagger/index.html` | Swagger API documentation                        | `GET`  | No           | N/A             |
 
 ## Get colors
 
