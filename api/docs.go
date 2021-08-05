@@ -288,7 +288,7 @@ type swaggerInfo struct {
 var SwaggerInfo = swaggerInfo{
 	Version:     "0.1.0",
 	Host:        "witchonstephendrive.com",
-	BasePath:    "/",
+	BasePath:    "/api/v1",
 	Schemes:     []string{"https"},
 	Title:       "witchonstephendrive.com",
 	Description: "Control my halloween decorations",

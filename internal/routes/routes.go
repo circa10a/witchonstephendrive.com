@@ -14,6 +14,7 @@ import (
 
 // Routes instantiates all of the listening context paths
 func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, apiDocAssets fs.FS) {
+	apiVersionGroup := e.Group(witchConfig.APIBaseURL)
 	// Static assets
 	frontendHTTPFS, err := utils.ConvertEmbedFsDirToHTTPFS(frontendAssets, "web")
 	if err != nil {
@@ -28,16 +29,19 @@ func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, 
 	apiDocsFileServer := http.FileServer(http.FS(apiDocAssets))
 	// API docs/Swagger JSON
 	e.GET("/api/*", echo.WrapHandler(apiDocsFileServer))
+	// Swagger docs
+	swaggerURL := swagger.URL("/api/swagger.json")
+	e.GET("/swagger/*", swagger.EchoWrapHandler(swaggerURL))
 
 	// Lights/Colors
 	// Route to view supported colors
-	e.GET("/colors", colorsReadHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
+	apiVersionGroup.GET("/colors", colorsReadHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			return next(c)
 		}
 	})
 	// Route to change color of lights
-	e.POST("/color/:color", colorChangeHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
+	apiVersionGroup.POST("/color/:color", colorChangeHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 		// In the event user passes unsupported color, give them a list
 		return func(c echo.Context) error {
 			c.Set("hueLights", witchConfig.HueLights)
@@ -47,7 +51,7 @@ func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, 
 	})
 
 	// Route to change lights state(on/off)
-	e.POST("/lights/:state", lightsStateHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
+	apiVersionGroup.POST("/lights/:state", lightsStateHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			c.Set("hueLights", witchConfig.HueLightsStructs)
 			return next(c)
@@ -56,13 +60,13 @@ func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, 
 
 	// Sounds
 	// Route to view supported sounds
-	e.GET("/sounds", soundsReadHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
+	apiVersionGroup.GET("/sounds", soundsReadHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			return next(c)
 		}
 	})
 	// Route to play sounds
-	e.POST("/sound/:sound", soundPlayHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
+	apiVersionGroup.POST("/sound/:sound", soundPlayHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			c.Set("quietTimeStart", witchConfig.SoundQuietTimeStart)
 			c.Set("quietTimeEnd", witchConfig.SoundQuietTimeEnd)
@@ -70,8 +74,4 @@ func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, 
 			return next(c)
 		}
 	})
-
-	// Swagger docs
-	url := swagger.URL("/api/swagger.json")
-	e.GET("/swagger/*", swagger.EchoWrapHandler(url))
 }

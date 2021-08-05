@@ -17,7 +17,7 @@
         "version": "0.1.0"
     },
     "host": "witchonstephendrive.com",
-    "basePath": "/",
+    "basePath": "/api/v1",
     "paths": {
         "/color/{color}": {
             "post": {

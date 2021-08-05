@@ -31,7 +31,7 @@ var apiDocAssets embed.FS
 // @license.name MIT
 // @license.url https://raw.githubusercontent.com/circa10a/witchonstephendrive.com/main/LICENSE
 // @host witchonstephendrive.com
-// @BasePath /
+// @BasePath /api/v1
 // @Schemes https
 func main() {
 	// Setup global config store
@@ -74,7 +74,7 @@ func main() {
 
 	// Prometheus metrics
 	if witchConfig.Metrics {
-		prometheus := witchMiddleware.NewPrometheusMiddlware()
+		prometheus := witchMiddleware.NewPrometheusMiddlware(witchConfig.APIBaseURL)
 		prometheus.Use(e)
 	}
 

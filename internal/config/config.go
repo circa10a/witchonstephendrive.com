@@ -8,6 +8,7 @@ import (
 
 type WitchConfig struct {
 	Port                   int           `envconfig:"PORT" default:"8080"`
+	APIBaseURL             string        `envconfig:"API_BASE_URL" default:"/api/v1"`
 	Metrics                bool          `envconfig:"METRICS" default:"true"`
 	HueUser                string        `envconfig:"HUE_USER" required:"true"`
 	HueLights              []int         `envconfig:"HUE_LIGHTS" required:"true" split_words:"true"`

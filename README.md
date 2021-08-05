@@ -57,6 +57,7 @@ Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks lik
 |---------------------------|--------------------------------------------------------------------------|-----------------------------|-----------|---------------|
 | Name                      | Description                                                              | Environment Variable        | Required  | Default       |
 | PORT                      | Port for web server to listen on                                         | `PORT`                      | `false`   | `8080`        |
+| API_BASE_URL              | Base URL for all interactive POST requests                               | `API_BASE_URL`              | `false`   | `/api/v1`     |
 | HUE_USER                  | Philips Hue API User/Token                                               | `HUE_USER`                  | `true`    | None          |
 | HUE_LIGHTS                | Light ID's to change color of. Example(export HUE_LIGHTS="1,2,3")        | `HUE_LIGHTS`                | `true`    | None          |
 | METRICS                   | Enables prometheus metrics on `/metrics`(unset for false)                | `METRICS`                   | `false`   | `true`        |
@@ -88,47 +89,47 @@ docker-compose up -d
 
 > Rate limiting performed by [this caddy plugin](https://github.com/mholt/caddy-ratelimit)
 
-|                       |                                                  |        |              |                 |
-|-----------------------|--------------------------------------------------|--------|--------------|-----------------|
-| Route                 | Description                                      | Method | Rate Limited | Limit           |
-| `/`                   | Serves static content in embedded from `./web`   | `GET`  | No           | N/A             |
-| `/colors`             | Get supported colors to change to                | `GET`  | No           | N/A             |
-| `/color/:color`       | Changes color of hue lights                      | `POST` | Yes          | 10 req. per 10s |
-| `/sounds`             | Get support sounds to play                       | `GET`  | No           | N/A             |
-| `/sound/:sound`       | Changes color of hue lights                      | `POST` | Yes          | 10 req. per 10s |
-| `/lights/:state`      | Changes state of configured lights(on/off)       | `POST` | Yes          | 10 req. per 10s |
-| `/metrics`            | Serves prometheus metrics using echo middleware] | `GET`  | No           | N/A             |
-| `/swagger/index.html` | Swagger API documentation                        | `GET`  | No           | N/A             |
+|                         |                                                 |        |              |                 |
+|-------------------------|-------------------------------------------------|--------|--------------|-----------------|
+| Route                   | Description                                     | Method | Rate Limited | Limit           |
+| `/`                     | Serves static content in embedded from `./web`  | `GET`  | No           | N/A             |
+| `/api/v1/colors`        | Get supported colors to change to               | `GET`  | No           | N/A             |
+| `/api/v1/color/:color`  | Changes color of hue lights                     | `POST` | Yes          | 10 req. per 10s |
+| `/api/v1/sounds`        | Get support sounds to play                      | `GET`  | No           | N/A             |
+| `/api/v1/sound/:sound`  | Changes color of hue lights                     | `POST` | Yes          | 10 req. per 10s |
+| `/api/v1/lights/:state` | Changes state of configured lights(on/off)      | `POST` | Yes          | 10 req. per 10s |
+| `/metrics`              | Serves prometheus metrics using echo middleware | `GET`  | No           | N/A             |
+| `/swagger/index.html`   | Swagger API documentation                       | `GET`  | No           | N/A             |
 
 ## Get colors
 
 ```bash
-curl -X POST http://localhost:8080/colors
+curl -X POST http://localhost:8080/api/v1/colors
 ```
 
 ## Example color change request
 
 ```bash
-curl -X POST http://localhost:8080/color/red
+curl -X POST http://localhost:8080/api/v1/color/red
 ```
 
 ## Get sounds
 
 ```bash
-curl -X POST http://localhost:8080/sounds
+curl -X POST http://localhost:8080/api/v1/sounds
 ```
 
 ## Example sound play request
 
 ```bash
-curl -X POST http://localhost:8080/sound/werewolf
+curl -X POST http://localhost:8080/api/v1/sound/werewolf
 ```
 
 ## Turn lights on/off
 
 ```bash
 # on
-curl -X POST http://localhost:8080/lights/on
+curl -X POST http://localhost:8080/api/v1/lights/on
 # off
-curl -X POST http://localhost:8080/lights/off
+curl -X POST http://localhost:8080/api/v1/lights/off
 ```

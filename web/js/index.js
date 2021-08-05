@@ -1,3 +1,6 @@
+// Base Path
+const witchAPIBaseURL = '/api/v1';
+
 // Utils
 const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -15,7 +18,7 @@ const playRandomSound = async() => {
   // Have a default
   supportedSounds = ['this-is-halloween'];
   try {
-    let resp = await fetch('/sounds', {});
+    let resp = await fetch(`${witchAPIBaseURL}/sounds`, {});
     let json = await resp.json();
     supportedSounds = json.supportedSounds;
   } catch(e) {
@@ -27,7 +30,7 @@ const playRandomSound = async() => {
   const randomSound = () => allowedSounds[Math.floor(Math.random() * allowedSounds.length)];
 
   try {
-    let resp = await fetch(`/sound/${randomSound()}`, {
+    let resp = await fetch(`${witchAPIBaseURL}/sound/${randomSound()}`, {
       method: 'POST',
     });
     let json = await resp.json();
@@ -88,7 +91,7 @@ const setState = async (opts = {}) => {
   playRandomSound();
   // Set light colors via hue
   try {
-    colorResponse = await fetch(`/color/${opts.color}`, {
+    colorResponse = await fetch(`${witchAPIBaseURL}/color/${opts.color}`, {
       method: 'POST',
     });
     // Check that rate limit isn't hit, alert user
@@ -109,11 +112,11 @@ const flicker = async (opts = {count: 3, sleepTime: 1000, color: 'black'}) => {
   for (let i = 0; i < opts.count; i++) {
     // Play sound, don't wait since it takes a second to kick off
     try {
-      await fetch('/lights/off', {
+      await fetch(`${witchAPIBaseURL}/lights/off`, {
         method: 'POST',
       });
       await sleep(opts.sleepTime);
-      await fetch('/lights/on', {
+      await fetch(`${witchAPIBaseURL}/lights/on`, {
         method: 'POST',
       });
       await sleep(opts.sleepTime);
