@@ -47,12 +47,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	witchConfig.Bridge = hueBridge
+	witchConfig.HueBridge = hueBridge
 	// Authenticate against bridge api
-	witchConfig.Bridge.Login(witchConfig.HueUser)
+	witchConfig.HueBridge.Login(witchConfig.HueUser)
 	// Store all light data to be used later
 	for _, lightID := range witchConfig.HueLights {
-		light, err := witchConfig.Bridge.GetLight(lightID)
+		light, err := witchConfig.HueBridge.GetLight(lightID)
 		if err != nil {
 			log.Fatal(err)
 		}

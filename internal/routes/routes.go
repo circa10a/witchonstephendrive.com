@@ -23,13 +23,13 @@ func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, 
 	frontendFileServer := http.FileServer(frontendHTTPFS)
 	// Serve frontend static assets
 	e.GET("/*", echo.WrapHandler(frontendFileServer))
+
 	// Swagger.{json,yaml}
 	apiDocsFileServer := http.FileServer(http.FS(apiDocAssets))
-
 	// API docs/Swagger JSON
 	e.GET("/api/*", echo.WrapHandler(apiDocsFileServer))
 
-	// Lights
+	// Lights/Colors
 	// Route to view supported colors
 	e.GET("/colors", colorsReadHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
@@ -40,7 +40,8 @@ func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, 
 	e.POST("/color/:color", colorChangeHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 		// In the event user passes unsupported color, give them a list
 		return func(c echo.Context) error {
-			c.Set("witchConfig", witchConfig)
+			c.Set("hueLights", witchConfig.HueLights)
+			c.Set("hueBridge", witchConfig.HueBridge)
 			return next(c)
 		}
 	})

@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"github.com/amimof/huego"
-	"github.com/circa10a/witchonstephendrive.com/internal/config"
 )
 
 // ColorMap holds all the possible colors supported by the api
@@ -99,10 +98,10 @@ func GetSupportedColors() []string {
 // ErrColorNotSupported error gets raised in the event that a requested color is not in the Colors map
 var ErrColorNotSupported = errors.New("color not supported")
 
-func SetLightsColor(witchConfig config.WitchConfig, color string) error {
+func SetLightsColor(lights []int, bridge *huego.Bridge, color string) error {
 	if _, ok := Colors[color]; ok {
-		for _, light := range witchConfig.HueLights {
-			_, err := witchConfig.Bridge.SetLightState(light, Colors[color])
+		for _, light := range lights {
+			_, err := bridge.SetLightState(light, Colors[color])
 			if err != nil {
 				return err
 			}

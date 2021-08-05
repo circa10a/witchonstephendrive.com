@@ -19,7 +19,7 @@ type WitchConfig struct {
 	SoundQueueCapacity     int           `envconfig:"SOUND_QUEUE_CAPACITY" default:"3"`
 	SoundQueuePollInterval int           `envconfig:"SOUND_QUEUE_POLL_INTERVAL" default:"1"`
 	SoundQueue             *lane.Deque   `ignored:"true"`
-	Bridge                 *huego.Bridge `ignored:"true"`
+	HueBridge              *huego.Bridge `ignored:"true"`
 	HueLightsStructs       []huego.Light `ignored:"true"`
 	RelayClient            *resty.Client `ignored:"true"`
 }
