@@ -10,20 +10,20 @@ import (
 
 // SupportedSounds is a slice of available mp3's in the sounds directory
 var SupportedSounds = []string{
+	"adams-family",
 	"dracula",
 	"ghost",
 	"halloween-organ",
 	"leave-now",
+	"police-siren", // Cause Traci
 	"pumpkin-king",
 	"scream",
+	"spell-on-you",
+	"stranger-things",
 	"this-is-halloween",
 	"werewolf",
 	"witch-laugh",
-	"spell-on-you",
-	"stranger-things",
-	"adams-family",
 	"youll-float-too",
-	"police-siren", // Cause Traci
 }
 
 // PlaySoundPayload is the type supported by assistant-relay to cast custom media

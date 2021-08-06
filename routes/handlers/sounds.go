@@ -73,6 +73,6 @@ func SoundPlayHandler(c echo.Context) error {
 	}
 	return c.JSON(http.StatusAccepted, &SoundPlayResponse{
 		Success: true,
-		Message: fmt.Sprintf("sound: %s played successfully", sound),
+		Message: fmt.Sprintf("sound: %s queued successfully", sound),
 	})
 }
