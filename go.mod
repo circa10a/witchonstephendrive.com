@@ -18,7 +18,7 @@ require (
 	github.com/mattn/go-isatty v0.0.13 // indirect
 	github.com/oleiade/lane v1.0.1
 	github.com/prometheus/common v0.30.0 // indirect
-	github.com/prometheus/procfs v0.7.1 // indirect
+	github.com/prometheus/procfs v0.7.2 // indirect
 	github.com/sirupsen/logrus v1.8.1
 	github.com/swaggo/echo-swagger v1.1.2
 	github.com/swaggo/swag v1.7.0

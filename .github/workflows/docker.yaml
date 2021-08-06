@@ -3,7 +3,7 @@ name: build-docker-images
 on:
   workflow_run:
     workflows:
-      - Test
+      - test
     branches:
       - main
     types:
