@@ -28,8 +28,13 @@ var apiDocAssets embed.FS
 // @description Control my halloween decorations
 // @contact.name Caleb Lemoine
 // @contact.email caleblemoine@gmail.com
+// @contact.url https://caleblemoine.dev
 // @license.name MIT
 // @license.url https://raw.githubusercontent.com/circa10a/witchonstephendrive.com/main/LICENSE
+// @tag.Name
+// @tag.description
+// @tag.docs.url https://github.com/circa10a/witchonstephendrive.com
+// @tag.docs.description Link to GitHub Repository
 // @host witchonstephendrive.com
 // @BasePath /api/v1
 // @Schemes https

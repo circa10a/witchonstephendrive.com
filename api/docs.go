@@ -20,6 +20,7 @@ var doc = `{
         "title": "{{.Title}}",
         "contact": {
             "name": "Caleb Lemoine",
+            "url": "https://caleblemoine.dev",
             "email": "caleblemoine@gmail.com"
         },
         "license": {
@@ -236,7 +237,15 @@ var doc = `{
                 }
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "externalDocs": {
+                "description": "Link to GitHub Repository",
+                "url": "https://github.com/circa10a/witchonstephendrive.com"
+            }
+        }
+    ]
 }`
 
 type swaggerInfo struct {

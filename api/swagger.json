@@ -8,6 +8,7 @@
         "title": "witchonstephendrive.com",
         "contact": {
             "name": "Caleb Lemoine",
+            "url": "https://caleblemoine.dev",
             "email": "caleblemoine@gmail.com"
         },
         "license": {
@@ -224,5 +225,13 @@
                 }
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "externalDocs": {
+                "description": "Link to GitHub Repository",
+                "url": "https://github.com/circa10a/witchonstephendrive.com"
+            }
+        }
+    ]
 }
