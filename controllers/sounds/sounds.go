@@ -22,6 +22,7 @@ var SupportedSounds = []string{
 	"spell-on-you",
 	"stranger-things",
 	"adams-family",
+	"youll-float-too",
 	"police-siren", // Cause Traci
 }
 
