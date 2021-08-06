@@ -1,57 +1,34 @@
 basePath: /api/v1
 definitions:
-  routes.ColorFailedChangeResponse:
+  handlers.ColorChangeResponse:
     properties:
       message:
         type: string
       success:
         type: boolean
-      supportedColors:
-        items:
-          type: string
-        type: array
     type: object
-  routes.ColorSuccessfulChangeResponse:
-    properties:
-      success:
-        type: boolean
-    type: object
-  routes.ColorsListResponse:
+  handlers.ColorsListResponse:
     properties:
       supportedColors:
         items:
           type: string
         type: array
     type: object
-  routes.LightStateFailedChangeResponse:
+  handlers.LightStateChangeResponse:
     properties:
       message:
         type: string
       success:
         type: boolean
     type: object
-  routes.LightStateSuccessfulChangeResponse:
-    properties:
-      success:
-        type: boolean
-    type: object
-  routes.SoundFailedPlayResponse:
+  handlers.SoundPlayResponse:
     properties:
       message:
         type: string
       success:
         type: boolean
-      supportedSounds:
-        items:
-          type: string
-        type: array
     type: object
-  routes.SoundSuccessfulPlayResponse:
-    properties:
-      success:
-        type: boolean
-    type: object
-  routes.SoundsListResponse:
+  handlers.SoundsListResponse:
     properties:
       supportedSounds:
         items:
@@ -85,15 +62,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/routes.ColorSuccessfulChangeResponse'
+            $ref: '#/definitions/handlers.ColorChangeResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/routes.ColorFailedChangeResponse'
+            $ref: '#/definitions/handlers.ColorChangeResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/routes.ColorFailedChangeResponse'
+            $ref: '#/definitions/handlers.ColorChangeResponse'
       summary: Change hue lights color
   /colors:
     get:
@@ -104,7 +81,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/routes.ColorsListResponse'
+            $ref: '#/definitions/handlers.ColorsListResponse'
       summary: Get available colors to change to
   /lights/{state}:
     post:
@@ -121,15 +98,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/routes.LightStateSuccessfulChangeResponse'
+            $ref: '#/definitions/handlers.LightStateChangeResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/routes.LightStateFailedChangeResponse'
+            $ref: '#/definitions/handlers.LightStateChangeResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/routes.LightStateFailedChangeResponse'
+            $ref: '#/definitions/handlers.LightStateChangeResponse'
       summary: Change state of configured lights
   /sound/{sound}:
     post:
@@ -146,15 +123,15 @@ paths:
         "202":
           description: Accepted
           schema:
-            $ref: '#/definitions/routes.SoundSuccessfulPlayResponse'
+            $ref: '#/definitions/handlers.SoundPlayResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/routes.SoundFailedPlayResponse'
+            $ref: '#/definitions/handlers.SoundPlayResponse'
         "429":
           description: Too Many Requests
           schema:
-            $ref: '#/definitions/routes.SoundFailedPlayResponse'
+            $ref: '#/definitions/handlers.SoundPlayResponse'
       summary: Play sound via assistant relay
   /sounds:
     get:
@@ -165,7 +142,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/routes.SoundsListResponse'
+            $ref: '#/definitions/handlers.SoundsListResponse'
       summary: Get available sounds to play
 schemes:
 - https

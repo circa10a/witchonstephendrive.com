@@ -39,19 +39,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/routes.ColorSuccessfulChangeResponse"
+                            "$ref": "#/definitions/handlers.ColorChangeResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/routes.ColorFailedChangeResponse"
+                            "$ref": "#/definitions/handlers.ColorChangeResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/routes.ColorFailedChangeResponse"
+                            "$ref": "#/definitions/handlers.ColorChangeResponse"
                         }
                     }
                 }
@@ -68,7 +68,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/routes.ColorsListResponse"
+                            "$ref": "#/definitions/handlers.ColorsListResponse"
                         }
                     }
                 }
@@ -94,19 +94,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/routes.LightStateSuccessfulChangeResponse"
+                            "$ref": "#/definitions/handlers.LightStateChangeResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/routes.LightStateFailedChangeResponse"
+                            "$ref": "#/definitions/handlers.LightStateChangeResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/routes.LightStateFailedChangeResponse"
+                            "$ref": "#/definitions/handlers.LightStateChangeResponse"
                         }
                     }
                 }
@@ -132,19 +132,19 @@
                     "202": {
                         "description": "Accepted",
                         "schema": {
-                            "$ref": "#/definitions/routes.SoundSuccessfulPlayResponse"
+                            "$ref": "#/definitions/handlers.SoundPlayResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/routes.SoundFailedPlayResponse"
+                            "$ref": "#/definitions/handlers.SoundPlayResponse"
                         }
                     },
                     "429": {
                         "description": "Too Many Requests",
                         "schema": {
-                            "$ref": "#/definitions/routes.SoundFailedPlayResponse"
+                            "$ref": "#/definitions/handlers.SoundPlayResponse"
                         }
                     }
                 }
@@ -161,7 +161,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/routes.SoundsListResponse"
+                            "$ref": "#/definitions/handlers.SoundsListResponse"
                         }
                     }
                 }
@@ -169,7 +169,7 @@
         }
     },
     "definitions": {
-        "routes.ColorFailedChangeResponse": {
+        "handlers.ColorChangeResponse": {
             "type": "object",
             "properties": {
                 "message": {
@@ -177,24 +177,10 @@
                 },
                 "success": {
                     "type": "boolean"
-                },
-                "supportedColors": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
                 }
             }
         },
-        "routes.ColorSuccessfulChangeResponse": {
-            "type": "object",
-            "properties": {
-                "success": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "routes.ColorsListResponse": {
+        "handlers.ColorsListResponse": {
             "type": "object",
             "properties": {
                 "supportedColors": {
@@ -205,7 +191,7 @@
                 }
             }
         },
-        "routes.LightStateFailedChangeResponse": {
+        "handlers.LightStateChangeResponse": {
             "type": "object",
             "properties": {
                 "message": {
@@ -216,15 +202,7 @@
                 }
             }
         },
-        "routes.LightStateSuccessfulChangeResponse": {
-            "type": "object",
-            "properties": {
-                "success": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "routes.SoundFailedPlayResponse": {
+        "handlers.SoundPlayResponse": {
             "type": "object",
             "properties": {
                 "message": {
@@ -232,24 +210,10 @@
                 },
                 "success": {
                     "type": "boolean"
-                },
-                "supportedSounds": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
                 }
             }
         },
-        "routes.SoundSuccessfulPlayResponse": {
-            "type": "object",
-            "properties": {
-                "success": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "routes.SoundsListResponse": {
+        "handlers.SoundsListResponse": {
             "type": "object",
             "properties": {
                 "supportedSounds": {

@@ -12,7 +12,7 @@ type ColorMap map[string]huego.State
 var maxBrightness uint8 = 254
 
 // SupportedColors hold a list of supported colors
-var SupportedColors = GetSupportedColors()
+var SupportedColors = getSupportedColors()
 
 // Colors hold all the supported colors' states
 var Colors = ColorMap{
@@ -86,8 +86,8 @@ var Colors = ColorMap{
 	},
 }
 
-// GetSupportedColors returns a slice of supported colors
-func GetSupportedColors() []string {
+// getSupportedColors returns a slice of supported colors
+func getSupportedColors() []string {
 	supportedColors := []string{}
 	for color := range Colors {
 		supportedColors = append(supportedColors, color)

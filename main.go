@@ -5,10 +5,10 @@ import (
 	"fmt"
 
 	"github.com/amimof/huego"
+	"github.com/circa10a/witchonstephendrive.com/controllers/sounds"
 	"github.com/circa10a/witchonstephendrive.com/internal/config"
-	witchMiddleware "github.com/circa10a/witchonstephendrive.com/internal/middleware"
-	"github.com/circa10a/witchonstephendrive.com/internal/routes"
-	"github.com/circa10a/witchonstephendrive.com/internal/sounds"
+	"github.com/circa10a/witchonstephendrive.com/routes"
+	witchPrometheusMiddleware "github.com/circa10a/witchonstephendrive.com/routes/middleware/prometheus"
 	"github.com/go-resty/resty/v2"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/labstack/echo/v4"
@@ -74,7 +74,7 @@ func main() {
 
 	// Prometheus metrics
 	if witchConfig.Metrics {
-		prometheus := witchMiddleware.NewPrometheusMiddlware(witchConfig.APIBaseURL)
+		prometheus := witchPrometheusMiddleware.NewPrometheus(witchConfig.APIBaseURL)
 		prometheus.Use(e)
 	}
 

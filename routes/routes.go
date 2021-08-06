@@ -7,6 +7,7 @@ import (
 	_ "github.com/circa10a/witchonstephendrive.com/api" // import generated docs.go
 	"github.com/circa10a/witchonstephendrive.com/internal/config"
 	"github.com/circa10a/witchonstephendrive.com/pkg/utils"
+	"github.com/circa10a/witchonstephendrive.com/routes/handlers"
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
 	swagger "github.com/swaggo/echo-swagger"
@@ -35,13 +36,13 @@ func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, 
 
 	// Lights/Colors
 	// Route to view supported colors
-	apiVersionGroup.GET("/colors", colorsReadHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
+	apiVersionGroup.GET("/colors", handlers.ColorsReadHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			return next(c)
 		}
 	})
 	// Route to change color of lights
-	apiVersionGroup.POST("/color/:color", colorChangeHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
+	apiVersionGroup.POST("/color/:color", handlers.ColorChangeHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 		// In the event user passes unsupported color, give them a list
 		return func(c echo.Context) error {
 			c.Set("hueLights", witchConfig.HueLights)
@@ -51,7 +52,7 @@ func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, 
 	})
 
 	// Route to change lights state(on/off)
-	apiVersionGroup.POST("/lights/:state", lightsStateHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
+	apiVersionGroup.POST("/lights/:state", handlers.LightsStateHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			c.Set("hueLights", witchConfig.HueLightsStructs)
 			return next(c)
@@ -60,13 +61,13 @@ func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, 
 
 	// Sounds
 	// Route to view supported sounds
-	apiVersionGroup.GET("/sounds", soundsReadHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
+	apiVersionGroup.GET("/sounds", handlers.SoundsReadHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			return next(c)
 		}
 	})
 	// Route to play sounds
-	apiVersionGroup.POST("/sound/:sound", soundPlayHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
+	apiVersionGroup.POST("/sound/:sound", handlers.SoundPlayHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			c.Set("quietTimeStart", witchConfig.SoundQuietTimeStart)
 			c.Set("quietTimeEnd", witchConfig.SoundQuietTimeEnd)
