@@ -79,10 +79,23 @@ export HUE_USER=<YOUR_TOKEN>; export HUE_LIGHTS="1,2,3"; export ASSISTANT_DEVICE
 
 ### Docker
 
+#### Deploy
+
 > Be sure to update values in `.env` to be consumed by `docker-compose.yml`
 
 ```bash
 docker-compose up -d
+```
+
+#### Build
+
+```bash
+# Auto determine CPU arch
+make build-docker
+# ARM64
+make build-docker-arm64
+# ARMv7
+make build-docker-armv7
 ```
 
 ### Endpoints
