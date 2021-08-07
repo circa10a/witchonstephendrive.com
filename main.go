@@ -4,16 +4,10 @@ import (
 	"embed"
 	"fmt"
 
-	"github.com/amimof/huego"
 	"github.com/circa10a/witchonstephendrive.com/controllers/sounds"
 	"github.com/circa10a/witchonstephendrive.com/internal/config"
 	"github.com/circa10a/witchonstephendrive.com/routes"
-	witchPrometheusMiddleware "github.com/circa10a/witchonstephendrive.com/routes/middleware/prometheus"
-	"github.com/go-resty/resty/v2"
 	"github.com/kelseyhightower/envconfig"
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"github.com/oleiade/lane"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -39,59 +33,33 @@ var apiDocAssets embed.FS
 // @BasePath /api/v1
 // @Schemes https
 func main() {
+	// Logger Config
+	config.InitLogger()
+
 	// Setup global config store
-	witchConfig := config.WitchConfig{}
-	err := envconfig.Process("", &witchConfig)
+	witchConfig := &config.WitchConfig{}
+	err := envconfig.Process("", witchConfig)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
-	// Hue Lights Config
-	// Find hue bridge ip
-	hueBridge, err := huego.Discover()
-	if err != nil {
-		log.Fatal(err)
-	}
-	witchConfig.HueBridge = hueBridge
-	// Authenticate against bridge api
-	witchConfig.HueBridge.Login(witchConfig.HueUser)
-	// Store all light data to be used later
-	for _, lightID := range witchConfig.HueLights {
-		light, err := witchConfig.HueBridge.GetLight(lightID)
-		if err != nil {
-			log.Fatal(err)
-		}
-		witchConfig.HueLightsStructs = append(witchConfig.HueLightsStructs, *light)
-	}
+	// Hue Lights
+	// Goroutine to regularly redescovers bridge IP in the event DHCP changes it
+	go witchConfig.InitHue()
 
-	// Create client to be used with assistant relay
-	assitantRelayEndpoint := fmt.Sprintf("%s:%d", witchConfig.AssistantRelayHost, witchConfig.AssistantRelayPort)
-	witchConfig.RelayClient = resty.New().SetHostURL(assitantRelayEndpoint).SetHeader("Content-Type", "application/json")
-
-	// Sound processing
-	// Create new queue to process "sound" jobs one at a time with a max limit to eliminate spam
-	witchConfig.SoundQueue = lane.NewCappedDeque(witchConfig.SoundQueueCapacity)
-	// Start the worker
+	// Sounds
+	// Google Assistant Relay Config such as endpoint and client
+	witchConfig.InitAssistantRelayConfig()
+	// Creates initial capped sounds queue
+	witchConfig.InitSoundQueue()
+	// Start the sound queue worker
 	go sounds.Daemon(witchConfig)
 
-	// New instance of echo
-	e := echo.New()
-
-	// Prometheus metrics
-	if witchConfig.Metrics {
-		prometheus := witchPrometheusMiddleware.NewPrometheus(witchConfig.APIBaseURL)
-		prometheus.Use(e)
-	}
-
-	// Use logging middleware
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "[${time_rfc3339}] ${status} ${method} ${path} (${remote_ip}) ${latency_human}\n",
-		Output: e.Logger.Output(),
-	}))
-
-	// Declare routes
+	// Rest API
+	// Configure echo server
+	e := witchConfig.InitEchoConfig(frontendAssets, apiDocAssets)
+	// Declare routes + handlers
 	routes.Routes(e, witchConfig, frontendAssets, apiDocAssets)
-
-	// Start App
+	// Start Listener
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", witchConfig.Port)))
 }

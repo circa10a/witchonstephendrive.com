@@ -34,7 +34,7 @@ type PlaySoundPayload struct {
 }
 
 // worker actually calls the assistant relay to play the sound read from the queue
-func worker(witchConfig config.WitchConfig, sound string) {
+func worker(witchConfig *config.WitchConfig, sound string) {
 	_, err := witchConfig.RelayClient.R().SetBody(PlaySoundPayload{
 		Device: witchConfig.AssistantDevice,
 		Source: fmt.Sprintf("%v.mp3", sound),
@@ -47,7 +47,7 @@ func worker(witchConfig config.WitchConfig, sound string) {
 }
 
 // Daemon continually reads sounds out of a queue to ensure non-overlapping casting
-func Daemon(witchConfig config.WitchConfig) {
+func Daemon(witchConfig *config.WitchConfig) {
 	for {
 		// Don't waste cpu by polling the queue too much
 		time.Sleep(time.Second * time.Duration(witchConfig.SoundQueuePollInterval))

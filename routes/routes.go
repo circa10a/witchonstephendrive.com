@@ -14,7 +14,7 @@ import (
 )
 
 // Routes instantiates all of the listening context paths
-func Routes(e *echo.Echo, witchConfig config.WitchConfig, frontendAssets fs.FS, apiDocAssets fs.FS) {
+func Routes(e *echo.Echo, witchConfig *config.WitchConfig, frontendAssets fs.FS, apiDocAssets fs.FS) {
 	apiVersionGroup := e.Group(witchConfig.APIBaseURL)
 	// Static assets
 	frontendHTTPFS, err := utils.ConvertEmbedFsDirToHTTPFS(frontendAssets, "web")
