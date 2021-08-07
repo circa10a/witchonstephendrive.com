@@ -7,6 +7,7 @@ import (
 // InitLogger configures global logrus logger
 func InitLogger() {
 	log.SetFormatter(&log.TextFormatter{
+		ForceColors:   true,
 		FullTimestamp: true,
 	})
 }

@@ -14,6 +14,9 @@ A home automation project to control hue lights for Halloween <img src="https://
     - [Configuration](#configuration)
     - [Go](#go)
     - [Docker](#docker)
+      - [Deploy](#deploy)
+      - [Build](#build)
+    - [Terraform module](#terraform-module)
     - [Endpoints](#endpoints)
   - [Get colors](#get-colors)
   - [Example color change request](#example-color-change-request)
@@ -53,22 +56,22 @@ Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks lik
 
 ### Configuration
 
-|                             |                                                                          |                               |           |             |
-|-----------------------------|--------------------------------------------------------------------------|-------------------------------|-----------|-------------|
-| Name                        | Description                                                              | Environment Variable          | Required  | Default     |
-| PORT                        | Port for web server to listen on                                         | `PORT`                        | `false`   | `8080`      |
-| API_BASE_URL                | Base URL for all interactive POST requests                               | `API_BASE_URL`                | `false`   | `/api/v1`   |
-| HUE_USER                    | Philips Hue API User/Token                                               | `HUE_USER`                    | `true`    | None        |
-| HUE_LIGHTS                  | Light ID's to change color of. Example(export HUE_LIGHTS="1,2,3")        | `HUE_LIGHTS`                  | `true`    | None        |
-| HUE_BRIDGE_REFRESH_INTERVAL | How many seconds to wait before rediscovering hue bridge config/ip       | `HUE_BRIDGE_REFRESH_INTERVAL` | `true`    | `21600`     |
-| METRICS                     | Enables prometheus metrics on `/metrics`(unset for false)                | `METRICS`                     | `false`   | `true`      |
-| ASSISTANT_DEVICE            | Name of google assistant speaker to play sounds on                       | `ASSISTANT_DEVICE`            | `true`    | None        |
-| ASSISTANT_RELAY_HOST        | Address of the google assistant relay                                    | `ASSISTANT_RELAY_HOST`        | `false`   | `127.0.0.1` |
-| ASSISTANT_RELAY_PORT        | Listening port of the google assistant relay                             | `ASSISTANT_RELAY_PORT`        | `false`   | `3000`      |
-| SOUND_QUIET_TIME_START      | Local time to ensure sounds are not played after this hour               | `SOUND_QUIET_TIME_START`      | `false`   | `22`        |
-| SOUND_QUIET_TIME_END        | Local time to ensure sounds are not played before this hour              | `SOUND_QUIET_TIME_END`        | `false`   | `07`        |
-| SOUND_QUEUE_CAPACITY        | Maxiumum depth of soung queue. This is to ensure no spam/long backlog    | `SOUND_QUEUE_CAPACITY`        | `false`   | `3`         |
-| SOUND_QUEUE_POLL_INTERVAL   | How many seconds to wait between checking sound queue to play sound msgs | `SOUND_QUEUE_POLL_INTERVAL`   | `false`   | `1`         |
+|                             |                                                                          |                               |           |                    |
+|-----------------------------|--------------------------------------------------------------------------|-------------------------------|-----------|--------------------|
+| Name                        | Description                                                              | Environment Variable          | Required  | Default            |
+| PORT                        | Port for web server to listen on                                         | `PORT`                        | `false`   | `8080`             |
+| API_BASE_URL                | Base URL for all interactive POST requests                               | `API_BASE_URL`                | `false`   | `/api/v1`          |
+| HUE_USER                    | Philips Hue API User/Token                                               | `HUE_USER`                    | `true`    | None               |
+| HUE_LIGHTS                  | Light ID's to change color of. Example(export HUE_LIGHTS="1,2,3")        | `HUE_LIGHTS`                  | `true`    | None               |
+| HUE_BRIDGE_REFRESH_INTERVAL | How many seconds to wait before rediscovering hue bridge config/ip       | `HUE_BRIDGE_REFRESH_INTERVAL` | `true`    | `21600`            |
+| METRICS                     | Enables prometheus metrics on `/metrics`(unset for false)                | `METRICS`                     | `false`   | `true`             |
+| ASSISTANT_DEVICE            | Name of google assistant speaker to play sounds on                       | `ASSISTANT_DEVICE`            | `true`    | None               |
+| ASSISTANT_RELAY_HOST        | Address of the google assistant relay                                    | `ASSISTANT_RELAY_HOST`        | `false`   | `http://127.0.0.1` |
+| ASSISTANT_RELAY_PORT        | Listening port of the google assistant relay                             | `ASSISTANT_RELAY_PORT`        | `false`   | `3000`             |
+| SOUND_QUIET_TIME_START      | Local time to ensure sounds are not played after this hour               | `SOUND_QUIET_TIME_START`      | `false`   | `22`               |
+| SOUND_QUIET_TIME_END        | Local time to ensure sounds are not played before this hour              | `SOUND_QUIET_TIME_END`        | `false`   | `07`               |
+| SOUND_QUEUE_CAPACITY        | Maxiumum depth of soung queue. This is to ensure no spam/long backlog    | `SOUND_QUEUE_CAPACITY`        | `false`   | `3`                |
+| SOUND_QUEUE_POLL_INTERVAL   | How many seconds to wait between checking sound queue to play sound msgs | `SOUND_QUEUE_POLL_INTERVAL`   | `false`   | `1`                |
 
 ### Go
 
@@ -99,21 +102,50 @@ make build-docker-arm64
 make build-docker-armv7
 ```
 
+### Terraform module
+
+Colors + sounds are not mutually exclusive, you can pass either just a color, just a sound, or both.
+
+```hcl
+module "witchonstephendrive" {
+  source       = "github.com/circa10a/witchonstephendrive.com//terraform"
+  api_base_url = "https://witchonstephendrive.com/api/v1"
+  color        = "purple"
+  sound        = "stranger-things"
+}
+
+output "color_change_response" {
+  value = module.witchonstephendrive.color_change_response
+}
+
+output "supported_colors" {
+  value = module.witchonstephendrive.supported_colors
+}
+
+output "sound_play_response" {
+  value = module.witchonstephendrive.sound_play_response
+}
+
+output "supported_sounds" {
+  value = module.witchonstephendrive.supported_sounds
+}
+```
+
 ### Endpoints
 
 > Rate limiting performed by [this caddy plugin](https://github.com/mholt/caddy-ratelimit)
 
-|                         |                                                 |        |              |                 |
-|-------------------------|-------------------------------------------------|--------|--------------|-----------------|
-| Route                   | Description                                     | Method | Rate Limited | Limit           |
-| `/`                     | Serves static content in embedded from `./web`  | `GET`  | No           | N/A             |
-| `/api/v1/colors`        | Get supported colors to change to               | `GET`  | No           | N/A             |
-| `/api/v1/color/:color`  | Changes color of hue lights                     | `POST` | Yes          | 10 req. per 10s |
-| `/api/v1/sounds`        | Get support sounds to play                      | `GET`  | No           | N/A             |
-| `/api/v1/sound/:sound`  | Changes color of hue lights                     | `POST` | Yes          | 10 req. per 10s |
-| `/api/v1/lights/:state` | Changes state of configured lights(on/off)      | `POST` | Yes          | 10 req. per 10s |
-| `/metrics`              | Serves prometheus metrics using echo middleware | `GET`  | No           | N/A             |
-| `/swagger/index.html`   | Swagger API documentation                       | `GET`  | No           | N/A             |
+|                         |                                                 |        |              |                     |
+|-------------------------|-------------------------------------------------|--------|--------------|---------------------|
+| Route                   | Description                                     | Method | Rate Limited | Limit               |
+| `/`                     | Serves static content embedded from `./web`     | `GET`  | No           | N/A                 |
+| `/api/v1/colors`        | Get supported colors to change to               | `GET`  | No           | N/A                 |
+| `/api/v1/color/:color`  | Changes color of hue lights                     | `POST` | Yes          | 10 requests per 10s |
+| `/api/v1/sounds`        | Get supported sounds to play                    | `GET`  | No           | N/A                 |
+| `/api/v1/sound/:sound`  | Plays sound through configured speaker          | `POST` | Yes          | 10 requests per 10s |
+| `/api/v1/lights/:state` | Changes state of configured lights(on/off)      | `POST` | Yes          | 10 requests per 10s |
+| `/metrics`              | Serves prometheus metrics using echo middleware | `GET`  | No           | N/A                 |
+| `/swagger/index.html`   | Swagger API documentation                       | `GET`  | No           | N/A                 |
 
 ## Get colors
 
