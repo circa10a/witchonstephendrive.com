@@ -14,7 +14,7 @@ func (w *WitchConfig) InitEchoConfig(frontendAssets fs.FS, apiDocAssets fs.FS) *
 	e := echo.New()
 
 	// Prometheus metrics
-	if w.Metrics {
+	if w.MetricsEnabled {
 		prometheus := witchPrometheusMiddleware.NewPrometheus(w.APIBaseURL)
 		prometheus.Use(e)
 	}

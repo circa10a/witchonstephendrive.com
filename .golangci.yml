@@ -37,3 +37,6 @@ linters:
     - unused
     - varcheck
     - whitespace
+linters-settings:
+  funlen:
+    lines: 70

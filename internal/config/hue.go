@@ -20,7 +20,7 @@ func (w *WitchConfig) InitHue() {
 		}
 		w.HueBridge = hueBridge
 		// Authenticate against bridge api
-		w.HueBridge.Login(w.HueUser)
+		w.HueBridge.Login(w.HueToken)
 		// Store all light data to be used later
 		for _, lightID := range w.HueLights {
 			light, err := w.HueBridge.GetLight(lightID)

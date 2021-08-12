@@ -75,6 +75,15 @@ var Colors = ColorMap{
 			0.3126,
 		},
 	},
+	"teal": {
+		On:     true,
+		Bri:    maxBrightness,
+		Effect: "none",
+		Xy: []float32{
+			0.1527,
+			0.2144,
+		},
+	},
 	"yellow": {
 		On:     true,
 		Bri:    maxBrightness,
