@@ -5,3 +5,6 @@ witch.json
 __debug_bin
 *tfstate*
 **/.terraform
+bin/
+# Generated
+controllers/sounds/supported_sounds.go

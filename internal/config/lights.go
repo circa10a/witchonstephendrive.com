@@ -13,8 +13,8 @@ func (w *WitchConfig) InitHueLightsScheduler() {
 		// On
 		log.Infof("scheduling lights turn on at hour: %d", w.HueLightsStart)
 		log.Infof("scheduling lights turn off at hour: %d", w.HueLightsEnd)
-		onSchedule := fmt.Sprintf("0 %d * * *", w.HueDefaultColorsStart)
-		offschedule := fmt.Sprintf("0 %d * * *", w.HueDefaultColorsStart)
+		onSchedule := fmt.Sprintf("0 %d * * *", w.HueLightsStart)
+		offschedule := fmt.Sprintf("0 %d * * *", w.HueLightsEnd)
 		c := cron.New()
 		// On
 		_, err := c.AddFunc(onSchedule, func() {

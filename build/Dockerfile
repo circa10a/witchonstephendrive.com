@@ -7,6 +7,7 @@ ENV USER=go \
     CGO_ENABLED=0
 
 RUN go mod tidy && \
+    go generate ./... && \
     go build -ldflags="-s -w" \
     -o witch && \
     addgroup --gid "$GID" "$USER" && \

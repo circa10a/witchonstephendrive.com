@@ -43,9 +43,9 @@ Here's what the front of my house looks like:
 
 <img src="https://i.imgur.com/Qj296rO.jpg" width="50%" height="50%"/>
 
-Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks like(with some sweet ghost animations):
+Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks like:
 
-<img src="https://i.imgur.com/BSg32cA.png" width="35%" height="35%"/>
+<img src="https://i.imgur.com/WTujMb2.png" width="35%" height="35%"/>
 
 ## How does it work
 
@@ -81,12 +81,12 @@ Here's what [witchonstephendrive.com](https://witchonstephendrive.com) looks lik
 | SOUND_QUIET_TIME_START      | Local time to ensure sounds are not played after this hour                                        | `WITCH_SOUND_QUIET_TIME_START`      | `false`   | `22`               |
 | SOUND_QUIET_TIME_END        | Local time to ensure sounds are not played before this hour                                       | `WITCH_SOUND_QUIET_TIME_END`        | `false`   | `07`               |
 | SOUND_QUEUE_CAPACITY        | Maxiumum depth of soung queue. This is to ensure no spam/long backlog                             | `WITCH_SOUND_QUEUE_CAPACITY`        | `false`   | `3`                |
-| SOUND_QUEUE_POLL_INTERVAL   | How many seconds to wait between checking sound queue to play sound msgs                          | `WITCH_SOUND_QUEUE_POLL_INTERVAL`   | `false`   | `1`                |
 | UI_ENABLED                  | Enables hosting of UI/static assets on `/`                                                        | `WITCH_UI_ENABLED`                  | `false`   | `true`             |
 
 ### Go
 
 ```bash
+go generate ./...
 go build -o witch .
 export WITCH_HUE_TOKEN=<YOUR_TOKEN>; export WITCH_HUE_LIGHTS="1,2,3"
 ./witch

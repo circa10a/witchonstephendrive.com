@@ -2,6 +2,7 @@ PROJECT=circa10a/witchonstephendrive.com
 BINARY=witch
 VERSION=0.1.0
 GOBUILDFLAGS=-ldflags="-s -w"
+GOGENERATE=go generate ./...
 DOCKERBUILDDIR=./build
 WTICHDOCKERFILE=$(DOCKERBUILDDIR)/Dockerfile
 CADDYDOCKERFILE=$(DOCKERBUILDDIR)/Dockerfile.caddy
@@ -14,7 +15,10 @@ DOCKERBUILDARM64=$(DOCKERBUILDX) --platform linux/arm64 -t $(PROJECT)
 DOCKERBUILDARMv7=$(DOCKERBUILDX) --platform linux/arm/v7 -t $(PROJECT)
 DOCKERPUSH=docker push $(PROJECT)
 
+.PHONY: build
+
 build:
+	$(GOGENERATE)
 	go build $(GOBUILDFLAGS) -o $(BINARY)
 
 build-docker:
@@ -32,11 +36,11 @@ build-docker-arm64:
 	$(DOCKERBUILDARM64):assistant-relay -f $(ASSISTANTRELAYDOCKERFILE) .
 
 build-docker-armv7:
-	$(DOCKERBUILDARM64):witch -f $(WTICHDOCKERFILE) .
-	$(DOCKERBUILDARM64):caddy -f $(CADDYDOCKERFILE).
-	$(DOCKERBUILDARM64):prometheus -f $(PROMETHEUSDOCKERFILE) .
-	$(DOCKERBUILDARM64):grafana -f $(GRAFANADOCKERFILE) .
-	$(DOCKERBUILDARM64):assistant-relay -f $(ASSISTANTRELAYDOCKERFILE) .
+	$(DOCKERBUILDARMv7):witch -f $(WTICHDOCKERFILE) .
+	$(DOCKERBUILDARMv7):caddy -f $(CADDYDOCKERFILE) .
+	$(DOCKERBUILDARMv7):prometheus -f $(PROMETHEUSDOCKERFILE) .
+	$(DOCKERBUILDARMv7):grafana -f $(GRAFANADOCKERFILE) .
+	$(DOCKERBUILDARMv7):assistant-relay -f $(ASSISTANTRELAYDOCKERFILE) .
 
 push-docker:
 	$(DOCKERPUSH):witch
@@ -46,13 +50,14 @@ push-docker:
 	$(DOCKERPUSH):assistant-relay
 
 run:
+	$(GOGENERATE)
 	go run .
 
 compile:
-	GOOS=linux GOARCH=amd64 go build $(GOBUILDFLAGS) -o bin/$(BINARY)-linux-amd64
-	GOOS=linux GOARCH=arm go build $(GOBUILDFLAGS) -o bin/$(BINARY)-linux-arm
-	GOOS=linux GOARCH=arm64 go build $(GOBUILDFLAGS) -o bin/$(BINARY)-linux-arm64
-	GOOS=darwin GOARCH=amd64 go build $(GOBUILDFLAGS) -o bin/$(BINARY)-darwin-amd64
+	GOOS=linux GOARCH=amd64 $(GOGENERATE) && go build $(GOBUILDFLAGS) -o bin/$(BINARY)-linux-amd64
+	GOOS=linux GOARCH=arm $(GOGENERATE) && go build $(GOBUILDFLAGS) -o bin/$(BINARY)-linux-arm
+	GOOS=linux GOARCH=arm64$(GOGENERATE) && go build $(GOBUILDFLAGS) -o bin/$(BINARY)-linux-arm64
+	GOOS=darwin GOARCH=amd64 $(GOGENERATE) && go build $(GOBUILDFLAGS) -o bin/$(BINARY)-darwin-amd64
 
 docs:
 	# Swagger
@@ -60,10 +65,12 @@ docs:
 	swag init -o ./api
 
 lint:
+	$(GOGENERATE)
 	golangci-lint run -v
 
 js-lint:
 	eslint web/js/*.js
 
 test:
+	$(GOGENERATE)
 	go test -v ./...

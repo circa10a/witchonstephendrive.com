@@ -59,7 +59,7 @@ func main() {
 	// Creates initial capped sounds queue
 	witchConfig.InitSoundQueue()
 	// Start the sound queue worker
-	go sounds.Daemon(witchConfig)
+	go sounds.InitDaemon(witchConfig)
 
 	// Rest API
 	// Configure echo server
