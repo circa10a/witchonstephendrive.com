@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/amimof/huego"
+	"github.com/circa10a/witchonstephendrive.com/controllers/lights"
 	"github.com/labstack/echo/v4"
 )
 
@@ -36,21 +37,19 @@ func LightsStateHandler(c echo.Context) error {
 		})
 	}
 
-	// Loop through lights and change state accordingly
-	for _, light := range hueLights {
-		var err error
-		if state == "on" {
-			err = light.On()
-		} else if state == "off" {
-			err = light.Off()
-		}
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, LightStateChangeResponse{
-				Success: false,
-				Message: err.Error(),
-			})
-		}
+	var err error
+	if state == "on" {
+		err = lights.SetLightsOn(hueLights)
+	} else if state == "off" {
+		err = lights.SetLightsOff(hueLights)
 	}
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, LightStateChangeResponse{
+			Success: false,
+			Message: err.Error(),
+		})
+	}
+
 	return c.JSON(http.StatusOK, LightStateChangeResponse{
 		Success: true,
 		Message: fmt.Sprintf("light state: %s set successfully", state),

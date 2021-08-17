@@ -46,8 +46,12 @@ func main() {
 	}
 
 	// Hue Lights
-	// Goroutine to regularly redescovers bridge IP in the event DHCP changes it
-	go witchConfig.InitHue()
+	// Start scheduler to regularly redescover bridge IP in the event DHCP changes it
+	witchConfig.InitHue()
+	// Start scheduler to set default light colors (if enabled)
+	witchConfig.InitDefaultColorsScheduler()
+	// Start schedulers to turn lights on/off
+	witchConfig.InitHueLightsScheduler()
 
 	// Sounds
 	// Google Assistant Relay Config such as endpoint and client

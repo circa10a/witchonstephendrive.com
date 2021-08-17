@@ -74,6 +74,9 @@ func Routes(e *echo.Echo, witchConfig *config.WitchConfig, frontendAssets fs.FS,
 		// Route to play sounds
 		apiVersionGroup.POST("/sound/:sound", handlers.SoundPlayHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 			return func(c echo.Context) error {
+				// Route is only functional if an assistant device is configured
+				c.Set("assistantDevice", witchConfig.AssistantDevice)
+				c.Set("quietTimeEnabled", witchConfig.SoundQuietTimeEnabled)
 				c.Set("quietTimeStart", witchConfig.SoundQuietTimeStart)
 				c.Set("quietTimeEnd", witchConfig.SoundQuietTimeEnd)
 				c.Set("soundQueue", witchConfig.SoundQueue)

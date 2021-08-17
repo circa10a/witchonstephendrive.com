@@ -45,11 +45,21 @@ func SoundsReadHandler(c echo.Context) error {
 // @Param sound path string true "Sound to play"
 func SoundPlayHandler(c echo.Context) error {
 	sound := c.Param("sound")
+	assistantDevice := c.Get("assistantDevice").(string)
 	queue := c.Get("soundQueue").(*lane.Deque)
+	quietTimeEnabled := c.Get("quietTimeEnabled").(bool)
 	quietTimeStart := c.Get("quietTimeStart").(int)
 	quietTimeEnd := c.Get("quietTimeEnd").(int)
+	// Only enable sounds if assistant device is configured
+	// The ensures sounds never reach the queue
+	if assistantDevice == "" {
+		return c.JSON(http.StatusBadRequest, SoundPlayResponse{
+			Success: false,
+			Message: "sounds disabled. no assistant device configured",
+		})
+	}
 	// Ensure sounds don't play during quiet time(late hours)
-	if sounds.IsDuringQuietTime(time.Now().Hour(), quietTimeStart, quietTimeEnd) {
+	if sounds.IsDuringQuietTime(time.Now().Hour(), quietTimeStart, quietTimeEnd) && quietTimeEnabled {
 		return c.JSON(http.StatusBadRequest, SoundPlayResponse{
 			Success: false,
 			Message: fmt.Sprintf("sounds disabled. quiet time is between %d:00 and %d:00", quietTimeStart, quietTimeEnd),

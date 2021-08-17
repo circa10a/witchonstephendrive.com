@@ -2,28 +2,36 @@ package sounds
 
 import (
 	"fmt"
+	"io/ioutil"
+	"strings"
 	"time"
 
 	"github.com/circa10a/witchonstephendrive.com/internal/config"
 	log "github.com/sirupsen/logrus"
 )
 
+const soundsDirectory = "./sounds"
+const soundFileSuffix = ".mp3"
+const assistantRelayCastType = "custom"
+const assistantRelayCastContextPath = "/cast"
+
 // SupportedSounds is a slice of available mp3's in the sounds directory
-var SupportedSounds = []string{
-	"adams-family",
-	"dracula",
-	"ghost",
-	"halloween-organ",
-	"leave-now",
-	"police-siren", // Cause Traci
-	"pumpkin-king",
-	"scream",
-	"spell-on-you",
-	"stranger-things",
-	"this-is-halloween",
-	"werewolf",
-	"witch-laugh",
-	"youll-float-too",
+var SupportedSounds = getSupportedSounds()
+
+// getSupportedColors returns a slice of supported sounds sourced from the sounds directory
+func getSupportedSounds() []string {
+	supportedSounds := []string{}
+	files, err := ioutil.ReadDir(soundsDirectory)
+	if err != nil {
+		log.Error(err)
+	}
+	for _, file := range files {
+		if strings.HasSuffix(file.Name(), soundFileSuffix) {
+			// dracula.mp3 => dracula
+			supportedSounds = append(supportedSounds, strings.TrimSuffix(file.Name(), soundFileSuffix))
+		}
+	}
+	return supportedSounds
 }
 
 // PlaySoundPayload is the type supported by assistant-relay to cast custom media
@@ -37,9 +45,9 @@ type PlaySoundPayload struct {
 func worker(witchConfig *config.WitchConfig, sound string) {
 	_, err := witchConfig.RelayClient.R().SetBody(PlaySoundPayload{
 		Device: witchConfig.AssistantDevice,
-		Source: fmt.Sprintf("%v.mp3", sound),
-		Type:   "custom",
-	}).Post("/cast")
+		Source: fmt.Sprintf("%s%s", sound, soundFileSuffix),
+		Type:   assistantRelayCastType,
+	}).Post(assistantRelayCastContextPath)
 
 	if err != nil {
 		log.Error(err)
