@@ -50,14 +50,17 @@ const getCountOfColorChanges = async () => {
   const metricsText = await metricsResp.text();
   const parsed = parsePrometheusTextFormat(metricsText);
   const requestMetrics = parsed.filter(metric =>  metric.name ===  'echo_requests_total')[0];
-  const requestCounter = requestMetrics.metrics.filter(counter => {
+  const requestCounters = requestMetrics.metrics.filter(counter => {
     return counter.labels.code === '200' &&
            counter.labels.method === 'POST' &&
            counter.labels.url.includes('/color/') &&
            counter.labels.host === 'witchonstephendrive.com';
-  })[0];
-
-  return requestCounter.value;
+  });
+  let usageCount = 0;
+  for (counter of requestCounters) {
+    usageCount += Number(counter.value);
+  }
+  return usageCount;
 };
 
 const setUsageFooter = async () => {
@@ -108,7 +111,7 @@ const flicker = async (opts = {count: 3, sleepTime: 1000, color: 'black'}) => {
   // Play sound, don't wait since it takes a few seconds to kick off
   playRandomSound();
   // Try to sync up sound and flash
-  await sleep(5000);
+  await sleep(2000);
   for (let i = 0; i < opts.count; i++) {
     // Play sound, don't wait since it takes a second to kick off
     try {
