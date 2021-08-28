@@ -25,6 +25,7 @@ type WitchConfig struct {
 	HueLightsEnd             int            `envconfig:"WITCH_HUE_LIGHTS_END" default:"7"`
 	HueLightsStructs         []huego.Light  `ignored:"true"`
 	HueToken                 string         `envconfig:"WITCH_HUE_TOKEN" required:"true"`
+	LogLevel                 string         `envconfig:"WITCH_LOG_LEVEL" default:"info"`
 	MetricsEnabled           bool           `envconfig:"WITCH_METRICS_ENABLED" default:"true"`
 	RelayClient              *resty.Client  `ignored:"true"`
 	SoundQueue               *lane.Deque    `ignored:"true"`

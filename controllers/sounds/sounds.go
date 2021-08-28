@@ -41,6 +41,7 @@ func InitDaemon(witchConfig *config.WitchConfig) {
 		time.Sleep(time.Millisecond * queuePollIntervalMS)
 		// Loop over queue, remove item, play, repeat
 		var sounds = make([]string, witchConfig.SoundQueue.Size())
+		log.Debug(fmt.Sprintf("sound queue size: %d", witchConfig.SoundQueue.Size()))
 		for i := 0; i < len(sounds); i++ {
 			sounds[i] = witchConfig.SoundQueue.Shift().(string)
 			worker(witchConfig, sounds[i])

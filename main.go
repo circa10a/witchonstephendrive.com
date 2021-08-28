@@ -17,11 +17,6 @@ var frontendAssets embed.FS
 //go:embed api
 var apiDocAssets embed.FS
 
-func init() {
-	// Logger Config
-	config.InitLogger()
-}
-
 // @title witchonstephendrive.com
 // @version 0.1.0
 // @description Control my halloween decorations
@@ -43,6 +38,12 @@ func main() {
 	err := envconfig.Process("", witchConfig)
 	if err != nil {
 		log.Fatal(err.Error())
+	}
+
+	// Logger Config
+	err = witchConfig.InitLogger()
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// Hue Lights
