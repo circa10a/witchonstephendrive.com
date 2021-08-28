@@ -8,9 +8,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
      <!-- Custom CSS-->
     <link rel="stylesheet" href="css/styles.css">
+    <!-- JS libs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
+    <script src="https://unpkg.com/dayjs@1.10.6/dayjs.min.js"></script>
+    <script src="https://unpkg.com/dayjs@1.10.6/plugin/utc.js"></script>
+    <script src="https://unpkg.com/dayjs@1.10.6/plugin/timezone.js"></script>
+    <script>dayjs.extend(window.dayjs_plugin_utc)</script>
+    <script>dayjs.extend(window.dayjs_plugin_timezone)</script>
     <!-- Parse prometheus metrics library -->
     <script src="https://cdn.jsdelivr.net/npm/parse-prometheus-text-format@1.1.1/dist/parse-prometheus-text-format.umd.js"></script>
     <!-- Custom JS-->

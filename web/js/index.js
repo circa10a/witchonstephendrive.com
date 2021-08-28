@@ -12,6 +12,17 @@ const checkLimit = (opts = {}) => {
   };
 };
 
+const convertWitchTimeToLocalTimeMessage = (apiResponse) => {
+  const witchTZ = 'America/Chicago';
+  const userTZ = dayjs.tz.guess();
+  const outputDateFormat = 'h:mmA';
+  const [startTime, endTime] = apiResponse.match(/\d+:00/g);
+  const formattedDate = dayjs().format('YYYY-DD-MM');
+  const localStartTime = dayjs.tz(`${formattedDate} ${startTime}`, witchTZ).tz(userTZ).format(outputDateFormat);
+  const localEndTime = dayjs.tz(`${formattedDate} ${endTime}`, witchTZ).tz(userTZ).format(outputDateFormat);
+  return `sounds disabled. quiet time is between ${localStartTime} and ${localEndTime}`;
+};
+
 // Sounds
 const playRandomSound = async() => {
   // Get Supported Sounds
@@ -35,7 +46,8 @@ const playRandomSound = async() => {
     });
     let json = await resp.json();
     if (json.message.includes('quiet')) {
-      M.toast({html: json.message, displayLength: 2000, classes: 'green darken-1 rounded'});
+      const userMsg = convertWitchTimeToLocalTimeMessage(json.message);
+      M.toast({html: userMsg, displayLength: 2000, classes: 'green darken-1 rounded'});
     }
   } catch(e) {
     console.error(e);
