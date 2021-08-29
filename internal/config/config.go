@@ -30,7 +30,7 @@ type WitchConfig struct {
 	RelayClient              *resty.Client  `ignored:"true"`
 	ShowBanner               bool           `envconfig:"SHOW_BANNER" default:"true"`
 	SoundQueue               *lane.Deque    `ignored:"true"`
-	SoundQueueCapacity       int            `envconfig:"SOUND_QUEUE_CAPACITY" default:"3"`
+	SoundQueueCapacity       int            `envconfig:"SOUND_QUEUE_CAPACITY" default:"2"`
 	SoundQuietTimeEnabled    bool           `envconfig:"SOUND_QUIET_TIME_ENABLED" default:"true"`
 	SoundQuietTimeEnd        int            `envconfig:"SOUND_QUIET_TIME_END" default:"07"`
 	SoundQuietTimeStart      int            `envconfig:"SOUND_QUIET_TIME_START" default:"22"`
