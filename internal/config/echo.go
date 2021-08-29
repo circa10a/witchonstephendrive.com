@@ -12,6 +12,8 @@ import (
 func (w *WitchConfig) InitEchoConfig(frontendAssets fs.FS, apiDocAssets fs.FS) *echo.Echo {
 	// New instance of echo
 	e := echo.New()
+	// Disable massive startup banner
+	e.HideBanner = true
 
 	// Prometheus metrics
 	if w.MetricsEnabled {
@@ -19,6 +21,7 @@ func (w *WitchConfig) InitEchoConfig(frontendAssets fs.FS, apiDocAssets fs.FS) *
 		prometheus.Use(e)
 	}
 
+	// Make route logging easier to read/match logrus without the shitty middleware
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "\033[36mINFO\033[0m[${time_rfc3339}] ${status} ${method} ${path} (${remote_ip}) ${latency_human}\n",
 		Output: e.Logger.Output(),

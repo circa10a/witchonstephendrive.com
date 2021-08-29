@@ -40,6 +40,11 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
+	// Show HAPPY HALLOWEEN banner
+	if witchConfig.ShowBanner {
+		witchConfig.PrintBanner()
+	}
+
 	// Logger Config
 	err = witchConfig.InitLogger()
 	if err != nil {

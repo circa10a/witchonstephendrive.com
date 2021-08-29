@@ -28,6 +28,7 @@ type WitchConfig struct {
 	LogLevel                 string         `envconfig:"WITCH_LOG_LEVEL" default:"info"`
 	MetricsEnabled           bool           `envconfig:"WITCH_METRICS_ENABLED" default:"true"`
 	RelayClient              *resty.Client  `ignored:"true"`
+	ShowBanner               bool           `envconfig:"WITCH_SHOW_BANNER" default:"true"`
 	SoundQueue               *lane.Deque    `ignored:"true"`
 	SoundQueueCapacity       int            `envconfig:"WITCH_SOUND_QUEUE_CAPACITY" default:"3"`
 	SoundQuietTimeEnabled    bool           `envconfig:"WITCH_SOUND_QUIET_TIME_ENABLED" default:"true"`
