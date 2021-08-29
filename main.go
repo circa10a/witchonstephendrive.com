@@ -11,6 +11,9 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// all environment variables for configuration expect WITCH_ prefix
+const envVarPrefix = "witch"
+
 //go:embed web
 var frontendAssets embed.FS
 
@@ -35,7 +38,7 @@ var apiDocAssets embed.FS
 func main() {
 	// Setup global config store
 	witchConfig := &config.WitchConfig{}
-	err := envconfig.Process("", witchConfig)
+	err := envconfig.Process(envVarPrefix, witchConfig)
 	if err != nil {
 		log.Fatal(err.Error())
 	}

@@ -23,6 +23,7 @@ type PlaySoundPayload struct {
 
 // worker actually calls the assistant relay to play the sound read from the queue
 func worker(witchConfig *config.WitchConfig, sound string) {
+	log.Debug(fmt.Sprintf("playing sound: %s", sound))
 	_, err := witchConfig.RelayClient.R().SetBody(PlaySoundPayload{
 		Device: witchConfig.AssistantDevice,
 		Source: fmt.Sprintf("%s%s", sound, soundFileSuffix),

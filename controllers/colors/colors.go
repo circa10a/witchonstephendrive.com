@@ -2,9 +2,11 @@ package colors
 
 import (
 	"errors"
+	"fmt"
 	"sort"
 
 	"github.com/amimof/huego"
+	log "github.com/sirupsen/logrus"
 )
 
 // ColorMap holds all the possible colors supported by the api
@@ -113,6 +115,7 @@ var ErrColorNotSupported = errors.New("color not supported")
 func SetLightsColor(lights []int, bridge *huego.Bridge, color string) error {
 	if _, ok := Colors[color]; ok {
 		for _, light := range lights {
+			log.Debug(fmt.Sprintf("setting color: %s on light id: %d", color, light))
 			_, err := bridge.SetLightState(light, Colors[color])
 			if err != nil {
 				return err
@@ -127,6 +130,7 @@ func SetLightsColor(lights []int, bridge *huego.Bridge, color string) error {
 // SetDefaultLightColors sets the default configured colors initiated by schedule
 func SetDefaultLightColors(defaultColorsMap map[int]string, bridge *huego.Bridge) error {
 	for light, color := range defaultColorsMap {
+		log.Debug(fmt.Sprintf("setting default color: %s on light id: %d", color, light))
 		if _, ok := Colors[color]; ok {
 			_, err := bridge.SetLightState(light, Colors[color])
 			if err != nil {
