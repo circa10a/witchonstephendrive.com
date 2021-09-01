@@ -5,15 +5,16 @@ import (
 )
 
 // InitLogger configures global logrus logger
-func (w *WitchConfig) InitLogger() error {
-	log.SetFormatter(&log.TextFormatter{
+func (w *WitchConfig) InitLogger() (*log.Logger, error) {
+	logger := log.New()
+	logger.SetFormatter(&log.TextFormatter{
 		ForceColors:   true,
 		FullTimestamp: true,
 	})
 	level, err := log.ParseLevel(w.LogLevel)
 	if err != nil {
-		return err
+		return log.New(), err
 	}
-	log.SetLevel(level)
-	return nil
+	logger.SetLevel(level)
+	return logger, nil
 }

@@ -11,7 +11,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// all environment variables for configuration expect WITCH_ prefix
+// All environment variables for configuration expect WITCH_ prefix
 const envVarPrefix = "witch"
 
 //go:embed web
@@ -49,7 +49,7 @@ func main() {
 	}
 
 	// Logger Config
-	err = witchConfig.InitLogger()
+	log, err := witchConfig.InitLogger()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -64,7 +64,7 @@ func main() {
 
 	// Sounds
 	// Google Assistant Relay Config such as endpoint and client
-	witchConfig.InitAssistantRelayConfig()
+	witchConfig.InitAssistantRelayConfig(log)
 	// Creates initial capped sounds queue
 	witchConfig.InitSoundQueue()
 	// Start the sound queue worker
@@ -76,5 +76,5 @@ func main() {
 	// Declare routes + handlers
 	routes.Routes(e, witchConfig, frontendAssets, apiDocAssets)
 	// Start Listener
-	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", witchConfig.Port)))
+	log.Fatal(e.Start(fmt.Sprintf(":%d", witchConfig.Port)))
 }
