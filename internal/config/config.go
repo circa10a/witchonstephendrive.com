@@ -1,6 +1,8 @@
 package config
 
 import (
+	"time"
+
 	"github.com/amimof/huego"
 	"github.com/go-resty/resty/v2"
 	"github.com/oleiade/lane"
@@ -15,7 +17,7 @@ type WitchConfig struct {
 	AssistantRelayHost       string         `envconfig:"ASSISTANT_RELAY_HOST" default:"http://127.0.0.1"`
 	AssistantRelayPort       int            `envconfig:"ASSISTANT_RELAY_PORT" default:"3000"`
 	HueBridge                *huego.Bridge  `ignored:"true"`
-	HueBridgeRefreshInterval int            `envconfig:"HUE_BRIDGE_REFRESH_INTERVAL" default:"6"`
+	HueBridgeRefreshInterval time.Duration  `envconfig:"HUE_BRIDGE_REFRESH_INTERVAL" default:"6h"`
 	HueDefaultColors         map[int]string `envconfig:"HUE_DEFAULT_COLORS" default:""`
 	HueDefaultColorsEnabled  bool           `envconfig:"HUE_DEFAULT_COLORS_ENABLED" default:"false"`
 	HueDefaultColorsStart    int            `envconfig:"HUE_DEFAULT_COLORS_START" default:"22"`

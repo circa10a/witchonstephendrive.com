@@ -56,7 +56,7 @@ func main() {
 
 	// Hue Lights
 	// Start scheduler to regularly redescover bridge IP in the event DHCP changes it
-	witchConfig.InitHue()
+	go witchConfig.InitHue()
 	// Start scheduler to set default light colors (if enabled)
 	witchConfig.InitDefaultColorsScheduler()
 	// Start schedulers to turn lights on/off

@@ -1,3 +1,2 @@
 # Media
 sounds/*.mp3 filter=lfs diff=lfs merge=lfs -text
-sounds/youll-float-too.mp3 filter=lfs diff=lfs merge=lfs -text

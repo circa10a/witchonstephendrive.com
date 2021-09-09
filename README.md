@@ -71,7 +71,7 @@ It allows anyone to change the color of the lighting behind the witch silhouette
 | `WITCH_HUE_DEFAULT_COLORS_ENABLED`  | Enables scheduler to set default colors or not                                                    | `false`   | `false`            |
 | `WITCH_HUE_DEFAULT_COLORS_START`    | Local time to set default colors at. Think of this as a nightly "reset"                           | `false`   | `22`               |
 | `WITCH_HUE_TOKEN`                   | Philips Hue API Token                                                                             | `true`    | None               |
-| `WITCH_HUE_BRIDGE_REFRESH_INTERVAL` | How many hours to wait before rediscovering hue bridge config/ip                                  | `false`   | `6`                |
+| `WITCH_HUE_BRIDGE_REFRESH_INTERVAL` | How long to wait before rediscovering hue bridge config/ip                                        | `false`   | `6h`                |
 | `WITCH_HUE_LIGHTS`                  | Light ID's to change color of. Example(export HUE_LIGHTS="1,2,3")                                 | `true`    | None               |
 | `WITCH_HUE_LIGHTS_SCHEDULE_ENABLED` | Enables start/end times for turning lights on/off                                                 | `false`   | `false`            |
 | `WITCH_HUE_LIGHTS_START`            | Local time to turn on configured lights                                                           | `false`   | `18`               |
@@ -100,6 +100,8 @@ export WITCH_HUE_TOKEN=<YOUR_TOKEN>; export WITCH_HUE_LIGHTS="1,2,3"
 #### Deploy
 
 > Be sure to update values in `.env` to be consumed by `docker-compose.yml`
+> This expects you to map in a pre-configured config.json for assistant-relay (line 32)
+> Follow the [assistant-relay docs](https://assistantrelay.com/docs/introduction) for configuration, then stash the config.json file it creates
 
 ```bash
 docker-compose up -d

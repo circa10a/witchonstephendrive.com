@@ -19,11 +19,8 @@ RUN go mod tidy && \
     --no-create-home \
     --uid "$UID" \
     "$USER" && \
-    chown "$UID":"$GID" /go/src/app/witch
+    chown "$UID":"$GID" /go/src/app/witch && \
+    apk add --no-cache tzdata
 
-FROM scratch
-COPY --from=0 /etc/passwd /etc/passwd
-COPY --from=0 /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=0 /go/src/app/witch /
 USER 1000
-ENTRYPOINT ["/witch"]
+ENTRYPOINT ["/go/src/app/witch"]

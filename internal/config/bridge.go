@@ -1,9 +1,8 @@
 package config
 
 import (
-	"fmt"
+	"time"
 
-	"github.com/robfig/cron/v3"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/amimof/huego"
@@ -12,16 +11,10 @@ import (
 // InitHue discovers hue bridge and configured lights on configured interval
 func (w *WitchConfig) InitHue() {
 	// Run this regularly in the event the bridge gets a new IP address
-	schedule := fmt.Sprintf("0 */%d * * * ", w.HueBridgeRefreshInterval)
-	c := cron.New()
-	_, err := c.AddFunc(schedule, func() {
+	for {
 		w.initHueBridge()
-	})
-	if err != nil {
-		log.Error(err)
+		time.Sleep(w.HueBridgeRefreshInterval)
 	}
-	w.initHueBridge()
-	c.Start()
 }
 
 func (w *WitchConfig) initHueBridge() {
