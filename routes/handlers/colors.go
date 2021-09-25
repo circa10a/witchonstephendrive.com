@@ -44,9 +44,10 @@ func ColorsReadHandler(c echo.Context) error {
 // @Param color path string true "Color to change lights to"
 func ColorChangeHandler(c echo.Context) error {
 	color := c.Param("color")
-	hueLights := c.Get("hueLights").([]int)
+	hueLights := c.Get("hueLights").([]huego.Light)
 	hueBridge := c.Get("hueBridge").(*huego.Bridge)
-	err := colors.SetLightsColor(hueLights, hueBridge, color)
+	thirdPartyManufacturers := c.Get("thirdPartyManufacturers").([]string)
+	err := colors.SetLightsColor(hueLights, hueBridge, color, thirdPartyManufacturers)
 	if err != nil {
 		if errors.Is(err, colors.ErrColorNotSupported) {
 			return c.JSON(http.StatusBadRequest, &ColorChangeResponse{

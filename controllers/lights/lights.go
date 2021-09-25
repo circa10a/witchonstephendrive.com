@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/amimof/huego"
+	"github.com/circa10a/witchonstephendrive.com/pkg/utils"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -20,12 +21,16 @@ func SetLightsOn(l []huego.Light) error {
 }
 
 // SetLightsOff turns off all configured lights
-func SetLightsOff(l []huego.Light) error {
+func SetLightsOff(l []huego.Light, thirdPartyManufacturers []string) error {
 	for _, light := range l {
 		log.Debug(fmt.Sprintf("turning off light id: %d", light.ID))
-		err := light.Off()
-		if err != nil {
-			return err
+		// Not all 3rd party manufacturers support setting power on behavior
+		// This results in light colors being reset when being flashed
+		if !utils.StrInSlice(light.ManufacturerName, thirdPartyManufacturers) {
+			err := light.Off()
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil

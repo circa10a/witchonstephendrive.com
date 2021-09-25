@@ -28,6 +28,7 @@ type LightStateChangeResponse struct {
 func LightsStateHandler(c echo.Context) error {
 	state := strings.ToLower(c.Param("state"))
 	hueLights := c.Get("hueLights").([]huego.Light)
+	thirdPartyManufacturers := c.Get("thirdPartyManufacturers").([]string)
 
 	// Check for on/off states
 	if state != "on" && state != "off" {
@@ -41,7 +42,7 @@ func LightsStateHandler(c echo.Context) error {
 	if state == "on" {
 		err = lights.SetLightsOn(hueLights)
 	} else if state == "off" {
-		err = lights.SetLightsOff(hueLights)
+		err = lights.SetLightsOff(hueLights, thirdPartyManufacturers)
 	}
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, LightStateChangeResponse{

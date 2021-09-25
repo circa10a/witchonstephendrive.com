@@ -6,15 +6,19 @@ import (
 	"sort"
 
 	"github.com/amimof/huego"
+	"github.com/circa10a/witchonstephendrive.com/pkg/utils"
 	log "github.com/sirupsen/logrus"
 )
 
 // ColorMap holds all the possible colors supported by the api
 type ColorMap map[string]huego.State
 
-var maxBrightness uint8 = 254
-var colorMode string = "xy"
-var defaultEffect string = "none"
+const (
+	maxBrightness uint8  = 254
+	defaultEffect string = "none"
+	// How many times we'll set the XY color to get to desired state if manufacturer not supported
+	thirdPartyManufacturerRetryCount int = 16
+)
 
 // SupportedColors hold a list of supported colors
 var SupportedColors = getSupportedColors()
@@ -22,86 +26,77 @@ var SupportedColors = getSupportedColors()
 // Colors hold all the supported colors' states
 var Colors = ColorMap{
 	"blue": {
-		On:        true,
-		Bri:       maxBrightness,
-		ColorMode: colorMode,
-		Effect:    defaultEffect,
+		On:     true,
+		Bri:    maxBrightness,
+		Effect: defaultEffect,
 		Xy: []float32{
 			0.1396,
 			0.0686,
 		},
 	},
 	"green": {
-		On:        true,
-		Bri:       maxBrightness,
-		ColorMode: colorMode,
-		Effect:    defaultEffect,
+		On:     true,
+		Bri:    maxBrightness,
+		Effect: defaultEffect,
 		Xy: []float32{
 			0.1723,
 			0.6866,
 		},
 	},
 	"orange": {
-		On:        true,
-		Bri:       maxBrightness,
-		ColorMode: colorMode,
-		Effect:    defaultEffect,
+		On:     true,
+		Bri:    maxBrightness,
+		Effect: defaultEffect,
 		Xy: []float32{
 			0.6424,
 			0.3523,
 		},
 	},
 	"pink": {
-		On:        true,
-		Bri:       maxBrightness,
-		ColorMode: colorMode,
-		Effect:    defaultEffect,
+		On:     true,
+		Bri:    maxBrightness,
+		Effect: defaultEffect,
 		Xy: []float32{
 			0.3924,
 			0.1634,
 		},
 	},
 	"purple": {
-		On:        true,
-		Bri:       maxBrightness,
-		ColorMode: colorMode,
-		Effect:    defaultEffect,
+		On:     true,
+		Bri:    maxBrightness,
+		Effect: defaultEffect,
 		Xy: []float32{
 			0.2027,
 			0.0715,
 		},
 	},
 	"rainbow": {
-		On:        true,
-		Bri:       maxBrightness,
-		ColorMode: colorMode,
-		Effect:    "colorloop",
+		On:     true,
+		Bri:    maxBrightness,
+		Effect: "colorloop",
 	},
 	"red": {
-		On:        true,
-		Bri:       maxBrightness,
-		ColorMode: colorMode,
-		Effect:    defaultEffect,
+		On:     true,
+		Bri:    maxBrightness,
+		Effect: defaultEffect,
 		Xy: []float32{
 			0.6786,
 			0.3126,
 		},
 	},
 	"teal": {
-		On:        true,
-		Bri:       maxBrightness,
-		ColorMode: colorMode,
-		Effect:    defaultEffect,
+		On:     true,
+		Bri:    maxBrightness,
+		Effect: defaultEffect,
 		Xy: []float32{
 			0.1527,
 			0.2144,
 		},
 	},
 	"yellow": {
-		On:        true,
-		Bri:       maxBrightness,
-		ColorMode: colorMode,
-		Effect:    defaultEffect,
+		On:     true,
+		Bri:    maxBrightness,
+		Effect: defaultEffect,
 		Xy: []float32{
 			0.5145,
 			0.4691,
@@ -123,13 +118,23 @@ func getSupportedColors() []string {
 var ErrColorNotSupported = errors.New("color not supported")
 
 // SetLightsColor sets all configured lights to the same color
-func SetLightsColor(lights []int, bridge *huego.Bridge, color string) error {
+func SetLightsColor(lights []huego.Light, bridge *huego.Bridge, color string, thirdPartyManufacturers []string) error {
 	if _, ok := Colors[color]; ok {
 		for _, light := range lights {
-			log.Debug(fmt.Sprintf("setting color: %s on light id: %d", color, light))
-			_, err := bridge.SetLightState(light, Colors[color])
+			log.Debug(fmt.Sprintf("setting color: %s on light id: %d", color, light.ID))
+			_, err := bridge.SetLightState(light.ID, Colors[color])
 			if err != nil {
 				return err
+			}
+			// Not all 3rd party manufacturers support setting the light state in one apply
+			// But requires multiple calls to set state to change to the desired colors
+			if utils.StrInSlice(light.ManufacturerName, thirdPartyManufacturers) {
+				for i := 0; i < thirdPartyManufacturerRetryCount; i++ {
+					_, err := bridge.SetLightState(light.ID, Colors[color])
+					if err != nil {
+						return err
+					}
+				}
 			}
 		}
 	} else {

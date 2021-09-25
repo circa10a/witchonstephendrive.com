@@ -72,7 +72,7 @@ It allows anyone to change the color of the lighting behind the witch silhouette
 | `WITCH_HUE_DEFAULT_COLORS_START`    | Local time to set default colors at. Think of this as a nightly "reset"                           | `false`   | `22`               |
 | `WITCH_HUE_TOKEN`                   | Philips Hue API Token                                                                             | `true`    | None               |
 | `WITCH_HUE_BRIDGE_REFRESH_INTERVAL` | How long to wait before rediscovering hue bridge config/ip                                        | `false`   | `6h`                |
-| `WITCH_HUE_LIGHTS`                  | Light ID's to change color of. Example(export HUE_LIGHTS="1,2,3")                                 | `true`    | None               |
+| `WITCH_HUE_LIGHTS`                  | Light ID's to change color of. Example(export HUE_LIGHTS="1,2,3")                                 | `true`    | `[]`               |
 | `WITCH_HUE_LIGHTS_SCHEDULE_ENABLED` | Enables start/end times for turning lights on/off                                                 | `false`   | `false`            |
 | `WITCH_HUE_LIGHTS_START`            | Local time to turn on configured lights                                                           | `false`   | `18`               |
 | `WITCH_HUE_LIGHTS_END`              | Local time to turn off configured lights                                                          | `false`   | `7`                |
@@ -84,6 +84,7 @@ It allows anyone to change the color of the lighting behind the witch silhouette
 | `WITCH_SOUND_QUIET_TIME_START`      | Local time to ensure sounds are not played after this hour                                        | `false`   | `22`               |
 | `WITCH_SOUND_QUIET_TIME_END`        | Local time to ensure sounds are not played before this hour                                       | `false`   | `07`               |
 | `WITCH_SOUND_QUEUE_CAPACITY`        | Maximum depth of soung queue. This is to ensure no spam/long backlog                              | `false`   | `2`                |
+| `WITCH_THIRD_PARTY_MANUFACTURERS`   | List of third party manufacturer bulbs used. This is ensure colors are set correctly + state saved| `false`   | `[]`               |
 | `WITCH_UI_ENABLED`                  | Enables hosting of UI/static assets on `/`                                                        | `false`   | `true`             |
 
 ### Go

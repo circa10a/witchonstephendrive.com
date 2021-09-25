@@ -39,4 +39,4 @@ linters:
     - whitespace
 linters-settings:
   funlen:
-    lines: 70
+    lines: 75
