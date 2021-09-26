@@ -1,7 +1,6 @@
 linters:
   enable:
     - bodyclose
-    - cyclop
     - deadcode
     - depguard
     - dogsled

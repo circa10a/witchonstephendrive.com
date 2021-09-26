@@ -18,7 +18,7 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.10 // indirect
 	github.com/oleiade/lane v1.0.1
-	github.com/prometheus/common v0.30.0 // indirect
+	github.com/prometheus/common v0.31.0 // indirect
 	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/sirupsen/logrus v1.8.1

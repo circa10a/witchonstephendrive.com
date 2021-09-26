@@ -6,7 +6,6 @@ import (
 	"sort"
 
 	"github.com/amimof/huego"
-	"github.com/circa10a/witchonstephendrive.com/pkg/utils"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -17,7 +16,9 @@ const (
 	maxBrightness uint8  = 254
 	defaultEffect string = "none"
 	// How many times we'll set the XY color to get to desired state if manufacturer not supported
-	thirdPartyManufacturerRetryCount int = 16
+	thirdPartyManufacturerRetryCount int    = 16
+	hueManufacturerName              string = "Signify Netherlands B.V."
+	innrManufacturerName             string = "innr"
 )
 
 // SupportedColors hold a list of supported colors
@@ -118,27 +119,40 @@ func getSupportedColors() []string {
 var ErrColorNotSupported = errors.New("color not supported")
 
 // SetLightsColor sets all configured lights to the same color
-func SetLightsColor(lights []huego.Light, bridge *huego.Bridge, color string, thirdPartyManufacturers []string) error {
+func SetLightsColor(lights []huego.Light, bridge *huego.Bridge, color string) []error {
 	if _, ok := Colors[color]; ok {
+		errs := []error{}
 		for _, light := range lights {
+			state := Colors[color]
 			log.Debug(fmt.Sprintf("setting color: %s on light id: %d", color, light.ID))
-			_, err := bridge.SetLightState(light.ID, Colors[color])
+			_, err := bridge.SetLightState(light.ID, state)
 			if err != nil {
-				return err
+				errs = append(errs, err)
+			}
+			// Effect seems to clash with innr lights and doesn't set color properly
+			if light.ManufacturerName == innrManufacturerName {
+				state.Effect = ""
+				_, err := bridge.SetLightState(light.ID, state)
+				if err != nil {
+					errs = append(errs, err)
+				}
 			}
 			// Not all 3rd party manufacturers support setting the light state in one apply
 			// But requires multiple calls to set state to change to the desired colors
-			if utils.StrInSlice(light.ManufacturerName, thirdPartyManufacturers) {
+			if light.ManufacturerName != hueManufacturerName && light.ManufacturerName != innrManufacturerName {
 				for i := 0; i < thirdPartyManufacturerRetryCount; i++ {
-					_, err := bridge.SetLightState(light.ID, Colors[color])
+					_, err := bridge.SetLightState(light.ID, state)
 					if err != nil {
-						return err
+						errs = append(errs, err)
 					}
 				}
 			}
 		}
+		if len(errs) > 0 {
+			return errs
+		}
 	} else {
-		return ErrColorNotSupported
+		return []error{ErrColorNotSupported}
 	}
 	return nil
 }

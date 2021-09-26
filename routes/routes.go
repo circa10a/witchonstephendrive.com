@@ -52,7 +52,6 @@ func Routes(e *echo.Echo, witchConfig *config.WitchConfig, frontendAssets fs.FS,
 			return func(c echo.Context) error {
 				c.Set("hueLights", witchConfig.HueLightsStructs)
 				c.Set("hueBridge", witchConfig.HueBridge)
-				c.Set("thirdPartyManufacturers", witchConfig.ThirdPartyManufacturers)
 				return next(c)
 			}
 		})
@@ -61,7 +60,6 @@ func Routes(e *echo.Echo, witchConfig *config.WitchConfig, frontendAssets fs.FS,
 		apiVersionGroup.POST("/lights/:state", handlers.LightsStateHandler, func(next echo.HandlerFunc) echo.HandlerFunc {
 			return func(c echo.Context) error {
 				c.Set("hueLights", witchConfig.HueLightsStructs)
-				c.Set("thirdPartyManufacturers", witchConfig.ThirdPartyManufacturers)
 				return next(c)
 			}
 		})

@@ -36,6 +36,5 @@ type WitchConfig struct {
 	SoundQuietTimeEnabled    bool           `envconfig:"SOUND_QUIET_TIME_ENABLED" default:"true"`
 	SoundQuietTimeEnd        int            `envconfig:"SOUND_QUIET_TIME_END" default:"07"`
 	SoundQuietTimeStart      int            `envconfig:"SOUND_QUIET_TIME_START" default:"22"`
-	ThirdPartyManufacturers  []string       `envconfig:"THIRD_PARTY_MANUFACTURERS" split_words:"true"`
 	UIEnabled                bool           `envconfig:"UI_ENABLED" default:"true"`
 }

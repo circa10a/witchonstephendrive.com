@@ -46,10 +46,10 @@ func ColorChangeHandler(c echo.Context) error {
 	color := c.Param("color")
 	hueLights := c.Get("hueLights").([]huego.Light)
 	hueBridge := c.Get("hueBridge").(*huego.Bridge)
-	thirdPartyManufacturers := c.Get("thirdPartyManufacturers").([]string)
-	err := colors.SetLightsColor(hueLights, hueBridge, color, thirdPartyManufacturers)
-	if err != nil {
-		if errors.Is(err, colors.ErrColorNotSupported) {
+	errs := colors.SetLightsColor(hueLights, hueBridge, color)
+	// Send back first error if exists
+	if len(errs) > 0 {
+		if errors.Is(errs[0], colors.ErrColorNotSupported) {
 			return c.JSON(http.StatusBadRequest, &ColorChangeResponse{
 				Success: false,
 				Message: fmt.Sprintf("color: %v not supported", color),
@@ -57,7 +57,7 @@ func ColorChangeHandler(c echo.Context) error {
 		} else {
 			return c.JSON(http.StatusInternalServerError, &ColorChangeResponse{
 				Success: false,
-				Message: err.Error(),
+				Message: errs[0].Error(),
 			})
 		}
 	}

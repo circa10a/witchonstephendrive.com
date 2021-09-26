@@ -3,6 +3,7 @@ package config
 import (
 	"errors"
 	"fmt"
+	"io"
 	"syscall"
 	"time"
 
@@ -24,10 +25,10 @@ func (w *WitchConfig) InitAssistantRelayConfig(log *log.Logger) {
 	w.RelayClient.SetHeader("Content-Type", "application/json")
 	w.RelayClient.SetTimeout(time.Second * assistantRelayTimeoutSeconds)
 	w.RelayClient.SetRetryCount(assistantRelayRetryCount)
-	// Only retry on connection refused
+	// Only retry on connection refused or EOF meaning possible reboot
 	w.RelayClient.SetRetryWaitTime(assistantRelayRetryWaitSeconds * time.Second).AddRetryCondition(
 		func(_ *resty.Response, err error) bool {
-			return errors.Is(err, syscall.ECONNREFUSED)
+			return errors.Is(err, syscall.ECONNREFUSED) || errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF)
 		},
 	)
 }
