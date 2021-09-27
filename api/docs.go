@@ -131,7 +131,7 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Play sound via assistant relay",
+                "summary": "Play sound via home assistant",
                 "parameters": [
                     {
                         "type": "string",

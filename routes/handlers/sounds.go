@@ -35,7 +35,7 @@ func SoundsReadHandler(c echo.Context) error {
 }
 
 // :sound godoc
-// @Summary Play sound via assistant relay
+// @Summary Play sound via home assistant
 // @Description Play halloween sound supported in sound list
 // @Produce json
 // @Success 202 {object} SoundPlayResponse
@@ -45,17 +45,17 @@ func SoundsReadHandler(c echo.Context) error {
 // @Param sound path string true "Sound to play"
 func SoundPlayHandler(c echo.Context) error {
 	sound := c.Param("sound")
-	assistantDevice := c.Get("assistantDevice").(string)
+	homeAssistantEntityID := c.Get("homeAssistantEntityID").(string)
 	queue := c.Get("soundQueue").(*lane.Deque)
 	quietTimeEnabled := c.Get("quietTimeEnabled").(bool)
 	quietTimeStart := c.Get("quietTimeStart").(int)
 	quietTimeEnd := c.Get("quietTimeEnd").(int)
-	// Only enable sounds if assistant device is configured
+	// Only enable sounds if entity ID is configured
 	// The ensures sounds never reach the queue
-	if assistantDevice == "" {
+	if homeAssistantEntityID == "" {
 		return c.JSON(http.StatusBadRequest, SoundPlayResponse{
 			Success: false,
-			Message: "sounds disabled. no assistant device configured",
+			Message: "sounds disabled. no home assistant entity ID configured",
 		})
 	}
 	// Ensure sounds don't play during quiet time(late hours)

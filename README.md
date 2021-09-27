@@ -53,38 +53,39 @@ It allows anyone to change the color of the lighting behind the witch silhouette
 1. Uses [Caddy](https://github.com/caddyserver/caddy) as a reverse proxy to the `witch` app for TLS termination([let's encrypt](https://letsencrypt.org/)).
 2. The `witch` app is a Go backend powered by [echo](https://echo.labstack.com/) that serves a vanilla html/css/js front end and has a `/color/:color` route.
 3. Once a `/color/:color` route is hit via a `POST` request, the `witch` app uses the [huego](https://github.com/amimof/huego) library for manipulating the state of the philips hue multicolor bulbs. The hue bridge endpoint on your network is automatically discovered.
-4. When a `/sound/:sound` route is hit via a `POST` request, the `witch` app writes to an in-memory queue which will then process sounds to play by calling the [assistant-relay](https://assistantrelay.com) to play pre-configured halloween sounds through connected google assistant speakers. The reason for the queue is to ensure all sounds are played and do not overlap.
+4. When a `/sound/:sound` route is hit via a `POST` request, the `witch` app writes to an in-memory queue which will then process sounds to play by calling [home assistant](https://www.home-assistant.io/) to play pre-configured halloween sounds through connected google assistant speakers. The reason for the queue is to ensure all sounds are played and do not get interrupted.
 
 ## Usage
 
 ### Configuration
 
-|                                     |                                                                                                   |           |                    |
-|-------------------------------------|---------------------------------------------------------------------------------------------------|-----------|--------------------|
-| Environment Variable                | Description                                                                                       | Required  | Default            |
-| `WITCH_API_BASE_URL`                | Base URL for all interactive POST requests                                                        | `false`   | `/api/v1`          |
-| `WITCH_API_ENABLED`                 | Enables swagger docs + REST API routes                                                            | `false`   | `true`             |
-| `WITCH_ASSISTANT_DEVICE`            | **Sounds only enabled if this is configured**. Name of google assistant speaker to play sounds on | `false`   | `""`               |
-| `WITCH_ASSISTANT_RELAY_HOST`        | Address of the google assistant relay                                                             | `false`   | `http://127.0.0.1` |
-| `WITCH_ASSISTANT_RELAY_PORT`        | Listening port of the google assistant relay                                                      | `false`   | `3000`             |
-| `WITCH_HUE_DEFAULT_COLORS`          | Map of default colors to set a configured time. Ex. `var="8:teal,9:pink"`                         | `false`   | `""`               |
-| `WITCH_HUE_DEFAULT_COLORS_ENABLED`  | Enables scheduler to set default colors or not                                                    | `false`   | `false`            |
-| `WITCH_HUE_DEFAULT_COLORS_START`    | Local time to set default colors at. Think of this as a nightly "reset"                           | `false`   | `22`               |
-| `WITCH_HUE_TOKEN`                   | Philips Hue API Token                                                                             | `true`    | None               |
-| `WITCH_HUE_BRIDGE_REFRESH_INTERVAL` | How long to wait before rediscovering hue bridge config/ip                                        | `false`   | `6h`                |
-| `WITCH_HUE_LIGHTS`                  | Light ID's to change color of. Example(export HUE_LIGHTS="1,2,3")                                 | `true`    | `[]`               |
-| `WITCH_HUE_LIGHTS_SCHEDULE_ENABLED` | Enables start/end times for turning lights on/off                                                 | `false`   | `false`            |
-| `WITCH_HUE_LIGHTS_START`            | Local time to turn on configured lights                                                           | `false`   | `18`               |
-| `WITCH_HUE_LIGHTS_END`              | Local time to turn off configured lights                                                          | `false`   | `7`                |
-| `WITCH_LOG_LEVEL`                   | [Logrus](https://github.com/sirupsen/logrus) log level                                            | `false`   | `info`             |
-| `WITCH_METRICS_ENABLED`             | Enables prometheus metrics on `/metrics`                                                          | `false`   | `true`             |
-| `WITCH_PORT`                        | Port for web server to listen on                                                                  | `false`   | `8080`             |
-| `WITCH_SHOW_BANNER`                 | Displays Happy Halloween banner on startup                                                        | `false`   | `true`             |
-| `WITCH_SOUND_QUIET_TIME_ENABLED`    | Enables quiet time functionality during configured hours                                          | `false`   | `true`             |
-| `WITCH_SOUND_QUIET_TIME_START`      | Local time to ensure sounds are not played after this hour                                        | `false`   | `22`               |
-| `WITCH_SOUND_QUIET_TIME_END`        | Local time to ensure sounds are not played before this hour                                       | `false`   | `07`               |
-| `WITCH_SOUND_QUEUE_CAPACITY`        | Maximum depth of soung queue. This is to ensure no spam/long backlog                              | `false`   | `2`                |
-| `WITCH_UI_ENABLED`                  | Enables hosting of UI/static assets on `/`                                                        | `false`   | `true`             |
+|                                         |                                                                                                       |           |                    |
+|-----------------------------------------|-------------------------------------------------------------------------------------------------------|-----------|--------------------|
+| Environment Variable                    | Description                                                                                           | Required  | Default            |
+| `WITCH_API_BASE_URL`                    | Base URL for all interactive POST requests                                                            | `false`   | `/api/v1`          |
+| `WITCH_API_ENABLED`                     | Enables swagger docs + REST API routes                                                                | `false`   | `true`             |
+| `WITCH_HOME_ASSISTANT_ENTITY_ID`        | **Sounds only enabled if this is configured**. Name of home assistant speaker(`media_player.speaker)` | `false`   | `""`               |
+| `WITCH_HOME_ASSISTANT_HOST`             | Address of home assistant                                                                             | `false`   | `http://127.0.0.1` |
+| `WITCH_HOME_ASSISTANT_PORT`             | Listening port of home assistant                                                                      | `false`   | `8123`             |
+| `WITCH_HUE_DEFAULT_COLORS`              | Map of default colors to set a configured time. Ex. `var="8:teal,9:pink"`                             | `false`   | `""`               |
+| `WITCH_HUE_DEFAULT_COLORS_ENABLED`      | Enables scheduler to set default colors or not                                                        | `false`   | `false`            |
+| `WITCH_HUE_DEFAULT_COLORS_START`        | Local time to set default colors at. Think of this as a nightly "reset"                               | `false`   | `22`               |
+| `WITCH_HUE_TOKEN`                       | Philips Hue API Token                                                                                 | `true`    | None               |
+| `WITCH_HUE_BRIDGE_REFRESH_INTERVAL`     | How long to wait before rediscovering hue bridge config/ip                                            | `false`   | `6h`               |
+| `WITCH_HUE_LIGHTS`                      | Light ID's to change color of. Example(export HUE_LIGHTS="1,2,3")                                     | `true`    | `[]`               |
+| `WITCH_HUE_LIGHTS_SCHEDULE_ENABLED`     | Enables start/end times for turning lights on/off                                                     | `false`   | `false`            |
+| `WITCH_HUE_LIGHTS_START`                | Local time to turn on configured lights                                                               | `false`   | `18`               |
+| `WITCH_HUE_LIGHTS_END`                  | Local time to turn off configured lights                                                              | `false`   | `7`                |
+| `WITCH_LOG_LEVEL`                       | [Logrus](https://github.com/sirupsen/logrus) log level                                                | `false`   | `info`             |
+| `WITCH_METRICS_ENABLED`                 | Enables prometheus metrics on `/metrics`                                                              | `false`   | `true`             |
+| `WITCH_PORT`                            | Port for web server to listen on                                                                      | `false`   | `8080`             |
+| `WITCH_SHOW_BANNER`                     | Displays Happy Halloween banner on startup                                                            | `false`   | `true`             |
+| `WITCH_SOUND_QUIET_TIME_ENABLED`        | Enables quiet time functionality during configured hours                                              | `false`   | `true`             |
+| `WITCH_SOUND_QUIET_TIME_START`          | Local time to ensure sounds are not played after this hour                                            | `false`   | `22`               |
+| `WITCH_SOUND_QUIET_TIME_END`            | Local time to ensure sounds are not played before this hour                                           | `false`   | `07`               |
+| `WITCH_SOUND_QUEUE_CAPACITY`            | Maximum depth of soung queue. This is to ensure no spam/long backlog                                  | `false`   | `2`                |
+| `WITCH_SOUND_QUEUE_WAIT_UNTIL_FINISHED` | Wait for sounds to finish playing before playing the next                                             | `false`   | `true`             |
+| `WITCH_UI_ENABLED`                      | Enables hosting of UI/static assets on `/`                                                            | `false`   | `true`             |
 
 ### Go
 
@@ -99,9 +100,7 @@ export WITCH_HUE_TOKEN=<YOUR_TOKEN>; export WITCH_HUE_LIGHTS="1,2,3"
 
 #### Deploy
 
-> Be sure to update values in `.env` to be consumed by `docker-compose.yml`
-> This expects you to map in a pre-configured config.json for assistant-relay (line 32)
-> Follow the [assistant-relay docs](https://assistantrelay.com/docs/introduction) for configuration, then stash the config.json file it creates
+> Follow the [Home Assistant docs](https://www.home-assistant.io/) to setup speakers to support sounds
 
 ```bash
 docker-compose up -d
@@ -202,4 +201,4 @@ To add new colors, make a new entry in `./controllers/colors/colors.go`
 
 ## Add new sounds
 
-To add new sounds, simply drop a new `.mp3` file in the `./sounds` directory. This is needed to add to the list of supported sounds and will be built into the assistant-relay docker image.
+To add new sounds, simply drop a new `.mp3` file in the `./sounds` directory. This is needed to add to the list of supported sounds and will be built into home assistant docker image.

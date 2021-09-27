@@ -102,7 +102,7 @@ const setTheme = (opts = {}) => {
 const setState = async (opts = {}) => {
   // Set UI colors
   setTheme(opts);
-  // Play sound, don't wait since it takes a second to kick off
+  // Play sound, dont' wait
   playRandomSound();
   // Set light colors via hue
   try {
@@ -120,12 +120,10 @@ const setState = async (opts = {}) => {
 // Flicker (turn lights off/on)
 const flicker = async (opts = {count: 3, sleepTime: 1000, color: 'black'}) => {
   setTheme({color: opts.color});
-  // Play sound, don't wait since it takes a few seconds to kick off
+  // Play sound, don't wait
   playRandomSound();
-  // Try to sync up sound and flash
-  await sleep(2000);
   for (let i = 0; i < opts.count; i++) {
-    // Play sound, don't wait since it takes a second to kick off
+    // Play sound, don't wait
     try {
       await fetch(`${witchAPIBaseURL}/lights/off`, {
         method: 'POST',

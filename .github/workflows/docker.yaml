@@ -47,14 +47,14 @@ jobs:
           platforms: ${{ env.PLATFORMS }}
           push: true
           tags: ${{ github.repository }}:caddy
-      - name: Build and push assistant-relay
+      - name: Build and push home-assistant
         uses: docker/build-push-action@v2
         with:
-          file: ./build/Dockerfile.assistant-relay
+          file: ./build/Dockerfile.home-assistant
           context: .
           platforms: ${{ env.PLATFORMS }}
           push: true
-          tags: ${{ github.repository }}:assistant-relay
+          tags: ${{ github.repository }}:home-assistant
       - name: Build and push prometheus
         uses: docker/build-push-action@v2
         with:

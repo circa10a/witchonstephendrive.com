@@ -23,14 +23,17 @@ services:
     depends_on:
         - witch
 
-  assistant-relay:
-    container_name: assistant-relay
+ homeassistant:
+    container_name: homeassistant
     network_mode: host
     restart: always
-    image: circa10a/witchonstephendrive.com:assistant-relay
+    image: circa10a/witchonstephendrive.com:home-assistant
     volumes:
-      - ~/config.json:/bin/config.json # To be configured
+      - homeassistant_data:/config
       - /etc/localtime:/etc/localtime:ro
+   env_file: .env
+   depends_on:
+     - witch
 
   watchtower:
     container_name: watchtower
@@ -70,5 +73,6 @@ services:
       - prometheus
 
 volumes:
+  home_assistant_data:
   prometheus_data:
   grafana_data:

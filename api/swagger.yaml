@@ -133,7 +133,7 @@ paths:
           description: Too Many Requests
           schema:
             $ref: '#/definitions/handlers.SoundPlayResponse'
-      summary: Play sound via assistant relay
+      summary: Play sound via home assistant
   /sounds:
     get:
       description: Get list of supported sounds

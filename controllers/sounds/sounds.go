@@ -10,28 +10,75 @@ import (
 )
 
 const soundFileSuffix = ".mp3"
-const assistantRelayCastType = "custom"
-const assistantRelayCastContextPath = "/cast"
+const homeAssistantContentType = "audio/mp3"
+const homeAssistantMediaContextPath = "/local"
+const homeAssistantCastContextPath = "/api/services/media_player/play_media"
 const queuePollIntervalMS = 100
+const soundPlaybackStatusPollIntervalSeconds = 3
 
-// PlaySoundPayload is the type supported by assistant-relay to cast custom media
+// PlaySoundPayload is the type supported by home assistant to cast custom media
 type PlaySoundPayload struct {
-	Device string `json:"device"`
-	Source string `json:"source"`
-	Type   string `json:"type"`
+	EntityID         string `json:"entity_id"`
+	MediaContentType string `json:"media_content_type"`
+	MediaContentID   string `json:"media_content_id"`
 }
 
-// worker actually calls the assistant relay to play the sound read from the queue
+type HomeAssistantStateResponse struct {
+	EntityID   string `json:"entity_id"`
+	State      string `json:"state"`
+	Attributes struct {
+		VolumeLevel            float64     `json:"volume_level"`
+		IsVolumeMuted          bool        `json:"is_volume_muted"`
+		MediaContentID         string      `json:"media_content_id"`
+		MediaDuration          float64     `json:"media_duration"`
+		MediaPosition          float64     `json:"media_position"`
+		MediaPositionUpdatedAt time.Time   `json:"media_position_updated_at"`
+		AppID                  string      `json:"app_id"`
+		AppName                string      `json:"app_name"`
+		EntityPictureLocal     interface{} `json:"entity_picture_local"`
+		FriendlyName           string      `json:"friendly_name"`
+		SupportedFeatures      int         `json:"supported_features"`
+	} `json:"attributes"`
+	LastChanged time.Time `json:"last_changed"`
+	LastUpdated time.Time `json:"last_updated"`
+	Context     struct {
+		ID       string      `json:"id"`
+		ParentID interface{} `json:"parent_id"`
+		UserID   string      `json:"user_id"`
+	} `json:"context"`
+}
+
+// worker actually calls home assistant to play the sound read from the queue
 func worker(witchConfig *config.WitchConfig, sound string) {
 	log.Debug(fmt.Sprintf("playing sound: %s", sound))
-	_, err := witchConfig.RelayClient.R().SetBody(PlaySoundPayload{
-		Device: witchConfig.AssistantDevice,
-		Source: fmt.Sprintf("%s%s", sound, soundFileSuffix),
-		Type:   assistantRelayCastType,
-	}).Post(assistantRelayCastContextPath)
+	// Play sound
+	_, err := witchConfig.HomeAssistantClient.R().SetBody(PlaySoundPayload{
+		EntityID:         witchConfig.HomeAssistantEntityID,
+		MediaContentType: homeAssistantContentType,
+		MediaContentID:   fmt.Sprintf("%s/%s%s", homeAssistantMediaContextPath, sound, soundFileSuffix),
+	}).Post(homeAssistantCastContextPath)
 
-	if err != nil {
-		log.Error(err)
+	// If enabled, check playback status until not "playing"
+	if witchConfig.SoundQueueWaitUntilFinished {
+		// Poll to determine when sound is finished
+		for {
+			time.Sleep(time.Second * soundPlaybackStatusPollIntervalSeconds)
+			resp, err := witchConfig.HomeAssistantClient.R().
+				SetResult(&HomeAssistantStateResponse{}).
+				Get(fmt.Sprintf("api/states/%s", witchConfig.HomeAssistantEntityID))
+			if err != nil {
+				log.Error(err)
+			}
+			state := resp.Result().(*HomeAssistantStateResponse)
+			log.Debug(fmt.Sprintf("waiting for entity id: %s to finish playing", state.EntityID))
+			if state.State != "playing" {
+				log.Debug(fmt.Sprintf("entity id: %s finished playing", state.EntityID))
+				break
+			}
+		}
+		if err != nil {
+			log.Error(err)
+		}
 	}
 }
 

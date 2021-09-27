@@ -63,8 +63,8 @@ func main() {
 	witchConfig.InitHueLightsScheduler()
 
 	// Sounds
-	// Google Assistant Relay Config such as endpoint and client
-	witchConfig.InitAssistantRelayConfig(log)
+	// Home Assistant Config such as endpoint and client
+	witchConfig.InitHomeAssistantConfig(log)
 	// Creates initial capped sounds queue
 	witchConfig.InitSoundQueue()
 	// Start the sound queue worker
