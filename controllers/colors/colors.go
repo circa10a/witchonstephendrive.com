@@ -35,6 +35,15 @@ var Colors = ColorMap{
 			0.0686,
 		},
 	},
+	"cyan": {
+		On:     true,
+		Bri:    maxBrightness,
+		Effect: defaultEffect,
+		Xy: []float32{
+			0.1527,
+			0.2144,
+		},
+	},
 	"green": {
 		On:     true,
 		Bri:    maxBrightness,
@@ -83,15 +92,6 @@ var Colors = ColorMap{
 		Xy: []float32{
 			0.6786,
 			0.3126,
-		},
-	},
-	"teal": {
-		On:     true,
-		Bri:    maxBrightness,
-		Effect: defaultEffect,
-		Xy: []float32{
-			0.1527,
-			0.2144,
 		},
 	},
 	"yellow": {
@@ -162,9 +162,13 @@ func SetDefaultLightColors(defaultColorsMap map[int]string, bridge *huego.Bridge
 	for light, color := range defaultColorsMap {
 		log.Debug(fmt.Sprintf("setting default color: %s on light id: %d", color, light))
 		if _, ok := Colors[color]; ok {
-			_, err := bridge.SetLightState(light, Colors[color])
+			light, err := bridge.GetLight(light)
 			if err != nil {
 				return err
+			}
+			errs := SetLightsColor([]huego.Light{*light}, bridge, color)
+			if len(errs) > 0 {
+				return errs[0]
 			}
 		} else {
 			return ErrColorNotSupported

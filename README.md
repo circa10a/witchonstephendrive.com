@@ -68,13 +68,13 @@ It allows anyone to change the color of the lighting behind the witch silhouette
 | `WITCH_HOME_ASSISTANT_ENTITY_ID`        | **Sounds only enabled if this is configured**. Name of home assistant speaker(`media_player.speaker)` | `false`   | `""`               |
 | `WITCH_HOME_ASSISTANT_HOST`             | Address of home assistant                                                                             | `false`   | `http://127.0.0.1` |
 | `WITCH_HOME_ASSISTANT_PORT`             | Listening port of home assistant                                                                      | `false`   | `8123`             |
-| `WITCH_HUE_DEFAULT_COLORS`              | Map of light ID/default color to set at configured time. Ex. `var="8:teal,9:pink"`                    | `false`   | `""`               |
+| `WITCH_HUE_DEFAULT_COLORS`              | Map of light ID/default color to set at configured time. Ex. `var="8:cyan,9:pink"`                    | `false`   | `""`               |
 | `WITCH_HUE_DEFAULT_COLORS_ENABLED`      | Enables scheduler to set default colors or not                                                        | `false`   | `false`            |
 | `WITCH_HUE_DEFAULT_COLORS_START`        | Local time to set default colors at. Think of this as a nightly "reset"                               | `false`   | `22`               |
 | `WITCH_HUE_TOKEN`                       | Philips Hue API Token                                                                                 | `true`    | None               |
 | `WITCH_HUE_BRIDGE_REFRESH_INTERVAL`     | How long to wait before rediscovering hue bridge config/ip                                            | `false`   | `6h`               |
 | `WITCH_HUE_LIGHTS`                      | Light ID's to change color of. Example(export HUE_LIGHTS="1,2,3")                                     | `true`    | `[]`               |
-| `WITCH_HUE_LIGHTS_SCHEDULE_ENABLED`     | Enables start/end times for turning lights on/off                                                     | `false`   | `false`            |
+| `WITCH_HUE_LIGHTS_SCHEDULE_ENABLED`     | Enables start/end times for turning lights on/off. Will also set to default colors if enabled         | `false`   | `false`            |
 | `WITCH_HUE_LIGHTS_START`                | Local time to turn on configured lights                                                               | `false`   | `18`               |
 | `WITCH_HUE_LIGHTS_END`                  | Local time to turn off configured lights                                                              | `false`   | `7`                |
 | `WITCH_LOG_LEVEL`                       | [Logrus](https://github.com/sirupsen/logrus) log level                                                | `false`   | `info`             |

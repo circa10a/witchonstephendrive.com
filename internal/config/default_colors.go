@@ -10,7 +10,7 @@ import (
 
 // InitDefaultColorsScheduler conditionally starts a scheduler to set default colors on configured lights
 func (w *WitchConfig) InitDefaultColorsScheduler() {
-	if w.HueDefaultColorsEnabled {
+	if w.HueDefaultColorsEnabled && len(w.HueDefaultColors) > 0 {
 		log.Infof("scheduling default light colors to be set at hour: %d", w.HueDefaultColorsStart)
 		schedule := fmt.Sprintf("0 %d * * *", w.HueDefaultColorsStart)
 		c := cron.New()

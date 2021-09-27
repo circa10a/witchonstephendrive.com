@@ -19,10 +19,20 @@ func (w *WitchConfig) InitHueLightsScheduler() {
 		c := cron.New()
 		// On
 		_, err := c.AddFunc(onSchedule, func() {
-			log.Info("turning lights on and setting to default colors")
-			err := colors.SetDefaultLightColors(w.HueDefaultColors, w.HueBridge)
-			if err != nil {
-				log.Error(err)
+			// If default colors are enabled and provided, turn on and set colors
+			if w.HueDefaultColorsEnabled && len(w.HueDefaultColors) > 0 {
+				log.Info("turning lights on and setting to default colors")
+				err := colors.SetDefaultLightColors(w.HueDefaultColors, w.HueBridge)
+				if err != nil {
+					log.Error(err)
+				}
+			} else {
+				// If just lights schedule is enabled, turn them on
+				log.Info("turning lights on")
+				err := lights.SetLightsOn(w.HueLightsStructs)
+				if err != nil {
+					log.Error(err)
+				}
 			}
 		})
 		if err != nil {
