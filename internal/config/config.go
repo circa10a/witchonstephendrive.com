@@ -11,7 +11,6 @@ import (
 // WitchConfig is a global config struct which holds all settings and some stateful objects
 type WitchConfig struct {
 	APIBaseURL                  string         `envconfig:"API_BASE_URL" default:"/api/v1"`
-	APIEnabled                  bool           `envconfig:"API_ENABLED" default:"true"`
 	Port                        int            `envconfig:"PORT" default:"8080"`
 	HomeAssistantEntityID       string         `envconfig:"HOME_ASSISTANT_ENTITY_ID" default:""`
 	HomeAssistantAPIToken       string         `envconfig:"HOME_ASSISTANT_API_TOKEN" default:""`

@@ -25,6 +25,7 @@ A home automation project to control hue lights for Halloween <img src="https://
   - [Turn lights on/off](#turn-lights-on/off)
   - [Add new colors](#add-new-colors)
   - [Add new sounds](#add-new-sounds)
+  - [Troubleshooting](#troubleshooting)
 
 ## Why
 
@@ -63,11 +64,11 @@ It allows anyone to change the color of the lighting behind the witch silhouette
 |-----------------------------------------|-------------------------------------------------------------------------------------------------------|-----------|--------------------|
 | Environment Variable                    | Description                                                                                           | Required  | Default            |
 | `WITCH_API_BASE_URL`                    | Base URL for all interactive POST requests                                                            | `false`   | `/api/v1`          |
-| `WITCH_API_ENABLED`                     | Enables swagger docs + REST API routes                                                                | `false`   | `true`             |
+| `WITCH_HOME_ASSISTANT_API_TOKEN`        | Home assistant API token to play `/local/<sound>.mp3` files                                           | `false`   | `""`               |
 | `WITCH_HOME_ASSISTANT_ENTITY_ID`        | **Sounds only enabled if this is configured**. Name of home assistant speaker(`media_player.speaker)` | `false`   | `""`               |
 | `WITCH_HOME_ASSISTANT_HOST`             | Address of home assistant                                                                             | `false`   | `http://127.0.0.1` |
 | `WITCH_HOME_ASSISTANT_PORT`             | Listening port of home assistant                                                                      | `false`   | `8123`             |
-| `WITCH_HUE_DEFAULT_COLORS`              | Map of default colors to set a configured time. Ex. `var="8:teal,9:pink"`                             | `false`   | `""`               |
+| `WITCH_HUE_DEFAULT_COLORS`              | Map of light ID/default color to set at configured time. Ex. `var="8:teal,9:pink"`                    | `false`   | `""`               |
 | `WITCH_HUE_DEFAULT_COLORS_ENABLED`      | Enables scheduler to set default colors or not                                                        | `false`   | `false`            |
 | `WITCH_HUE_DEFAULT_COLORS_START`        | Local time to set default colors at. Think of this as a nightly "reset"                               | `false`   | `22`               |
 | `WITCH_HUE_TOKEN`                       | Philips Hue API Token                                                                                 | `true`    | None               |
@@ -100,7 +101,8 @@ export WITCH_HUE_TOKEN=<YOUR_TOKEN>; export WITCH_HUE_LIGHTS="1,2,3"
 
 #### Deploy
 
-> Follow the [Home Assistant docs](https://www.home-assistant.io/) to setup speakers to support sounds
+> Follow the [Home Assistant docs](https://www.home-assistant.io/) to setup speakers to support sounds by going to http://localhost:8123/
+> You will also need to [create an API token in home assistant](https://developers.home-assistant.io/docs/auth_api/#long-lived-access-token) and set WITCH_HOME_ASSISTANT_API_TOKEN environment variable. Sample config in [provided example .env file](.env)
 
 ```bash
 docker-compose up -d
@@ -202,3 +204,12 @@ To add new colors, make a new entry in `./controllers/colors/colors.go`
 ## Add new sounds
 
 To add new sounds, simply drop a new `.mp3` file in the `./sounds` directory. This is needed to add to the list of supported sounds and will be built into home assistant docker image.
+
+## Troubleshooting
+
+For debug logs:
+
+```bash
+export WITCH_LOG_LEVEL=debug
+make run
+```

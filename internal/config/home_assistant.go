@@ -11,9 +11,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// This should only be as long as the longest sound to play
-const homeAssistantTimeoutSeconds = 45
-const homeAssistantRetryCount = 1
+const homeAssistantTimeoutSeconds = 10
+const homeAssistantRetryCount = 3
 const homeAssistantRetryWaitSeconds = 5
 
 // InitHomeAssistantConfig sets the initial home assistant endpoint and REST client

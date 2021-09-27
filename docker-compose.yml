@@ -28,6 +28,7 @@ services:
     network_mode: host
     restart: always
     image: circa10a/witchonstephendrive.com:home-assistant
+    privileged: true
     volumes:
       - homeassistant_data:/config
       - /etc/localtime:/etc/localtime:ro

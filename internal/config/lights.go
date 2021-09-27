@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 
+	"github.com/circa10a/witchonstephendrive.com/controllers/colors"
 	"github.com/circa10a/witchonstephendrive.com/controllers/lights"
 	"github.com/robfig/cron/v3"
 	log "github.com/sirupsen/logrus"
@@ -18,8 +19,8 @@ func (w *WitchConfig) InitHueLightsScheduler() {
 		c := cron.New()
 		// On
 		_, err := c.AddFunc(onSchedule, func() {
-			log.Info("turning lights on")
-			err := lights.SetLightsOn(w.HueLightsStructs)
+			log.Info("turning lights on and setting to default colors")
+			err := colors.SetDefaultLightColors(w.HueDefaultColors, w.HueBridge)
 			if err != nil {
 				log.Error(err)
 			}

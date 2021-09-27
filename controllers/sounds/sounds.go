@@ -23,6 +23,7 @@ type PlaySoundPayload struct {
 	MediaContentID   string `json:"media_content_id"`
 }
 
+// HomeAssistantStateResponse represents the /api/state/<entity_id> JSON response from home assistant
 type HomeAssistantStateResponse struct {
 	EntityID   string `json:"entity_id"`
 	State      string `json:"state"`
