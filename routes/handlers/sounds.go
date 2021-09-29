@@ -67,7 +67,7 @@ func SoundPlayHandler(c echo.Context) error {
 	}
 	// If sound is supported
 	if utils.StrInSlice(sound, sounds.SupportedSounds) {
-		// Ensure we don't get a huge backlog of sound requests
+		// Ensure we don't get a huge backlog of sound requests by limiting with a capped queue
 		if !queue.Append(sound) {
 			return c.JSON(http.StatusTooManyRequests, SoundPlayResponse{
 				Success: false,
@@ -81,6 +81,7 @@ func SoundPlayHandler(c echo.Context) error {
 			Message: fmt.Sprintf("sound: %v not supported", sound),
 		})
 	}
+	// This means queue.append(sound) was successful
 	return c.JSON(http.StatusAccepted, &SoundPlayResponse{
 		Success: true,
 		Message: fmt.Sprintf("sound: %s queued successfully", sound),

@@ -114,7 +114,7 @@ const setState = async (opts = {}) => {
   } catch(e) {
     console.error(e);
   }
-  setUsageFooter();
+  // setUsageFooter();
 };
 
 // Flicker (turn lights off/on)
@@ -137,5 +137,5 @@ const flicker = async (opts = {count: 3, sleepTime: 1000, color: 'black'}) => {
       console.error(e);
     };
   };
-  setUsageFooter();
+  // setUsageFooter();
 };
