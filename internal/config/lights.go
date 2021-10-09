@@ -41,9 +41,11 @@ func (w *WitchConfig) InitHueLightsScheduler() {
 		// Off
 		_, err = c.AddFunc(offschedule, func() {
 			log.Info("turning lights off")
-			err := lights.SetLightsOff(w.HueLightsStructs)
-			if err != nil {
-				log.Error(err)
+			for _, light := range w.HueLightsStructs {
+				err := light.Off()
+				if err != nil {
+					log.Error(err)
+				}
 			}
 		})
 		if err != nil {
