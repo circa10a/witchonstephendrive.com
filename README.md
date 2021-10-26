@@ -4,6 +4,8 @@
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/circa10a/witchonstephendrive.com)](https://pkg.go.dev/github.com/circa10a/witchonstephendrive.com?tab=overview)
 [![Go Report Card](https://goreportcard.com/badge/github.com/circa10a/witchonstephendrive.com)](https://goreportcard.com/report/github.com/circa10a/witchonstephendrive.com)
 
+[![demo](https://yt-embed.herokuapp.com/embed?v=UTl32JWIu6o)](https://youtu.be/UTl32JWIu6o "demo")
+
 A home automation project to control hue lights for Halloween <img src="https://raw.githubusercontent.com/egonelbre/gophers/10cc13c5e29555ec23f689dc985c157a8d4692ab/vector/fairy-tale/witch-too-much-candy.svg" align="right" width="20%" height="20%"/>
 
 - [witchonstephendrive.com](#witchonstephendrivecom---)
@@ -41,13 +43,13 @@ It allows anyone to change the color of the lighting behind the witch silhouette
 ### Outdoor Pictures
 
 <p float="left">
-  <img src="https://i.imgur.com/hQE6u6h.jpg" width="45%" height="45%"/>
-  <img src="https://i.imgur.com/Qj296rO.jpg" width="45%" height="45%"/>
+  <img src="/images/outdoor_green.jpg" width="45%" height="45%"/>
+  <img src="/images/outdoor_blue.jpg" width="45%" height="45%"/>
 <p/>
 
 ### Site Preview
 
-<img src="https://i.imgur.com/WTujMb2.png" width="25%" height="25%"/>
+<img src="/images/site_preview.png" width="25%" height="25%"/>
 
 ## How does it work
 
