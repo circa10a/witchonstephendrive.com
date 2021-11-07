@@ -20,7 +20,7 @@ func (w *WitchConfig) InitHomeAssistantConfig(log *log.Logger) {
 	// Create client to be used with home assistant
 	homeAssistantEndpoint := fmt.Sprintf("%s:%d", w.HomeAssistantHost, w.HomeAssistantPort)
 	w.HomeAssistantClient = resty.New().SetLogger(log)
-	w.HomeAssistantClient.SetHostURL(homeAssistantEndpoint)
+	w.HomeAssistantClient.SetBaseURL(homeAssistantEndpoint)
 	w.HomeAssistantClient.SetHeader("Content-Type", "application/json")
 	w.HomeAssistantClient.SetAuthToken(w.HomeAssistantAPIToken)
 	w.HomeAssistantClient.SetTimeout(time.Second * homeAssistantTimeoutSeconds)

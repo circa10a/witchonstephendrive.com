@@ -39,6 +39,7 @@ func ColorsReadHandler(c echo.Context) error {
 // @Produce json
 // @Success 200 {object} ColorChangeResponse
 // @Failure 400 {object} ColorChangeResponse
+// @Failure 403 {object} ColorChangeResponse
 // @Failure 500 {object} ColorChangeResponse
 // @Router /color/{color} [post]
 // @Param color path string true "Color to change lights to"

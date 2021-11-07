@@ -22,6 +22,7 @@ type LightStateChangeResponse struct {
 // @Produce json
 // @Success 200 {object} LightStateChangeResponse
 // @Failure 400 {object} LightStateChangeResponse
+// @Failure 403 {object} LightStateChangeResponse
 // @Failure 500 {object} LightStateChangeResponse
 // @Router /lights/{state} [post]
 // @Param state path string true "State to set lights to (on/off)"

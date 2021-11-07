@@ -68,6 +68,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/handlers.ColorChangeResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/handlers.ColorChangeResponse'
         "500":
           description: Internal Server Error
           schema:
@@ -104,6 +108,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/handlers.LightStateChangeResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/handlers.LightStateChangeResponse'
         "500":
           description: Internal Server Error
           schema:
@@ -127,6 +135,10 @@ paths:
             $ref: '#/definitions/handlers.SoundPlayResponse'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.SoundPlayResponse'
+        "403":
+          description: Forbidden
           schema:
             $ref: '#/definitions/handlers.SoundPlayResponse'
         "429":

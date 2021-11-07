@@ -40,6 +40,7 @@ func SoundsReadHandler(c echo.Context) error {
 // @Produce json
 // @Success 202 {object} SoundPlayResponse
 // @Failure 400 {object} SoundPlayResponse
+// @Failure 403 {object} SoundPlayResponse
 // @Failure 429 {object} SoundPlayResponse
 // @Router /sound/{sound} [post]
 // @Param sound path string true "Sound to play"
