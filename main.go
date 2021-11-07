@@ -70,6 +70,9 @@ func main() {
 	// Start the sound queue worker
 	go sounds.InitDaemon(witchConfig)
 
+	// Geofencing
+	// Setup client
+	witchConfig.InitGeofencing()
 	// Rest API
 	// Configure echo server
 	e := witchConfig.InitEchoConfig(frontendAssets, apiDocAssets)

@@ -6,9 +6,14 @@ const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
 
-const checkLimit = (opts = {}) => {
+const checkIfAllowed = (opts = {}) => {
+  // Rate limiting
   if (opts.statusCode === 429) {
     M.toast({html: 'Slow down!', displayLength: 2000, classes: 'green darken-1 rounded'});
+  };
+  // Geofencing
+  if (opts.statusCode === 403) {
+    M.toast({html: 'It appears you are not on Stephen Drive. Come on over to have some fun!', displayLength: 3000, classes: 'green darken-1 rounded'});
   };
 };
 
@@ -110,7 +115,8 @@ const setState = async (opts = {}) => {
       method: 'POST',
     });
     // Check that rate limit isn't hit, alert user
-    checkLimit({statusCode: colorResponse.status});
+    // Check if allowed via geofencing
+    checkIfAllowed({statusCode: colorResponse.status});
   } catch(e) {
     console.error(e);
   }

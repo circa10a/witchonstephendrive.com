@@ -66,6 +66,8 @@ It allows anyone to change the color of the lighting behind the witch silhouette
 |-----------------------------------------|-------------------------------------------------------------------------------------------------------|-----------|--------------------|
 | Environment Variable                    | Description                                                                                           | Required  | Default            |
 | `WITCH_API_BASE_URL`                    | Base URL for all interactive POST requests                                                            | `false`   | `/api/v1`          |
+| `WITCH_GEOFENCING_ENABLED`              | Enable Client IP geofencing enforcing users to be in close proximity. Requires IP Stack API Token     | `false`   | `false`            |
+| `WITCH_GEOFENCING_IP_STACK_API_TOKEN`   | [IP Stack API Token](https://ipstack.com/) to lookup client coordinates                               | `false`   | `""`               |
 | `WITCH_HOME_ASSISTANT_API_TOKEN`        | Home assistant API token to play `/local/<sound>.mp3` files                                           | `false`   | `""`               |
 | `WITCH_HOME_ASSISTANT_ENTITY_ID`        | **Sounds only enabled if this is configured**. Name of home assistant speaker(`media_player.speaker)` | `false`   | `""`               |
 | `WITCH_HOME_ASSISTANT_HOST`             | Address of home assistant                                                                             | `false`   | `http://127.0.0.1` |

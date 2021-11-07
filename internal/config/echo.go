@@ -3,6 +3,7 @@ package config
 import (
 	"io/fs"
 
+	witchGeofencingMiddleware "github.com/circa10a/witchonstephendrive.com/routes/middleware/geofencing"
 	witchPrometheusMiddleware "github.com/circa10a/witchonstephendrive.com/routes/middleware/prometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -21,11 +22,20 @@ func (w *WitchConfig) InitEchoConfig(frontendAssets fs.FS, apiDocAssets fs.FS) *
 		prometheus.Use(e)
 	}
 
+	// Geofencing only POST (state changing) routes
+	if w.GeofencingEnabled {
+		currentLat := w.GeofencingCoordinates.Latitide
+		currentLong := w.GeofencingCoordinates.Longitude
+		e.Use(witchGeofencingMiddleware.IsClientAllowed(currentLat, currentLong, w.GeofencingCache))
+	}
+
 	// Make route logging easier to read/match logrus without the shitty middleware
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "\033[36mINFO\033[0m[${time_rfc3339}] ${status} ${method} ${path} (${remote_ip}) ${latency_human}\n",
 		Output: e.Logger.Output(),
 	}))
 
+	// Get real IP from proxy (caddy) to properly use geofencing
+	e.IPExtractor = echo.ExtractIPFromXFFHeader()
 	return e
 }
