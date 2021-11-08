@@ -4,19 +4,19 @@ import (
 	"time"
 
 	"github.com/amimof/huego"
+	"github.com/circa10a/go-geofence"
 	"github.com/go-resty/resty/v2"
 	"github.com/oleiade/lane"
-	"github.com/qioalice/ipstack"
 )
 
 // WitchConfig is a global config struct which holds all settings and some stateful objects
 type WitchConfig struct {
 	APIBaseURL                  string            `envconfig:"API_BASE_URL" default:"/api/v1"`
 	Port                        int               `envconfig:"PORT" default:"8080"`
-	GeofencingEnabled           bool              `envconfig:"GEOFENCING_ENABLED" default:"false"`
-	GeofencingCoordinates       *ipstack.Response `ignored:"true"`
+	GeofencingEnabled           bool              `envconfig:"GEOFENCING_ENABLED" default:"true"`
+	GeofencingClient            geofence.Geofence `ignored:"true"`
 	GeofencingIPStackAPIToken   string            `envconfig:"GEOFENCING_IP_STACK_API_TOKEN" default:""`
-	GeofencingCache             map[string]bool   `ignored:"true"`
+	GeofencingSensitivity       int               `envconfig:"GEOFENCING_SENSITIVITY" default:"3"`
 	HomeAssistantEntityID       string            `envconfig:"HOME_ASSISTANT_ENTITY_ID" default:""`
 	HomeAssistantAPIToken       string            `envconfig:"HOME_ASSISTANT_API_TOKEN" default:""`
 	HomeAssistantHost           string            `envconfig:"HOME_ASSISTANT_HOST" default:"http://127.0.0.1"`

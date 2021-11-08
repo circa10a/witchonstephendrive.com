@@ -5,6 +5,7 @@ import (
 
 	witchGeofencingMiddleware "github.com/circa10a/witchonstephendrive.com/routes/middleware/geofencing"
 	witchPrometheusMiddleware "github.com/circa10a/witchonstephendrive.com/routes/middleware/prometheus"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -24,9 +25,7 @@ func (w *WitchConfig) InitEchoConfig(frontendAssets fs.FS, apiDocAssets fs.FS) *
 
 	// Geofencing only POST (state changing) routes
 	if w.GeofencingEnabled {
-		currentLat := w.GeofencingCoordinates.Latitide
-		currentLong := w.GeofencingCoordinates.Longitude
-		e.Use(witchGeofencingMiddleware.IsClientAllowed(currentLat, currentLong, w.GeofencingCache))
+		e.Use(witchGeofencingMiddleware.IsClientAllowed(w.GeofencingClient))
 	}
 
 	// Make route logging easier to read/match logrus without the shitty middleware
