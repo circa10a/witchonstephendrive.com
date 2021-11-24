@@ -7,11 +7,15 @@ import (
 
 func (w *WitchConfig) InitGeofencing() {
 	if w.GeofencingEnabled {
-		client, err := geofence.New("", w.GeofencingIPStackAPIToken, w.GeofencingSensitivity)
+		client, err := geofence.New(&geofence.Config{
+			IPAddress:   "",
+			Token:       w.GeofencingFreeGeoIPAPIToken,
+			Sensitivity: w.GeofencingSensitivity,
+			CacheTTL:    -1, // hold cache until restart
+		})
 		if err != nil {
 			log.Fatal(err)
 		}
-		w.GeofencingClient.CreateCache(-1)
 		w.GeofencingClient = *client
 	}
 }

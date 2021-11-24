@@ -18,7 +18,7 @@ type WitchConfig struct {
 	HomeAssistantAPIToken       string            `envconfig:"HOME_ASSISTANT_API_TOKEN" default:""`
 	LogLevel                    string            `envconfig:"LOG_LEVEL" default:"info"`
 	HomeAssistantEntityID       string            `envconfig:"HOME_ASSISTANT_ENTITY_ID" default:""`
-	GeofencingIPStackAPIToken   string            `envconfig:"GEOFENCING_IP_STACK_API_TOKEN" default:""`
+	GeofencingFreeGeoIPAPIToken string            `envconfig:"GEOFENCING_FREEGEOIP_API_TOKEN" default:""`
 	HomeAssistantHost           string            `envconfig:"HOME_ASSISTANT_HOST" default:"http://127.0.0.1"`
 	HueToken                    string            `envconfig:"HUE_TOKEN" required:"true"`
 	APIBaseURL                  string            `envconfig:"API_BASE_URL" default:"/api/v1"`
@@ -40,7 +40,7 @@ type WitchConfig struct {
 	MetricsEnabled              bool              `envconfig:"METRICS_ENABLED" default:"true"`
 	SoundQuietTimeEnabled       bool              `envconfig:"SOUND_QUIET_TIME_ENABLED" default:"true"`
 	HueDefaultColorsEnabled     bool              `envconfig:"HUE_DEFAULT_COLORS_ENABLED" default:"false"`
-	GeofencingEnabled           bool              `envconfig:"GEOFENCING_ENABLED" default:"true"`
+	GeofencingEnabled           bool              `envconfig:"GEOFENCING_ENABLED" default:"false"`
 	SoundQueueWaitUntilFinished bool              `envconfig:"SOUND_QUEUE_WAIT_UNTIL_FINISHED" default:"true"`
 	UIEnabled                   bool              `envconfig:"UI_ENABLED" default:"true"`
 }
