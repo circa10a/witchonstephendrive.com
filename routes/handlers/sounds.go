@@ -18,8 +18,8 @@ type SoundsListResponse struct {
 
 // SoundPlayResponse responds with a boolean to indicate successful or not and message
 type SoundPlayResponse struct {
-	Success bool   `json:"success"`
 	Message string `json:"message"`
+	Success bool   `json:"success"`
 }
 
 // sounds godoc

@@ -12,8 +12,8 @@ import (
 
 // LightStateChangeResponse responds with a boolean to indicate successful or not and message
 type LightStateChangeResponse struct {
-	Success bool   `json:"success"`
 	Message string `json:"message"`
+	Success bool   `json:"success"`
 }
 
 // :state godoc

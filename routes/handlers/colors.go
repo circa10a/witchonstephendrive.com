@@ -17,8 +17,8 @@ type ColorsListResponse struct {
 
 // ColorChangeResponse responds with a boolean to indicate successful or not and message
 type ColorChangeResponse struct {
-	Success bool   `json:"success"`
 	Message string `json:"message"`
+	Success bool   `json:"success"`
 }
 
 // colors godoc

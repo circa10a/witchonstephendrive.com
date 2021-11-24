@@ -25,21 +25,6 @@ type PlaySoundPayload struct {
 
 // HomeAssistantStateResponse represents the /api/state/<entity_id> JSON response from home assistant
 type HomeAssistantStateResponse struct {
-	EntityID   string `json:"entity_id"`
-	State      string `json:"state"`
-	Attributes struct {
-		VolumeLevel            float64     `json:"volume_level"`
-		IsVolumeMuted          bool        `json:"is_volume_muted"`
-		MediaContentID         string      `json:"media_content_id"`
-		MediaDuration          float64     `json:"media_duration"`
-		MediaPosition          float64     `json:"media_position"`
-		MediaPositionUpdatedAt time.Time   `json:"media_position_updated_at"`
-		AppID                  string      `json:"app_id"`
-		AppName                string      `json:"app_name"`
-		EntityPictureLocal     interface{} `json:"entity_picture_local"`
-		FriendlyName           string      `json:"friendly_name"`
-		SupportedFeatures      int         `json:"supported_features"`
-	} `json:"attributes"`
 	LastChanged time.Time `json:"last_changed"`
 	LastUpdated time.Time `json:"last_updated"`
 	Context     struct {
@@ -47,6 +32,21 @@ type HomeAssistantStateResponse struct {
 		ParentID interface{} `json:"parent_id"`
 		UserID   string      `json:"user_id"`
 	} `json:"context"`
+	EntityID   string `json:"entity_id"`
+	State      string `json:"state"`
+	Attributes struct {
+		MediaPositionUpdatedAt time.Time   `json:"media_position_updated_at"`
+		EntityPictureLocal     interface{} `json:"entity_picture_local"`
+		AppID                  string      `json:"app_id"`
+		AppName                string      `json:"app_name"`
+		FriendlyName           string      `json:"friendly_name"`
+		MediaContentID         string      `json:"media_content_id"`
+		MediaPosition          float64     `json:"media_position"`
+		VolumeLevel            float64     `json:"volume_level"`
+		MediaDuration          float64     `json:"media_duration"`
+		SupportedFeatures      int         `json:"supported_features"`
+		IsVolumeMuted          bool        `json:"is_volume_muted"`
+	} `json:"attributes"`
 }
 
 // worker actually calls home assistant to play the sound read from the queue

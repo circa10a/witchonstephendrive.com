@@ -12,8 +12,8 @@ import (
 // GeofencingAllowedResponse responds with a boolean to indicate whether a client is allowed to make changes
 // based on proximity to the server
 type GeofencingAllowedResponse struct {
-	Success bool   `json:"success"`
 	Message string `json:"message"`
+	Success bool   `json:"success"`
 }
 
 // IsClientAllowed looks up the coordinates of a client to see if it's nearby
