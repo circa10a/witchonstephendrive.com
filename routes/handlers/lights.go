@@ -16,6 +16,12 @@ type LightStateChangeResponse struct {
 	Success bool   `json:"success"`
 }
 
+// PostLightsHandler holds all the data needed for the POST lights handler
+type PostLightsHandler struct {
+	echo.Context
+	HueLights []huego.Light
+}
+
 // :state godoc
 // @Summary Change state of configured lights
 // @Description Only supports states of on/off
@@ -26,9 +32,8 @@ type LightStateChangeResponse struct {
 // @Failure 500 {object} LightStateChangeResponse
 // @Router /lights/{state} [post]
 // @Param state path string true "State to set lights to (on/off)"
-func LightsStateHandler(c echo.Context) error {
+func (h *PostLightsHandler) Handler(c echo.Context) error {
 	state := strings.ToLower(c.Param("state"))
-	hueLights := c.Get("hueLights").([]huego.Light)
 
 	// Check for on/off states
 	if state != "on" && state != "off" {
@@ -40,9 +45,9 @@ func LightsStateHandler(c echo.Context) error {
 
 	var err error
 	if state == "on" {
-		err = lights.SetLightsOn(hueLights)
+		err = lights.SetLightsOn(h.HueLights)
 	} else if state == "off" {
-		err = lights.SetLightsOff(hueLights)
+		err = lights.SetLightsOff(h.HueLights)
 	}
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, LightStateChangeResponse{

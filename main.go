@@ -7,12 +7,8 @@ import (
 	"github.com/circa10a/witchonstephendrive.com/controllers/sounds"
 	"github.com/circa10a/witchonstephendrive.com/internal/config"
 	"github.com/circa10a/witchonstephendrive.com/routes"
-	"github.com/kelseyhightower/envconfig"
 	log "github.com/sirupsen/logrus"
 )
-
-// All environment variables for configuration expect WITCH_ prefix
-const envVarPrefix = "witch"
 
 //go:embed web
 var frontendAssets embed.FS
@@ -37,42 +33,10 @@ var apiDocAssets embed.FS
 // @Schemes https
 func main() {
 	// Setup global config store
-	witchConfig := &config.WitchConfig{}
-	err := envconfig.Process(envVarPrefix, witchConfig)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-
-	// Show HAPPY HALLOWEEN banner
-	if witchConfig.ShowBanner {
-		witchConfig.PrintBanner()
-	}
-
-	// Logger Config
-	log, err := witchConfig.InitLogger()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Hue Lights
-	// Start scheduler to regularly redescover bridge IP in the event DHCP changes it
-	go witchConfig.InitHue()
-	// Start scheduler to set default light colors (if enabled)
-	witchConfig.InitDefaultColorsScheduler()
-	// Start schedulers to turn lights on/off
-	witchConfig.InitHueLightsScheduler()
-
-	// Sounds
-	// Home Assistant Config such as endpoint and client
-	witchConfig.InitHomeAssistantConfig(log)
-	// Creates initial capped sounds queue
-	witchConfig.InitSoundQueue()
+	witchConfig := config.New()
 	// Start the sound queue worker
 	go sounds.InitDaemon(witchConfig)
 
-	// Geofencing
-	// Setup client
-	witchConfig.InitGeofencing()
 	// Rest API
 	// Configure echo server
 	e := witchConfig.InitEchoConfig(frontendAssets, apiDocAssets)

@@ -6,8 +6,13 @@ import (
 	"github.com/amimof/huego"
 	"github.com/circa10a/go-geofence"
 	"github.com/go-resty/resty/v2"
+	"github.com/kelseyhightower/envconfig"
 	"github.com/oleiade/lane"
+	log "github.com/sirupsen/logrus"
 )
+
+// All environment variables for configuration expect WITCH_ prefix
+const envVarPrefix = "witch"
 
 // WitchConfig is a global config struct which holds all settings and some stateful objects
 type WitchConfig struct {
@@ -43,4 +48,44 @@ type WitchConfig struct {
 	GeofencingEnabled           bool              `envconfig:"GEOFENCING_ENABLED" default:"false"`
 	SoundQueueWaitUntilFinished bool              `envconfig:"SOUND_QUEUE_WAIT_UNTIL_FINISHED" default:"true"`
 	UIEnabled                   bool              `envconfig:"UI_ENABLED" default:"true"`
+}
+
+// Returns a new config and inits needed daemons
+func New() *WitchConfig {
+	witchConfig := &WitchConfig{}
+	err := envconfig.Process(envVarPrefix, witchConfig)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	// Show HAPPY HALLOWEEN banner
+	if witchConfig.ShowBanner {
+		witchConfig.PrintBanner()
+	}
+
+	// Logger Config
+	log, err := witchConfig.InitLogger()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Hue Lights
+	// Start scheduler to regularly redescover bridge IP in the event DHCP changes it
+	go witchConfig.InitHue()
+	// Start scheduler to set default light colors (if enabled)
+	witchConfig.InitDefaultColorsScheduler()
+	// Start schedulers to turn lights on/off
+	witchConfig.InitHueLightsScheduler()
+
+	// Sounds
+	// Home Assistant Config such as endpoint and client
+	witchConfig.InitHomeAssistantConfig(log)
+	// Creates initial capped sounds queue
+	witchConfig.InitSoundQueue()
+
+	// Geofencing
+	// Setup client
+	witchConfig.InitGeofencing()
+
+	return witchConfig
 }

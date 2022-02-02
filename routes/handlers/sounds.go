@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/circa10a/witchonstephendrive.com/controllers/sounds"
-	"github.com/circa10a/witchonstephendrive.com/pkg/utils"
 	"github.com/labstack/echo/v4"
 	"github.com/oleiade/lane"
 )
@@ -22,16 +21,32 @@ type SoundPlayResponse struct {
 	Success bool   `json:"success"`
 }
 
+// GetSoundsHandler holds all the data needed for the GET sounds handler
+type GetSoundsHandler struct {
+	echo.Context
+	SupportedSounds []string
+}
+
 // sounds godoc
 // @Summary Get available sounds to play
 // @Description Get list of supported sounds
 // @Produce json
 // @Success 200 {object} SoundsListResponse
 // @Router /sounds [get]
-func SoundsReadHandler(c echo.Context) error {
+func (h *GetSoundsHandler) Handler(c echo.Context) error {
 	return c.JSON(http.StatusOK, SoundsListResponse{
-		SupportedSounds: sounds.SupportedSounds,
+		SupportedSounds: h.SupportedSounds,
 	})
+}
+
+// PostSoundsHandler holds all the data needed for the POST sounds handler
+type PostSoundsHandler struct {
+	echo.Context
+	Queue                 *lane.Deque
+	HomeAssistantEntityID string
+	QuietTimeStart        int
+	QuietTimeEnd          int
+	QuietTimeEnabled      bool
 }
 
 // :sound godoc
@@ -44,32 +59,27 @@ func SoundsReadHandler(c echo.Context) error {
 // @Failure 429 {object} SoundPlayResponse
 // @Router /sound/{sound} [post]
 // @Param sound path string true "Sound to play"
-func SoundPlayHandler(c echo.Context) error {
+func (h *PostSoundsHandler) Handler(c echo.Context) error {
 	sound := c.Param("sound")
-	homeAssistantEntityID := c.Get("homeAssistantEntityID").(string)
-	queue := c.Get("soundQueue").(*lane.Deque)
-	quietTimeEnabled := c.Get("quietTimeEnabled").(bool)
-	quietTimeStart := c.Get("quietTimeStart").(int)
-	quietTimeEnd := c.Get("quietTimeEnd").(int)
 	// Only enable sounds if entity ID is configured
 	// The ensures sounds never reach the queue
-	if homeAssistantEntityID == "" {
+	if h.HomeAssistantEntityID == "" {
 		return c.JSON(http.StatusBadRequest, SoundPlayResponse{
 			Success: false,
 			Message: "sounds disabled. no home assistant entity ID configured",
 		})
 	}
 	// Ensure sounds don't play during quiet time(late hours)
-	if sounds.IsDuringQuietTime(time.Now().Hour(), quietTimeStart, quietTimeEnd) && quietTimeEnabled {
+	if sounds.IsDuringQuietTime(time.Now().Hour(), h.QuietTimeStart, h.QuietTimeEnd) && h.QuietTimeEnabled {
 		return c.JSON(http.StatusBadRequest, SoundPlayResponse{
 			Success: false,
-			Message: fmt.Sprintf("sounds disabled. quiet time is between %d:00 and %d:00", quietTimeStart, quietTimeEnd),
+			Message: fmt.Sprintf("sounds disabled. quiet time is between %d:00 and %d:00", h.QuietTimeStart, h.QuietTimeEnd),
 		})
 	}
 	// If sound is supported
-	if utils.StrInSlice(sound, sounds.SupportedSounds) {
+	if StrInSlice(sound, sounds.SupportedSounds) {
 		// Ensure we don't get a huge backlog of sound requests by limiting with a capped queue
-		if !queue.Append(sound) {
+		if !h.Queue.Append(sound) {
 			return c.JSON(http.StatusTooManyRequests, SoundPlayResponse{
 				Success: false,
 				Message: fmt.Sprintf("will not play sound: %s. sound queue is at capacity", sound),
@@ -87,4 +97,14 @@ func SoundPlayHandler(c echo.Context) error {
 		Success: true,
 		Message: fmt.Sprintf("sound: %s queued successfully", sound),
 	})
+}
+
+// StrInSlice returns true if string is in slice
+func StrInSlice(str string, list []string) bool {
+	for _, item := range list {
+		if str == item {
+			return true
+		}
+	}
+	return false
 }

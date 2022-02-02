@@ -21,16 +21,29 @@ type ColorChangeResponse struct {
 	Success bool   `json:"success"`
 }
 
+// GetColorsHandler holds all the data needed for the GET colors handler
+type GetColorsHandler struct {
+	echo.Context
+	SupportedColors []string
+}
+
 // colors godoc
 // @Summary Get available colors to change to
 // @Description Get list of supported colors
 // @Produce json
 // @Success 200 {object} ColorsListResponse
 // @Router /colors [get]
-func ColorsReadHandler(c echo.Context) error {
+func (h GetColorsHandler) Handler(c echo.Context) error {
 	return c.JSON(http.StatusOK, ColorsListResponse{
-		SupportedColors: colors.SupportedColors,
+		SupportedColors: h.SupportedColors,
 	})
+}
+
+// PostColorsHandler holds all the data needed for the POST colors handler
+type PostColorsHandler struct {
+	echo.Context
+	HueBridge *huego.Bridge
+	HueLights []huego.Light
 }
 
 // :color godoc
@@ -43,11 +56,9 @@ func ColorsReadHandler(c echo.Context) error {
 // @Failure 500 {object} ColorChangeResponse
 // @Router /color/{color} [post]
 // @Param color path string true "Color to change lights to"
-func ColorChangeHandler(c echo.Context) error {
+func (h *PostColorsHandler) Handler(c echo.Context) error {
 	color := c.Param("color")
-	hueLights := c.Get("hueLights").([]huego.Light)
-	hueBridge := c.Get("hueBridge").(*huego.Bridge)
-	errs := colors.SetLightsColor(hueLights, hueBridge, color)
+	errs := colors.SetLightsColor(h.HueLights, h.HueBridge, color)
 	// Send back first error if exists
 	if len(errs) > 0 {
 		if errors.Is(errs[0], colors.ErrColorNotSupported) {
