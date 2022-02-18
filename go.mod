@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/amimof/huego v1.2.1
-	github.com/circa10a/go-geofence v0.3.1
+	github.com/circa10a/go-geofence v0.4.0
 	github.com/fatih/color v1.13.0
 	github.com/go-openapi/swag v0.21.1 // indirect
 	github.com/go-resty/resty/v2 v2.7.0
@@ -18,11 +18,9 @@ require (
 	github.com/prometheus/client_golang v1.12.1 // indirect
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/sirupsen/logrus v1.8.1
-	github.com/swaggo/echo-swagger v1.2.0
-	github.com/swaggo/swag v1.7.8
-	golang.org/x/crypto v0.0.0-20220131195533-30dcbda58838 // indirect
-	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
-	golang.org/x/sys v0.0.0-20220128215802-99c3d69c2c27 // indirect
-	golang.org/x/time v0.0.0-20211116232009-f0f3c7e86c11 // indirect
-	golang.org/x/tools v0.1.9 // indirect
+	github.com/swaggo/echo-swagger v1.3.0
+	github.com/swaggo/swag v1.7.9
+	golang.org/x/crypto v0.0.0-20220214200702-86341886e292 // indirect
+	golang.org/x/sys v0.0.0-20220209214540-3681064d5158 // indirect
+	golang.org/x/time v0.0.0-20220210224613-90d013bbcef8 // indirect
 )

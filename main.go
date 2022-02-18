@@ -6,7 +6,7 @@ import (
 
 	"github.com/circa10a/witchonstephendrive.com/controllers/sounds"
 	"github.com/circa10a/witchonstephendrive.com/internal/config"
-	"github.com/circa10a/witchonstephendrive.com/routes"
+	"github.com/circa10a/witchonstephendrive.com/internal/routes"
 	log "github.com/sirupsen/logrus"
 )
 

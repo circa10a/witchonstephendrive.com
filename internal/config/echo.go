@@ -3,8 +3,8 @@ package config
 import (
 	"io/fs"
 
-	witchGeofencingMiddleware "github.com/circa10a/witchonstephendrive.com/routes/middleware/geofencing"
-	witchPrometheusMiddleware "github.com/circa10a/witchonstephendrive.com/routes/middleware/prometheus"
+	witchGeofencingMiddleware "github.com/circa10a/witchonstephendrive.com/internal/routes/middleware/geofencing"
+	witchPrometheusMiddleware "github.com/circa10a/witchonstephendrive.com/internal/routes/middleware/prometheus"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
