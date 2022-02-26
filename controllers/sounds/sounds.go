@@ -9,10 +9,6 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const soundFileSuffix = ".mp3"
-const homeAssistantContentType = "audio/mp3"
-const homeAssistantMediaContextPath = "/local"
-const homeAssistantCastContextPath = "/api/services/media_player/play_media"
 const queuePollIntervalMS = 100
 const soundPlaybackStatusPollIntervalSeconds = 3
 
@@ -55,9 +51,9 @@ func worker(witchConfig *config.WitchConfig, sound string) {
 	// Play sound
 	_, err := witchConfig.HomeAssistantClient.R().SetBody(PlaySoundPayload{
 		EntityID:         witchConfig.HomeAssistantEntityID,
-		MediaContentType: homeAssistantContentType,
-		MediaContentID:   fmt.Sprintf("%s/%s%s", homeAssistantMediaContextPath, sound, soundFileSuffix),
-	}).Post(homeAssistantCastContextPath)
+		MediaContentType: "audio/mp3",
+		MediaContentID:   fmt.Sprintf("/local/%s.mp3", sound),
+	}).Post("/api/services/media_player/play_media")
 
 	// If enabled, check playback status until not "playing"
 	if witchConfig.SoundQueueWaitUntilFinished {

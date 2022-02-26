@@ -2,7 +2,6 @@ package geofencing
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/circa10a/go-geofence"
 	"github.com/labstack/echo/v4"
@@ -20,21 +19,13 @@ type GeofencingAllowedResponse struct {
 func IsClientAllowed(geofenceClient geofence.Geofence) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			method := c.Request().Method
 			// We only care about routes that affect state
-			if method != http.MethodPost {
+			if c.Request().Method != http.MethodPost {
 				return next(c)
 			}
 
 			// Client ip, strip port
-			ipAddress := strings.Split(c.Request().Host, ":")[0]
-			// Ensure not a private ip
-			if strings.HasPrefix(ipAddress, "192.") ||
-				strings.HasPrefix(ipAddress, "172.") ||
-				strings.HasPrefix(ipAddress, "10.") {
-				log.Debugf("Private ip of %s detected. Skipping geofencing middleware", ipAddress)
-				return next(c)
-			}
+			ipAddress := c.RealIP()
 
 			isAllowed, err := geofenceClient.IsIPAddressNear(ipAddress)
 			if err != nil {

@@ -23,7 +23,7 @@ services:
     depends_on:
         - witch
 
- homeassistant:
+  homeassistant:
     container_name: homeassistant
     network_mode: host
     restart: always
@@ -32,8 +32,8 @@ services:
     volumes:
       - homeassistant_data:/config
       - /etc/localtime:/etc/localtime:ro
-   env_file: .env
-   depends_on:
+    env_file: .env
+    depends_on:
      - witch
 
   watchtower:
@@ -74,6 +74,6 @@ services:
       - prometheus
 
 volumes:
-  home_assistant_data:
+  homeassistant_data:
   prometheus_data:
   grafana_data:

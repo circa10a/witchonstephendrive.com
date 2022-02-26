@@ -37,7 +37,7 @@ type WitchConfig struct {
 	HueLightsEnd                int               `envconfig:"HUE_LIGHTS_END" default:"7"`
 	HueBridgeRefreshInterval    time.Duration     `envconfig:"HUE_BRIDGE_REFRESH_INTERVAL" default:"6h"`
 	HomeAssistantPort           int               `envconfig:"HOME_ASSISTANT_PORT" default:"8123"`
-	GeofencingRadius            int               `envconfig:"GEOFENCING_RADIUS" default:"0.5"`
+	GeofencingRadius            float64           `envconfig:"GEOFENCING_RADIUS" default:"0.5"`
 	SoundQueueCapacity          int               `envconfig:"SOUND_QUEUE_CAPACITY" default:"1"`
 	SoundQuietTimeStart         int               `envconfig:"SOUND_QUIET_TIME_START" default:"22"`
 	HueLightsScheduleEnabled    bool              `envconfig:"HUE_LIGHTS_SCHEDULE_ENABLED" default:"false"`
