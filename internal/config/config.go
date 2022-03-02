@@ -7,7 +7,6 @@ import (
 	"github.com/circa10a/go-geofence"
 	"github.com/go-resty/resty/v2"
 	"github.com/kelseyhightower/envconfig"
-	"github.com/oleiade/lane"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -18,7 +17,7 @@ const envVarPrefix = "witch"
 type WitchConfig struct {
 	HueBridge                   *huego.Bridge     `ignored:"true"`
 	HueDefaultColors            map[int]string    `envconfig:"HUE_DEFAULT_COLORS" default:""`
-	SoundQueue                  *lane.Deque       `ignored:"true"`
+	SoundQueue                  chan string       `ignored:"true"`
 	HomeAssistantClient         *resty.Client     `ignored:"true"`
 	HomeAssistantAPIToken       string            `envconfig:"HOME_ASSISTANT_API_TOKEN" default:""`
 	LogLevel                    string            `envconfig:"LOG_LEVEL" default:"info"`
@@ -46,7 +45,6 @@ type WitchConfig struct {
 	SoundQuietTimeEnabled       bool              `envconfig:"SOUND_QUIET_TIME_ENABLED" default:"true"`
 	HueDefaultColorsEnabled     bool              `envconfig:"HUE_DEFAULT_COLORS_ENABLED" default:"false"`
 	GeofencingEnabled           bool              `envconfig:"GEOFENCING_ENABLED" default:"false"`
-	SoundQueueWaitUntilFinished bool              `envconfig:"SOUND_QUEUE_WAIT_UNTIL_FINISHED" default:"true"`
 	UIEnabled                   bool              `envconfig:"UI_ENABLED" default:"true"`
 }
 
@@ -81,7 +79,7 @@ func New() *WitchConfig {
 	// Home Assistant Config such as endpoint and client
 	witchConfig.InitHomeAssistantConfig(log)
 	// Creates initial capped sounds queue
-	witchConfig.InitSoundQueue()
+	witchConfig.SoundQueue = make(chan string, witchConfig.SoundQueueCapacity)
 
 	// Geofencing
 	// Setup client

@@ -7,7 +7,6 @@ import (
 
 	"github.com/circa10a/witchonstephendrive.com/controllers/sounds"
 	"github.com/labstack/echo/v4"
-	"github.com/oleiade/lane"
 )
 
 // SoundsListResponse responds supported sounds to play
@@ -42,7 +41,7 @@ func (h *GetSoundsHandler) Handler(c echo.Context) error {
 // PostSoundsHandler holds all the data needed for the POST sounds handler
 type PostSoundsHandler struct {
 	echo.Context
-	Queue                 *lane.Deque
+	Queue                 chan string
 	HomeAssistantEntityID string
 	QuietTimeStart        int
 	QuietTimeEnd          int
@@ -79,7 +78,11 @@ func (h *PostSoundsHandler) Handler(c echo.Context) error {
 	// If sound is supported
 	if StrInSlice(sound, sounds.SupportedSounds) {
 		// Ensure we don't get a huge backlog of sound requests by limiting with a capped queue
-		if !h.Queue.Append(sound) {
+		// If queue is at capacity, enter default case
+		select {
+		case h.Queue <- sound:
+			// Playing sound
+		default:
 			return c.JSON(http.StatusTooManyRequests, SoundPlayResponse{
 				Success: false,
 				Message: fmt.Sprintf("will not play sound: %s. sound queue is at capacity", sound),
