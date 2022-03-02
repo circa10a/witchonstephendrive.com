@@ -4,15 +4,15 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// InitLogger configures global logrus logger
-func (w *WitchConfig) InitLogger() (*log.Logger, error) {
+// initLogger configures global logrus logger
+func initLogger(loglevel string) (*log.Logger, error) {
 	// New logger to pass to home assistant client
 	logger := log.New()
 	logger.SetFormatter(&log.TextFormatter{
 		ForceColors:   true,
 		FullTimestamp: true,
 	})
-	level, err := log.ParseLevel(w.LogLevel)
+	level, err := log.ParseLevel(loglevel)
 	if err != nil {
 		return log.New(), err
 	}

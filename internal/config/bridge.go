@@ -8,8 +8,8 @@ import (
 	"github.com/amimof/huego"
 )
 
-// InitHue discovers hue bridge and configured lights on configured interval
-func (w *WitchConfig) InitHue() {
+// initHue discovers hue bridge and configured lights on configured interval
+func (w *WitchConfig) initHue() {
 	// Run this regularly in the event the bridge gets a new IP address
 	for {
 		w.initHueBridge()

@@ -8,8 +8,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// InitDefaultColorsScheduler conditionally starts a scheduler to set default colors on configured lights
-func (w *WitchConfig) InitDefaultColorsScheduler() {
+// initDefaultColorsScheduler conditionally starts a scheduler to set default colors on configured lights
+func (w *WitchConfig) initDefaultColorsScheduler() {
 	if w.HueDefaultColorsEnabled && len(w.HueDefaultColors) > 0 {
 		log.Infof("scheduling default light colors to be set at hour: %d", w.HueDefaultColorsStart)
 		schedule := fmt.Sprintf("0 %d * * *", w.HueDefaultColorsStart)

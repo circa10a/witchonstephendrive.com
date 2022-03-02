@@ -20,8 +20,8 @@ const banner = `
  :   : :   :   : :   :         :           :         :   : :   :   : :  : :: : :  : :: : :   : :  :     :: :  : :     : :: ::   : :: ::   ::    :
 `
 
-// PrintBanner prints a HAPPY HALLOWEEN banner on startup
-func (w *WitchConfig) PrintBanner() {
+// printBanner prints a HAPPY HALLOWEEN banner on startup
+func printBanner() {
 	sliceOfColorFuncs := []func(string, ...interface{}){
 		color.Green,
 		color.Red,

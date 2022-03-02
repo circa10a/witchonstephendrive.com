@@ -50,40 +50,40 @@ type WitchConfig struct {
 
 // Returns a new config and inits needed daemons
 func New() *WitchConfig {
-	witchConfig := &WitchConfig{}
-	err := envconfig.Process(envVarPrefix, witchConfig)
+	w := &WitchConfig{}
+	err := envconfig.Process(envVarPrefix, w)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
 	// Show HAPPY HALLOWEEN banner
-	if witchConfig.ShowBanner {
-		witchConfig.PrintBanner()
+	if w.ShowBanner {
+		printBanner()
 	}
 
 	// Logger Config
-	log, err := witchConfig.InitLogger()
+	log, err := initLogger(w.LogLevel)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Hue Lights
 	// Start scheduler to regularly redescover bridge IP in the event DHCP changes it
-	go witchConfig.InitHue()
+	go w.initHue()
 	// Start scheduler to set default light colors (if enabled)
-	witchConfig.InitDefaultColorsScheduler()
+	w.initDefaultColorsScheduler()
 	// Start schedulers to turn lights on/off
-	witchConfig.InitHueLightsScheduler()
+	w.initHueLightsScheduler()
 
 	// Sounds
 	// Home Assistant Config such as endpoint and client
-	witchConfig.InitHomeAssistantConfig(log)
+	w.initHomeAssistantClient(log)
 	// Creates initial capped sounds queue
-	witchConfig.SoundQueue = make(chan string, witchConfig.SoundQueueCapacity)
+	w.SoundQueue = make(chan string, w.SoundQueueCapacity)
 
 	// Geofencing
 	// Setup client
-	witchConfig.InitGeofencing()
+	w.initGeofencingClient()
 
-	return witchConfig
+	return w
 }

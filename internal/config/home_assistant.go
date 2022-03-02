@@ -15,8 +15,8 @@ const homeAssistantTimeoutSeconds = 10
 const homeAssistantRetryCount = 3
 const homeAssistantRetryWaitSeconds = 5
 
-// InitHomeAssistantConfig sets the initial home assistant endpoint and REST client
-func (w *WitchConfig) InitHomeAssistantConfig(log *log.Logger) {
+// initHomeAssistantClient sets the initial home assistant endpoint and REST client
+func (w *WitchConfig) initHomeAssistantClient(log *log.Logger) {
 	// Create client to be used with home assistant
 	homeAssistantEndpoint := fmt.Sprintf("%s:%d", w.HomeAssistantHost, w.HomeAssistantPort)
 	w.HomeAssistantClient = resty.New().SetLogger(log)

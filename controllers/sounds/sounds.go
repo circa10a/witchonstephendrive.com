@@ -77,13 +77,13 @@ func worker(witchConfig *config.WitchConfig, sound string) {
 }
 
 // InitDaemon continually reads sounds out of a queue to ensure non-overlapping casting
-func InitDaemon(witchConfig *config.WitchConfig) {
+func InitDaemon(w *config.WitchConfig) {
 	for {
 		time.Sleep(time.Millisecond * queuePollIntervalMS)
-		log.Debugf("queue size: %d", len(witchConfig.SoundQueue))
+		log.Debugf("queue size: %d", len(w.SoundQueue))
 		select {
-		case sound := <-witchConfig.SoundQueue:
-			worker(witchConfig, sound)
+		case sound := <-w.SoundQueue:
+			worker(w, sound)
 		default:
 			break
 		}

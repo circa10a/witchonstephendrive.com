@@ -32,7 +32,7 @@ func Routes(e *echo.Echo, witchConfig *config.WitchConfig, frontendAssets fs.FS,
 	// UI
 	// Static assets
 	if witchConfig.UIEnabled {
-		frontendHTTPFS, err := ConvertEmbedFsDirToHTTPFS(frontendAssets, "web")
+		frontendHTTPFS, err := convertEmbedFSDirToHTTPFS(frontendAssets, "web")
 		if err != nil {
 			log.Error(err)
 		}
@@ -91,8 +91,8 @@ func Routes(e *echo.Echo, witchConfig *config.WitchConfig, frontendAssets fs.FS,
 	apiVersionGroup.POST(soundNamePath, postSoundsHandler.Handler)
 }
 
-// ConvertEmbedFsDirToHTTPSFS returns sub directory of fs
-func ConvertEmbedFsDirToHTTPFS(e fs.FS, d string) (http.FileSystem, error) {
+// convertEmbedFSDirToHTTPSFS returns sub directory of fs
+func convertEmbedFSDirToHTTPFS(e fs.FS, d string) (http.FileSystem, error) {
 	fsys, err := fs.Sub(e, d)
 	if err != nil {
 		return nil, err

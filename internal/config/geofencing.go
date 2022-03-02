@@ -5,7 +5,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func (w *WitchConfig) InitGeofencing() {
+// initGeofencingClient configures the geofencing client
+func (w *WitchConfig) initGeofencingClient() {
 	if w.GeofencingEnabled {
 		client, err := geofence.New(&geofence.Config{
 			IPAddress:               "",

@@ -9,7 +9,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func (w *WitchConfig) InitHueLightsScheduler() {
+// initHueLightsScheduler conditionally starts a scheduler to turn on/off lights and set default colors
+func (w *WitchConfig) initHueLightsScheduler() {
 	if w.HueLightsScheduleEnabled {
 		// On
 		log.Infof("scheduling lights turn on at hour: %d", w.HueLightsStart)
