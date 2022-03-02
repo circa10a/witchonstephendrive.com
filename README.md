@@ -90,7 +90,6 @@ It allows anyone to change the color of the lighting behind the witch silhouette
 | `WITCH_SOUND_QUIET_TIME_START`          | Local time to ensure sounds are not played after this hour                                            | `false`   | `22`               |
 | `WITCH_SOUND_QUIET_TIME_END`            | Local time to ensure sounds are not played before this hour                                           | `false`   | `07`               |
 | `WITCH_SOUND_QUEUE_CAPACITY`            | Maximum depth of sound queue. This is to ensure no spam/long backlog                                  | `false`   | `1`                |
-| `WITCH_SOUND_QUEUE_WAIT_UNTIL_FINISHED` | Wait for sounds to finish playing before playing the next                                             | `false`   | `true`             |
 | `WITCH_UI_ENABLED`                      | Enables hosting of UI/static assets on `/`                                                            | `false`   | `true`             |
 
 ### Go

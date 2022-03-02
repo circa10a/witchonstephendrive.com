@@ -55,27 +55,24 @@ func worker(witchConfig *config.WitchConfig, sound string) {
 		MediaContentID:   fmt.Sprintf("/local/%s.mp3", sound),
 	}).Post("/api/services/media_player/play_media")
 
-	// If enabled, check playback status until not "playing"
-	if witchConfig.SoundQueueWaitUntilFinished {
-		// Poll to determine when sound is finished
-		for {
-			time.Sleep(time.Second * soundPlaybackStatusPollIntervalSeconds)
-			resp, err := witchConfig.HomeAssistantClient.R().
-				SetResult(&HomeAssistantStateResponse{}).
-				Get(fmt.Sprintf("api/states/%s", witchConfig.HomeAssistantEntityID))
-			if err != nil {
-				log.Error(err)
-			}
-			state := resp.Result().(*HomeAssistantStateResponse)
-			log.Debug(fmt.Sprintf("waiting for entity id: %s to finish playing", state.EntityID))
-			if state.State != "playing" {
-				log.Debug(fmt.Sprintf("entity id: %s finished playing", state.EntityID))
-				break
-			}
-		}
+	// Poll to determine when sound is finished
+	for {
+		time.Sleep(time.Second * soundPlaybackStatusPollIntervalSeconds)
+		resp, err := witchConfig.HomeAssistantClient.R().
+			SetResult(&HomeAssistantStateResponse{}).
+			Get(fmt.Sprintf("api/states/%s", witchConfig.HomeAssistantEntityID))
 		if err != nil {
 			log.Error(err)
 		}
+		state := resp.Result().(*HomeAssistantStateResponse)
+		log.Debug(fmt.Sprintf("waiting for entity id: %s to finish playing", state.EntityID))
+		if state.State != "playing" {
+			log.Debug(fmt.Sprintf("entity id: %s finished playing", state.EntityID))
+			break
+		}
+	}
+	if err != nil {
+		log.Error(err)
 	}
 }
 
