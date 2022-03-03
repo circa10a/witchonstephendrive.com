@@ -18,6 +18,9 @@ func (w *WitchConfig) initHue() {
 }
 
 func (w *WitchConfig) initHueBridge() {
+	w.mu.Lock()
+	defer w.mu.Unlock()
+
 	log.Info("renewing bridge configuration")
 	// Find hue bridge ip
 	hueBridge, err := huego.Discover()

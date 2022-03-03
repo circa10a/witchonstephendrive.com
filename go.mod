@@ -12,7 +12,7 @@ require (
 	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/labstack/echo-contrib v0.12.0
-	github.com/labstack/echo/v4 v4.6.3
+	github.com/labstack/echo/v4 v4.7.0
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/prometheus/client_golang v1.12.1 // indirect
 	github.com/robfig/cron/v3 v3.0.1

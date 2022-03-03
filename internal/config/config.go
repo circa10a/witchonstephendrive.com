@@ -1,6 +1,7 @@
 package config
 
 import (
+	"sync"
 	"time"
 
 	"github.com/amimof/huego"
@@ -46,6 +47,7 @@ type WitchConfig struct {
 	HueDefaultColorsEnabled     bool              `envconfig:"HUE_DEFAULT_COLORS_ENABLED" default:"false"`
 	GeofencingEnabled           bool              `envconfig:"GEOFENCING_ENABLED" default:"false"`
 	UIEnabled                   bool              `envconfig:"UI_ENABLED" default:"true"`
+	mu                          sync.RWMutex      `ignored:"true"`
 }
 
 // Returns a new config and inits needed daemons
