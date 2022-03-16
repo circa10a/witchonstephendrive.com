@@ -32,6 +32,8 @@ func IsClientAllowed(geofenceClient geofence.Geofence) echo.MiddlewareFunc {
 				log.Error(err)
 			}
 
+			log.Debugf("IP address: %s, isAllowed: %t", ipAddress, isAllowed)
+
 			if !isAllowed {
 				return c.JSON(http.StatusForbidden, GeofencingAllowedResponse{
 					Success: false,
