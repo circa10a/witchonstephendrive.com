@@ -2,6 +2,7 @@ package geofencing
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/circa10a/go-geofence"
 	"github.com/labstack/echo/v4"
@@ -26,6 +27,11 @@ func IsClientAllowed(geofenceClient geofence.Geofence) echo.MiddlewareFunc {
 
 			// Client ip, strip port
 			ipAddress := c.RealIP()
+
+			// Typical mobile phone address space, allow it
+			if strings.HasPrefix(ipAddress, "172.") {
+				return next(c)
+			}
 
 			isAllowed, err := geofenceClient.IsIPAddressNear(ipAddress)
 			if err != nil {
