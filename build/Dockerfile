@@ -6,9 +6,11 @@ ENV USER=go \
     GID=1000 \
     CGO_ENABLED=0
 
-RUN go mod tidy && \
+RUN apk add --no-cache tzdata git && \
+    go mod tidy && \
     go generate ./... && \
     go build -ldflags="-s -w" \
+    -buildvcs=false \
     -o witch && \
     addgroup --gid "$GID" "$USER" && \
     adduser \
@@ -19,8 +21,7 @@ RUN go mod tidy && \
     --no-create-home \
     --uid "$UID" \
     "$USER" && \
-    chown "$UID":"$GID" /go/src/app/witch && \
-    apk add --no-cache tzdata
+    chown "$UID":"$GID" /go/src/app/witch
 
 USER 1000
 ENTRYPOINT ["/go/src/app/witch"]
