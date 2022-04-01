@@ -1,6 +1,7 @@
 package config
 
 import (
+	"context"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -8,12 +9,21 @@ import (
 	"github.com/amimof/huego"
 )
 
-// initHue discovers hue bridge and configured lights on configured interval
-func (w *WitchConfig) initHue() {
+// InitHue discovers hue bridge and configured lights on configured interval
+func (w *WitchConfig) InitHue(ctx context.Context) {
 	// Run this regularly in the event the bridge gets a new IP address
+	ticker := time.NewTicker(w.HueBridgeRefreshInterval)
+	// Set initial address
+	w.initHueBridge()
+	// Start daemon
 	for {
-		w.initHueBridge()
-		time.Sleep(w.HueBridgeRefreshInterval)
+		select {
+		case <-ticker.C:
+			w.initHueBridge()
+		case <-ctx.Done():
+			log.Info("Hue bridge address refresher shutdown successfully")
+			return
+		}
 	}
 }
 
@@ -21,7 +31,7 @@ func (w *WitchConfig) initHueBridge() {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 
-	log.Info("renewing bridge configuration")
+	log.Info("Renewing bridge configuration")
 	// Find hue bridge ip
 	hueBridge, err := huego.Discover()
 	if err != nil {

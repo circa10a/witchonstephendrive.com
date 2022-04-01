@@ -9,12 +9,12 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// initHueLightsScheduler conditionally starts a scheduler to turn on/off lights and set default colors
-func (w *WitchConfig) initHueLightsScheduler() {
+// InitHueLightsScheduler conditionally starts a scheduler to turn on/off lights and set default colors
+func (w *WitchConfig) InitHueLightsScheduler() {
 	if w.HueLightsScheduleEnabled {
 		// On
-		log.Infof("scheduling lights turn on at hour: %d", w.HueLightsStart)
-		log.Infof("scheduling lights turn off at hour: %d", w.HueLightsEnd)
+		log.Infof("Scheduling lights turn on at hour: %d", w.HueLightsStart)
+		log.Infof("Scheduling lights turn off at hour: %d", w.HueLightsEnd)
 		onSchedule := fmt.Sprintf("0 %d * * *", w.HueLightsStart)
 		offschedule := fmt.Sprintf("0 %d * * *", w.HueLightsEnd)
 		c := cron.New()
@@ -22,14 +22,14 @@ func (w *WitchConfig) initHueLightsScheduler() {
 		_, err := c.AddFunc(onSchedule, func() {
 			// If default colors are enabled and provided, turn on and set colors
 			if w.HueDefaultColorsEnabled && len(w.HueDefaultColors) > 0 {
-				log.Info("turning lights on and setting to default colors")
+				log.Info("Turning lights on and setting to default colors")
 				err := colors.SetDefaultLightColors(w.HueDefaultColors, w.HueBridge)
 				if err != nil {
 					log.Error(err)
 				}
 			} else {
 				// If just lights schedule is enabled, turn them on
-				log.Info("turning lights on")
+				log.Info("Turning lights on")
 				err := lights.SetLightsOn(w.HueLightsStructs)
 				if err != nil {
 					log.Error(err)
@@ -41,7 +41,7 @@ func (w *WitchConfig) initHueLightsScheduler() {
 		}
 		// Off
 		_, err = c.AddFunc(offschedule, func() {
-			log.Info("turning lights off")
+			log.Info("Turning lights off")
 			for _, light := range w.HueLightsStructs {
 				err := light.Off()
 				if err != nil {

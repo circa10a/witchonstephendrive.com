@@ -1,8 +1,13 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"fmt"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/circa10a/witchonstephendrive.com/controllers/sounds"
 	"github.com/circa10a/witchonstephendrive.com/internal/config"
@@ -33,15 +38,46 @@ var apiDocAssets embed.FS
 // @Schemes https
 func main() {
 	// Setup global config store
-	witchConfig := config.New()
-	// Start the sound queue worker
-	go sounds.InitDaemon(witchConfig)
+	w := config.New()
 
-	// Rest API
 	// Configure echo server
-	e := witchConfig.InitEchoConfig(frontendAssets, apiDocAssets)
+	e := w.InitEchoConfig(frontendAssets, apiDocAssets)
+
+	ctx, cancel := context.WithCancel(context.Background())
+	// Ensure we can cancel all of our goroutines
+	go func(ctx context.Context) {
+		c := make(chan os.Signal, 1)
+		signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
+		<-c
+
+		cancel()
+		if err := e.Shutdown(ctx); err != nil {
+			if err != context.Canceled {
+				log.Fatal(err, "Error shutting down web server")
+			}
+		}
+	}(ctx)
+
+	// Hue Lights
+	// Start scheduler to regularly redescover bridge IP in the event DHCP changes it
+	go w.InitHue(ctx)
+	// Start scheduler to set default light colors (if enabled)
+	w.InitDefaultColorsScheduler()
+	// Start schedulers to turn lights on/off
+	w.InitHueLightsScheduler()
+
+	// Sounds
+	// Start the sound queue worker
+	go sounds.InitDaemon(ctx, w)
+
+	// REST API
 	// Declare routes + handlers
-	routes.Routes(e, witchConfig, frontendAssets, apiDocAssets)
+	routes.Routes(e, w, frontendAssets, apiDocAssets)
 	// Start Listener
-	log.Fatal(e.Start(fmt.Sprintf(":%d", witchConfig.Port)))
+	if err := e.Start(fmt.Sprintf(":%d", w.Port)); err != nil {
+		if err != http.ErrServerClosed {
+			log.Fatal(err, "Error starting web server")
+		}
+		log.Info("Web server shutdown successfully")
+	}
 }

@@ -124,7 +124,7 @@ func SetLightsColor(lights []huego.Light, bridge *huego.Bridge, color string) []
 		errs := []error{}
 		for _, light := range lights {
 			state := Colors[color]
-			log.Debug(fmt.Sprintf("setting color: %s on light id: %d", color, light.ID))
+			log.Debug(fmt.Sprintf("Setting color: %s on light id: %d", color, light.ID))
 			_, err := bridge.SetLightState(light.ID, state)
 			if err != nil {
 				errs = append(errs, err)
@@ -160,7 +160,7 @@ func SetLightsColor(lights []huego.Light, bridge *huego.Bridge, color string) []
 // SetDefaultLightColors sets the default configured colors initiated by schedule
 func SetDefaultLightColors(defaultColorsMap map[int]string, bridge *huego.Bridge) error {
 	for light, color := range defaultColorsMap {
-		log.Debug(fmt.Sprintf("setting default color: %s on light id: %d", color, light))
+		log.Debug(fmt.Sprintf("Setting default color: %s on light id: %d", color, light))
 		if _, ok := Colors[color]; ok {
 			light, err := bridge.GetLight(light)
 			if err != nil {

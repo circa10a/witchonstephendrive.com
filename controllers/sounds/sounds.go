@@ -2,6 +2,7 @@
 package sounds
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -47,13 +48,18 @@ type HomeAssistantStateResponse struct {
 
 // worker actually calls home assistant to play the sound read from the queue
 func worker(witchConfig *config.WitchConfig, sound string) {
-	log.Debug(fmt.Sprintf("playing sound: %s", sound))
+	log.Debug(fmt.Sprintf("Playing sound: %s", sound))
 	// Play sound
 	_, err := witchConfig.HomeAssistantClient.R().SetBody(PlaySoundPayload{
 		EntityID:         witchConfig.HomeAssistantEntityID,
 		MediaContentType: "audio/mp3",
 		MediaContentID:   fmt.Sprintf("/local/%s.mp3", sound),
 	}).Post("/api/services/media_player/play_media")
+	if err != nil {
+		// Attempts to play failed
+		// Return so we don't unnecessarily try to get status of sound playing
+		return
+	}
 
 	// Poll to determine when sound is finished
 	for {
@@ -65,9 +71,9 @@ func worker(witchConfig *config.WitchConfig, sound string) {
 			log.Error(err)
 		}
 		state := resp.Result().(*HomeAssistantStateResponse)
-		log.Debug(fmt.Sprintf("waiting for entity id: %s to finish playing", state.EntityID))
+		log.Debug(fmt.Sprintf("Waiting for entity id: %s to finish playing", state.EntityID))
 		if state.State != "playing" {
-			log.Debug(fmt.Sprintf("entity id: %s finished playing", state.EntityID))
+			log.Debug(fmt.Sprintf("Entity id: %s finished playing", state.EntityID))
 			break
 		}
 	}
@@ -77,15 +83,23 @@ func worker(witchConfig *config.WitchConfig, sound string) {
 }
 
 // InitDaemon continually reads sounds out of a queue to ensure non-overlapping casting
-func InitDaemon(w *config.WitchConfig) {
+func InitDaemon(ctx context.Context, w *config.WitchConfig) {
+	ticker := time.NewTicker(queuePollIntervalMS)
+
+	// Start daemon
 	for {
-		time.Sleep(time.Millisecond * queuePollIntervalMS)
-		log.Debugf("queue size: %d", len(w.SoundQueue))
 		select {
-		case sound := <-w.SoundQueue:
-			worker(w, sound)
-		default:
-			break
+		case <-ticker.C:
+			log.Debugf("Queue size: %d", len(w.SoundQueue))
+			select {
+			case sound := <-w.SoundQueue:
+				worker(w, sound)
+			default:
+				break
+			}
+		case <-ctx.Done():
+			log.Info("Sound queue worker shutdown successfully")
+			return
 		}
 	}
 }

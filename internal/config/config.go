@@ -69,14 +69,6 @@ func New() *WitchConfig {
 		log.Fatal(err)
 	}
 
-	// Hue Lights
-	// Start scheduler to regularly redescover bridge IP in the event DHCP changes it
-	go w.initHue()
-	// Start scheduler to set default light colors (if enabled)
-	w.initDefaultColorsScheduler()
-	// Start schedulers to turn lights on/off
-	w.initHueLightsScheduler()
-
 	// Sounds
 	// Home Assistant Config such as endpoint and client
 	w.initHomeAssistantClient(log)
