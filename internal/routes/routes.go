@@ -87,7 +87,7 @@ func Routes(e *echo.Echo, witchConfig *config.WitchConfig, frontendAssets fs.FS,
 		QuietTimeEnd:          witchConfig.SoundQuietTimeEnd,
 		HomeAssistantEntityID: witchConfig.HomeAssistantEntityID,
 	}
-	// Route is only functional if an entity ID is configured
+	// Route is only functional if a home assistant entity ID is configured
 	apiVersionGroup.POST(soundNamePath, postSoundsHandler.Handler)
 }
 

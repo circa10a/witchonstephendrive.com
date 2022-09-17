@@ -10,8 +10,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const queuePollIntervalMS = 100
-const soundPlaybackStatusPollIntervalSeconds = 3
+const queuePollInterval = 100 * time.Millisecond
+const soundPlaybackStatusPollInterval = 3 * time.Second
 
 // PlaySoundPayload is the type supported by home assistant to cast custom media
 type PlaySoundPayload struct {
@@ -63,7 +63,7 @@ func worker(witchConfig *config.WitchConfig, sound string) {
 
 	// Poll to determine when sound is finished
 	for {
-		time.Sleep(time.Second * soundPlaybackStatusPollIntervalSeconds)
+		time.Sleep(time.Second * soundPlaybackStatusPollInterval)
 		resp, err := witchConfig.HomeAssistantClient.R().
 			SetResult(&HomeAssistantStateResponse{}).
 			Get(fmt.Sprintf("api/states/%s", witchConfig.HomeAssistantEntityID))
@@ -84,7 +84,7 @@ func worker(witchConfig *config.WitchConfig, sound string) {
 
 // InitDaemon continually reads sounds out of a queue to ensure non-overlapping casting
 func InitDaemon(ctx context.Context, w *config.WitchConfig) {
-	ticker := time.NewTicker(queuePollIntervalMS)
+	ticker := time.NewTicker(queuePollInterval)
 
 	// Start daemon
 	for {

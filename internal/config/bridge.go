@@ -10,8 +10,8 @@ import (
 )
 
 // InitHue discovers hue bridge and configured lights on configured interval
+// it triggers an internal daemon regularly in the event the bridge gets a new IP address
 func (w *WitchConfig) InitHue(ctx context.Context) {
-	// Run this regularly in the event the bridge gets a new IP address
 	ticker := time.NewTicker(w.HueBridgeRefreshInterval)
 	// Set initial address
 	w.initHueBridge()
@@ -28,8 +28,8 @@ func (w *WitchConfig) InitHue(ctx context.Context) {
 }
 
 func (w *WitchConfig) initHueBridge() {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.Lock()
+	defer w.Unlock()
 
 	log.Info("Renewing bridge configuration")
 	// Find hue bridge ip

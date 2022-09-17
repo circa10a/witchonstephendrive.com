@@ -10,7 +10,7 @@ func (w *WitchConfig) initGeofencingClient() {
 	if w.GeofencingEnabled {
 		client, err := geofence.New(&geofence.Config{
 			IPAddress:               "",
-			Token:                   w.GeofencingFreeGeoIPAPIToken,
+			Token:                   w.GeofencingIPBaseAPIToken,
 			Radius:                  w.GeofencingClient.Radius,
 			AllowPrivateIPAddresses: true,
 			CacheTTL:                -1, // hold cache until restart

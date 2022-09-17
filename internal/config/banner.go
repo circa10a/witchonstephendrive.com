@@ -28,7 +28,6 @@ func printBanner() {
 		color.Yellow,
 	}
 
-	//nolint:gosec // don't need crypto here for random, cmon it's 3 colors
 	randomIndex := rand.Intn(len(sliceOfColorFuncs))
 	colorOutput := sliceOfColorFuncs[randomIndex]
 	colorOutput(banner)

@@ -15,7 +15,7 @@ func NewPrometheus(apiBaseURL string) *prometheus.Prometheus {
 		url := c.Request().URL.Path
 		color := c.Param("color")
 		sound := c.Param("sound")
-		// Strip API Base URL path(/api/1)
+		// Strip API Base URL path(/api/v1)
 		url = strings.Replace(url, apiBaseURL, "", 1)
 		// /color/:color => /color/red
 		if color != "" {
