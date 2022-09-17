@@ -85,7 +85,7 @@ It allows anyone to change the color of the lighting behind the witch silhouette
 | `WITCH_LOG_LEVEL`                       | [Logrus](https://github.com/sirupsen/logrus) log level                                                | `false`   | `info`             |
 | `WITCH_METRICS_ENABLED`                 | Enables prometheus metrics on `/metrics`                                                              | `false`   | `true`             |
 | `WITCH_PORT`                            | Port for web server to listen on                                                                      | `false`   | `8080`             |
-| `WITCH_SHOW_BANNER`                     | Displays Happy Halloween banner on startup                                                            | `false`   | `true`             |
+| `WITCH_SHOW_BANNER`                     | Displays Happy Halloween banner on startup                                                            | `false`   | `false`            |
 | `WITCH_SOUND_QUIET_TIME_ENABLED`        | Enables quiet time functionality during configured hours                                              | `false`   | `true`             |
 | `WITCH_SOUND_QUIET_TIME_START`          | Local time to ensure sounds are not played after this hour                                            | `false`   | `22`               |
 | `WITCH_SOUND_QUIET_TIME_END`            | Local time to ensure sounds are not played before this hour                                           | `false`   | `07`               |

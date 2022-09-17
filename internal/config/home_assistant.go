@@ -11,9 +11,9 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const homeAssistantTimeoutSeconds = 10
+const homeAssistantTimeout = 10 * time.Second
 const homeAssistantRetryCount = 3
-const homeAssistantRetryWaitSeconds = 5
+const homeAssistantRetryWait = 5 * time.Second
 
 // initHomeAssistantClient sets the initial home assistant endpoint and REST client
 func (w *WitchConfig) initHomeAssistantClient(log *log.Logger) {
@@ -23,10 +23,10 @@ func (w *WitchConfig) initHomeAssistantClient(log *log.Logger) {
 	w.HomeAssistantClient.SetBaseURL(homeAssistantEndpoint)
 	w.HomeAssistantClient.SetHeader("Content-Type", "application/json")
 	w.HomeAssistantClient.SetAuthToken(w.HomeAssistantAPIToken)
-	w.HomeAssistantClient.SetTimeout(time.Second * homeAssistantTimeoutSeconds)
+	w.HomeAssistantClient.SetTimeout(homeAssistantTimeout)
 	w.HomeAssistantClient.SetRetryCount(homeAssistantRetryCount)
 	// Only retry on connection refused or EOF meaning possible reboot
-	w.HomeAssistantClient.SetRetryWaitTime(homeAssistantRetryWaitSeconds * time.Second).AddRetryCondition(
+	w.HomeAssistantClient.SetRetryWaitTime(homeAssistantRetryWait).AddRetryCondition(
 		func(_ *resty.Response, err error) bool {
 			return errors.Is(err, syscall.ECONNREFUSED) || errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF)
 		},

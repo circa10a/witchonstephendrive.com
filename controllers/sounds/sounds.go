@@ -63,13 +63,16 @@ func worker(witchConfig *config.WitchConfig, sound string) {
 
 	// Poll to determine when sound is finished
 	for {
-		time.Sleep(time.Second * soundPlaybackStatusPollInterval)
+		log.Debug("Polling for media play completion")
+		time.Sleep(soundPlaybackStatusPollInterval)
+
 		resp, err := witchConfig.HomeAssistantClient.R().
 			SetResult(&HomeAssistantStateResponse{}).
 			Get(fmt.Sprintf("api/states/%s", witchConfig.HomeAssistantEntityID))
 		if err != nil {
 			log.Error(err)
 		}
+
 		state := resp.Result().(*HomeAssistantStateResponse)
 		log.Debug(fmt.Sprintf("Waiting for entity id: %s to finish playing", state.EntityID))
 		if state.State != "playing" {
@@ -77,6 +80,7 @@ func worker(witchConfig *config.WitchConfig, sound string) {
 			break
 		}
 	}
+
 	if err != nil {
 		log.Error(err)
 	}
