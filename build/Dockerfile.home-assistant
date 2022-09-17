@@ -1,3 +1,3 @@
 FROM homeassistant/home-assistant:stable
-RUN mkdir -p /media && ln -s /config/www /media
+RUN mkdir -p /media && ln -s /media /config/www
 COPY ../sounds /media
