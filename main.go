@@ -59,8 +59,7 @@ func main() {
 	}(ctx)
 
 	// Hue Lights
-	// Start scheduler to regularly redescover bridge IP in the event DHCP changes it
-	go w.InitHue(ctx)
+	w.InitHueBridge()
 	// Start scheduler to set default light colors (if enabled)
 	w.InitDefaultColorsScheduler()
 	// Start schedulers to turn lights on/off

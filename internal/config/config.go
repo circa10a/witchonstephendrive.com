@@ -2,7 +2,6 @@ package config
 
 import (
 	"sync"
-	"time"
 
 	"github.com/amimof/huego"
 	"github.com/circa10a/go-geofence"
@@ -19,7 +18,6 @@ type WitchConfig struct {
 	APIBaseURL string `envconfig:"API_BASE_URL" default:"/api/v1"`
 
 	HueBridge                *huego.Bridge  `ignored:"true"`
-	HueBridgeRefreshInterval time.Duration  `envconfig:"HUE_BRIDGE_REFRESH_INTERVAL" default:"6h"`
 	HueDefaultColors         map[int]string `envconfig:"HUE_DEFAULT_COLORS" default:""`
 	HueDefaultColorsEnabled  bool           `envconfig:"HUE_DEFAULT_COLORS_ENABLED" default:"false"`
 	HueDefaultColorsStart    int            `envconfig:"HUE_DEFAULT_COLORS_START" default:"22"`

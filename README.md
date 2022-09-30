@@ -77,7 +77,6 @@ It allows anyone to change the color of the lighting behind the witch silhouette
 | `WITCH_HUE_DEFAULT_COLORS_ENABLED`      | Enables scheduler to set default colors or not                                                        | `false`   | `false`            |
 | `WITCH_HUE_DEFAULT_COLORS_START`        | Local time to set default colors at. Think of this as a nightly "reset"                               | `false`   | `22`               |
 | `WITCH_HUE_TOKEN`                       | Philips Hue API Token                                                                                 | `true`    | None               |
-| `WITCH_HUE_BRIDGE_REFRESH_INTERVAL`     | How long to wait before rediscovering hue bridge config/ip                                            | `false`   | `6h`               |
 | `WITCH_HUE_LIGHTS`                      | Light ID's to change color of. Example(export HUE_LIGHTS="1,2,3")                                     | `true`    | `[]`               |
 | `WITCH_HUE_LIGHTS_SCHEDULE_ENABLED`     | Enables start/end times for turning lights on/off. Will also set to default colors if enabled         | `false`   | `false`            |
 | `WITCH_HUE_LIGHTS_START`                | Local time to turn on configured lights                                                               | `false`   | `18`               |
